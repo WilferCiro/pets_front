@@ -8,6 +8,7 @@ import FormLabel      from '@/formcomponents/FormLabel';
 import FormSearch     from '@/formcomponents/FormSearch';
 import FormNumber     from '@/formcomponents/FormNumber';
 import FormPassword   from '@/formcomponents/FormPassword';
+import FormtextArea   from '@/formcomponents/FormtextArea';
 
 import { Form, Input, Row, Col } from 'antd';
 
@@ -63,6 +64,7 @@ class BaseFormStructure  extends React.Component{
 			"price"           : (item) => <FormNumber name={item["id"]} price={true} ref={item["id"]} {...item} />,
 			"percent"         : (item) => <FormNumber name={item["id"]} percent={true} ref={item["id"]} {...item} />,
 			"password"        : (item) => <FormPassword name={item["id"]} ref={item["id"]} {...item} />,
+			"textarea"        : (item) => <FormtextArea name={item["id"]} ref={item["id"]} {...item} />,
 		};
 
 		return <Col span={item["size"] * 2}>

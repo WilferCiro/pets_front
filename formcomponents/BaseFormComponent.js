@@ -41,6 +41,8 @@ class BaseFormComponent extends React.Component{
 		this.onEnter          = this.props.onEnter;
 		this.getName          = this.getName.bind(this);
 		this.getRules         = this.getRules.bind(this);
+
+		this.style = {margin: "0px"};
 	}
 
 	getRules() {

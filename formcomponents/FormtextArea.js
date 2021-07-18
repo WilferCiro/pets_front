@@ -1,11 +1,14 @@
 import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
 import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { Input, Form } from 'antd';
+import { Input, Form }    from 'antd';
 
-class FormInputText extends BaseFormComponent{
+const { TextArea } = Input;
+
+class FormtextArea extends BaseFormComponent{
 	constructor(props) {
 		super(props);
+
+		this.type = "FormtextArea";
 	}
 
 	render() {
@@ -16,7 +19,8 @@ class FormInputText extends BaseFormComponent{
 				rules={this.getRules()}
 				style={this.style}
 			>
-				<Input
+				<TextArea
+					rows={this.props.rows ? this.props.rows : 5}
 					placeholder={this.getPlaceholder()}
 				/>
 			</Form.Item>
@@ -24,4 +28,4 @@ class FormInputText extends BaseFormComponent{
 	}
 }
 
-export default FormInputText;
+export default FormtextArea;

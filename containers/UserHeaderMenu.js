@@ -50,13 +50,13 @@ class UserHeaderMenu extends BasePanel{
 						id="login_pasword"
 						ref={this.refPassword}
 						/><br />
-					<a onClick={(e) => this.redirectPage(this.constants.route_recover, this.constants.route_recover_alias)}>¿Olvidaste tu contraseña?</a><br />
+					<a onClick={(e) => this.redirectPage(this.constants.route_recovers)}>¿Olvidaste tu contraseña?</a><br />
 					<button>Iniciar sesión</button>
 					<br />
 					ó<br />
 					<button>Ingresar con facebook</button><br />
 					<button>Ingresar con gmail</button><br />
-					<a onClick={(e) => this.redirectPage(this.constants.route_register, this.constants.route_register_alias)}>Regístrate</a>
+					<a onClick={(e) => this.redirectPage(this.constants.route_register)}>Regístrate</a>
 				</KiwiModal>
 			</div>
 		);

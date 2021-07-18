@@ -35,13 +35,14 @@ class LocalDashboard extends App
 		let isBrowser = !req;
 
 		let pageProps = {};
+		let leftPanelProps = {};
 		let urls_servidores = [];
 		let redirect = true;
 		let isLogged = true;
 
 		isLogged = BasePanel.store.isLogged(ctx);//BasePanel.user.isLoggedServer(ctx) || BasePanel.user.isLogged();
 		//isLogged = BasePanel.store.isLoggedServer(ctx) || BasePanel.store.isLogged();
-		console.log(!process.browser, router.route);
+		//console.log(!process.browser, router.route);
 		if(!process.browser){
 			if(!isLogged){
 				if (router.route === "/mascotas"){
@@ -56,6 +57,7 @@ class LocalDashboard extends App
 				}
 			}
 		}
+		leftPanelProps = await LeftPanel.getInitialProps(ctx);
 
 		if(redirect && Component.getInitialProps){
 			pageProps = await Component.getInitialProps(ctx);
@@ -77,7 +79,7 @@ class LocalDashboard extends App
 			empresas = _empresas["data"];
 		}*/
 
-		return {pageProps, isLogged, empresas};
+		return {pageProps, leftPanelProps};
 	}
 
 	componentDidMount() {
@@ -115,7 +117,7 @@ class LocalDashboard extends App
 
 	render(){
 		//console.log("***", this.props.isLogged);
-		let {Component, pageProps} = this.props;
+		let {Component, pageProps, leftPanelProps} = this.props;
 		let urlPage = Constant.URL_webpage;
 		let nombrePage = "LuloCat";
 		let defaultDescription = nombrePage + " Dashboard.";
@@ -270,7 +272,7 @@ class LocalDashboard extends App
 					<div>
 						<div className="complete-page">
 							<div className="complete-left-panel">
-								<LeftPanel page={this.props.router.asPath} />
+								<LeftPanel {...leftPanelProps} />
 							</div>
 							<div></div>
 							<div className="complete-body">

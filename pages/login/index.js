@@ -1,7 +1,7 @@
 import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 import Constant       from '@/components//Constant';
-
+import {Divider}      from 'antd';
 // Form Components
 import FormPassword   from '@/formcomponents//FormPassword';
 import FormInputText   from '@/formcomponents//FormInputText';
@@ -25,7 +25,9 @@ class Login extends BasePanel{
 	}
 
 	componentDidMount() {
-
+		if(this.props.showSignUp) {
+			this.onRegisterLogin();
+		}
 	}
 
 	onRegisterLogin() {
@@ -128,17 +130,21 @@ class Login extends BasePanel{
 					<div className="overlay-container">
 						<div className="overlay">
 							<div className="overlay-panel overlay-left">
-								<h1>¡Hola!</h1>
+								<h1 className="login-title">¡Hola!</h1>
 								<p>¿Ya tienes una cuenta?</p>
 								<button className="login-button ghost" id="signIn" onClick={(e) => this.onRegisterLogin()}>Inicia sesión</button>
+								<Divider />
+								<a className="login-link" id="signIn" onClick={(e) => this.goHome()}>Volver a la página como invitado</a>
 							</div>
 							<div className="overlay-panel overlay-right">
-								<h1>¡Bienvenido!</h1>
+								<h1 className="login-title">¡Bienvenido!</h1>
 								<p>
 									¿No tienes una cuenta con nosotros?<br />
 									Nuestro sistema <b>SIEMPRE</b> será gratuito.
 								</p>
 								<button className="login-button ghost" id="signUp" onClick={(e) => this.onRegisterLogin()}>¡Regístrate aquí!</button>
+								<Divider />
+								<a className="login-link" id="signIn" onClick={(e) => this.goHome()}>Volver a la página como invitado</a>
 							</div>
 						</div>
 					</div>
@@ -149,7 +155,8 @@ class Login extends BasePanel{
 }
 
 Login.getInitialProps = async ({query}) => {
-	return {query};
+	let showSignUp = query["signup"] ? query["signup"] : false;
+	return {query, showSignUp};
 }
 
 export default Login;

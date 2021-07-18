@@ -25,10 +25,7 @@ class Product extends BasePanel{
 					<Link href={`/empresa/${this.state.producto.empresa__id}/${encodeURIComponent(this.state.producto.empresa__nombre)}`} replace>
 						<a onClick={(event) => {
 									event.preventDefault();
-									this.redirectPage(this.constants.empresa_profile, this.constants.empresa_profile_alias.formatUnicorn({
-										0: this.state.producto.empresa__pk,
-										1: encodeURIComponent("".removeAccents(this.state.producto.empresa__nombre))
-									})
+									this.redirectPage(this.constants.empresa_profile)
 							)}}>
 							{this.state.producto.empresa__nombre}
 						</a>

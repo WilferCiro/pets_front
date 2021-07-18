@@ -119,7 +119,7 @@ class BlogView extends BasePanel{
 						>
 							<List.Item.Meta
 								avatar={<Avatar src={item.portada} size={60} />}
-								title={<a onClick={(e) => this.redirectPage(this.constants.route_subblog, this.constants.route_subblog_alias.formatUnicorn({0:item.pk}))}>{item.titulo}</a>}
+								title={<a onClick={(e) => this.redirectPage(this.constants.route_subblog, {"pk" : item.pk})}>{item.titulo}</a>}
 								description={"Modificado: " + item.fecha_modificacion + ", por: " + item.usuario}
 							/>
 						</List.Item>

@@ -96,7 +96,7 @@ class MascotasView extends BasePanel{
 							]}
 							>
 								<Meta
-									title={<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, this.constants.route_profile_mascotas_alias.formatUnicorn({0:mascota.pk}))}>{mascota.nombre}</a>}
+									title={<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>{mascota.nombre}</a>}
 									description={mascota.presentacion}
 								/>
 						</Card>

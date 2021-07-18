@@ -3,6 +3,8 @@ import React, {
 } from 'react';
 
 import router       from 'next/router';
+import Router, { withRouter } from 'next/router'
+
 import Constant     from '@/components/Constant';
 import Services     from '@/utils/Services';
 import User         from '@/utils//User';
@@ -44,17 +46,19 @@ export default class BasePanel extends Component {
 
 	logout() {
 		BasePanel.user.deleteToken();
-		this.redirectPage(this.constants.route_login, this.constants.route_login_alias);
+		this.redirectPage(this.constants.route_login);
 	}
 	error(data) {
 		console.log("--ERRR----", data);
 	}
 
-	redirectPage(to, alias) {
-		router.push(to, alias);
+	redirectPage(to, query = {}) {
+		//router.push(to, alias);
+		Router.push({ pathname: to, query: query });
 	}
+
 	goHome() {
-		this.redirectPage(this.constants.route_index, this.constants.route_index_alias);
+		this.redirectPage(this.constants.route_index);
 	}
 
 	send(data) {

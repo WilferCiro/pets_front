@@ -94,6 +94,13 @@ class MascotasProfileView extends BasePanel{
 			{title: "Sexo", description: "Hembra"},
 			//{title: "Acciones", description: null},
 		];
+		let dataConacto = [
+			{title: "Nombre Dueño", description: mascota["user__nombre"] ? mascota["user__nombre"] : "Información oculta"},
+			{title: "Celular 1", description: mascota["user__celular1"] ? mascota["user__celular1"] : "Información oculta"},
+			{title: "Celular 2", description: mascota["user__celular2"] ? mascota["user__celular2"] : "Información oculta"},
+			{title: "Email", description: mascota["user__email"] ? mascota["user__email"] : "Información oculta"},
+			//{title: "Acciones", description: null},
+		];
 
 		return (
 			<div>
@@ -111,7 +118,7 @@ class MascotasProfileView extends BasePanel{
 					:
 					null
 				}
-				<Row  gutter={[40, 16]} align="middle">
+				<Row  gutter={[40, 16]} align="top">
 					<Col xs={24} md={11} lg={8}>
 						<Carousel>
 							{
@@ -182,16 +189,7 @@ class MascotasProfileView extends BasePanel{
 									<List.Item>
 										<List.Item.Meta
 											title={item.title}
-											description={
-												item.description ?
-												item.description
-												:
-												<Space>
-													<Button type="primary" icon={<EditOutlined />}>Editar</Button>
-													<Button type="primary" icon={<HeartFilled />}>Vacunas</Button>
-													<Button type="primary" icon={<QrcodeOutlined />}>Generar placa</Button>
-												</Space>
-											}
+											description={item.description}
 										/>
 									</List.Item>
 									)}
@@ -200,7 +198,19 @@ class MascotasProfileView extends BasePanel{
 							{
 								this.canEdit || this.isMissing ?
 									<TabPane tab="Datos de contacto" key="2">
-										Contacto
+										<List
+											size="small"
+											itemLayout="horizontal"
+											dataSource={dataConacto}
+											renderItem={item => (
+											<List.Item>
+												<List.Item.Meta
+													title={item.title}
+													description={item.description}
+												/>
+											</List.Item>
+											)}
+										/>
 									</TabPane>
 								:
 								null
