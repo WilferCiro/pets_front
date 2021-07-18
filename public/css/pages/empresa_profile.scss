@@ -1,0 +1,37 @@
+.empresa{
+	min-height: 800px;
+}
+.empresa-portada{
+	width: 100%;
+	height: 200px;
+	position: relative;
+}
+.empresa-foto{
+	width: 200px;
+	height: 200px;
+	border-radius: 100%;
+	border: solid 1px black;
+	position: absolute;
+	bottom: -50px;
+	left: 15%;
+	background: white;
+	overflow: hidden;
+}
+.empresa-body{
+	display: grid;
+	grid-template-columns: 25% 73%;
+	grid-column-gap: 2%;
+	width: 80%;
+	margin: auto;
+	margin-top: 30px;
+}
+.empresa-detalles{
+	margin-top: 40px;
+}
+.empresa-detalles-item{
+	padding: 15px 20px;
+	width: calc(100% - 30px);
+	margin-bottom: 15px;
+	border-radius: 8px;
+	background: white;
+}

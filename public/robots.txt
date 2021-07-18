@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://davincipolicarpa.edu.co/sitemap.xml

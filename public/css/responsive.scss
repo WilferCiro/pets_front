@@ -1,0 +1,20 @@
+@import "variables";
+
+
+@media (max-width: 767px) {
+	.complete-left-panel{
+		width: 0px;
+		overflow: hidden;
+	}
+
+	.complete-page{
+		display: grid;
+		grid-template-columns: 0% 100%;
+	}
+
+	.header-divider{
+		display: grid;
+		grid-template-columns: 60% 40%;
+	}
+
+}

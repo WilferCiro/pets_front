@@ -1,0 +1,16 @@
+{
+	"short_name" : "KiwiPyme",
+	"name" : "KiwiPyme",
+	"icons" : [
+		{
+			"src" : "/app-icon-512x512.png",
+			"sizes" : "512x512",
+			"type" : "image/png",
+			"purpose": "any maskable"
+		}
+	],
+	"start_url" : "/",
+	"display" : "standalone",
+	"theme_color" : "#ffffff",
+	"background_color" : "#00132B"
+}
