@@ -1,7 +1,9 @@
 import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
-import { Card, Avatar, Skeleton, Space, Result, Button } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined, InboxOutlined } from '@ant-design/icons';
+import { Card, Avatar, Skeleton, Space, Result, Button, List, Row, Col, Tooltip, message } from 'antd';
+import { PlusCircleFilled, EditOutlined, EllipsisOutlined, SettingOutlined, InboxOutlined } from '@ant-design/icons';
+
+import AddMascotaFormStructure from '@/formclasses/add_mascota';
 
 const { Meta } = Card;
 class MascotasView extends BasePanel{
@@ -9,11 +11,20 @@ class MascotasView extends BasePanel{
 		super(props);
 
 		this.state = {
-			mascotas: null
+			mascotas: null,
+			paginator: null
 		}
+
+		this.pageSize = 9;
 
 		this.searchMascotas        = this.searchMascotas.bind(this);
 		this.successSearchMascotas = this.successSearchMascotas.bind(this);
+		this.addMascota            = this.addMascota.bind(this);
+		this.onAddMascota          = this.onAddMascota.bind(this);
+		this.successAddMascota     = this.successAddMascota.bind(this);
+		this.successUploadPhotos   = this.successUploadPhotos.bind(this);
+
+		this.refFormAdd = React.createRef();
 	}
 
 	componentDidMount() {
@@ -22,9 +33,10 @@ class MascotasView extends BasePanel{
 
 	searchMascotas(page) {
 		let body = {
-			"cantidad" : 10,
+			"cantidad" : this.pageSize,
 			"pagina" : page,
-			"modelo" : "card"
+			"modelo" : "card",
+			"ordenar_por" : "-pk"
 		}
 		this.send({
 			endpoint: this.constants.getPrivateEndpoint() + "mascota",
@@ -40,8 +52,74 @@ class MascotasView extends BasePanel{
 		console.log(data);
 		if(data["estado_p"] === 200) {
 			this.setState({
-				mascotas: data["data"]
+				mascotas: data["data"],
+				paginator: data["paginator"]
 			});
+		}
+	}
+
+	addMascota() {
+		this.refFormAdd.current.open("Registrar nueva mascota");
+	}
+
+	onAddMascota() {
+		let formValues = this.refFormAdd.current.getValues();
+		this.images = formValues["imagenes"]["fotos"];
+		this.uploaded = 0;
+		let body = {
+			"modelo" : "crear",
+			"nombre" : formValues["nombre"],
+			"fecha_nacimiento" : formValues["fecha_nacimiento"],
+			"tipo" : formValues["tipo"],
+			"raza" : formValues["raza"],
+			"visible" : formValues["visible"],
+			"presentacion" : formValues["presentacion"]
+		}
+
+		this.send({
+			endpoint: this.constants.getPrivateEndpoint() + "mascota",
+			method: 'POST',
+			success: this.successAddMascota,
+			body: body,
+			showMessage : true,
+			requires_token: true
+		});
+	}
+
+	successAddMascota(data) {
+		if(data["estado_p"] === 200) {
+
+			let pk = data["data"]["pk"];
+			this.newPk = pk;
+			this.uploaded = 0;
+			console.log("----", this.images);
+			for (let index in this.images) {
+				let body = {
+					"modelo" : "crear",
+					"foto" : this.images[index]["originFileObj"],
+					"mascota" : pk
+				}
+				console.log(body);
+				this.send({
+					endpoint: this.constants.getPrivateEndpoint() + "filemascota",
+					method: 'POST',
+					success: this.successUploadPhotos,
+					body: body,
+					showMessage : true,
+					requires_token: true,
+					formData: true
+				});
+			}
+			//
+		}
+	}
+
+	successUploadPhotos(data){
+		console.log(data, this.uploaded, this.images.length);
+		this.uploaded += 1;
+		if (this.uploaded === this.images.length) {
+			message.success("La mascota ha sido registada con éxito");
+			this.redirectPage(this.constants.route_profile_mascotas, {"pk" : this.newPk});
 		}
 	}
 
@@ -76,33 +154,69 @@ class MascotasView extends BasePanel{
 
 		return (
 			<div>
-				<h2>Mis mascotas</h2>
-				{
-					(this.state.mascotas).map((mascota, index) => {
-						let foto = mascota.foto.length > 0 ? mascota.foto[0] : null;
-						return <Card
-							key={Math.random()}
-							style={{ width: 300 }}
-							cover={
-								<img
-									className="image-card"
-									alt={foto ? foto.descripcion : "Foto de mascota"}
-									src={foto ? foto.foto : "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"}
-								/>
-							}
-							actions={[
-								<SettingOutlined key="setting" />,
-								<EditOutlined key="edit" />
-							]}
-							>
-								<Meta
-									title={<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>{mascota.nombre}</a>}
-									description={mascota.presentacion}
-								/>
-						</Card>
-					})
-				}
+				<AddMascotaFormStructure
+					modal={true}
+					vertical={false}
+					ref={this.refFormAdd}
+					modalOnOk={this.onAddMascota}
+					initialValues={{
+						"visible" : true
+					}} />
+				<Row gutter={[40, 16]} align="middle">
+					<Col span={19}>
+						<h2 className="mascota-name">Mis mascotas</h2>
+					</Col>
+					<Col span={5}>
+						<Tooltip title="Editar datos de la mascota">
+							<Button type="primary" icon={<PlusCircleFilled />} onClick={this.addMascota}>Agregar mascota</Button>
+						</Tooltip>
+					</Col>
+				</Row>
 
+				<List
+					itemLayout="vertical"
+					size="large"
+					grid={{
+						gutter: 8,
+						xs: 1,
+						sm: 1,
+						md: 2,
+						lg: 2,
+						xl: 3,
+						xxl: 4,
+					}}
+					pagination={{
+						onChange: page => {
+							this.searchMascotas(page);
+						},
+						total: this.state.paginator.total,
+						pageSize: this.pageSize,
+						position: "both"
+					}}
+					dataSource={this.state.mascotas}
+					renderItem={mascota => (
+						<List.Item
+							key={Math.random()}
+						>
+							<Card
+								key={Math.random()}
+								style={{ width: "100%" }}
+								cover={
+									<img
+										className="image-card"
+										alt={mascota.foto.length > 0 ? mascota.foto[0].descripcion : "Foto de mascota"}
+										src={mascota.foto.length > 0 ? mascota.foto[0].foto : "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"}
+									/>
+								}
+								>
+									<Meta
+										title={<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>{mascota.nombre} - @{mascota.identificacion}</a>}
+										description={mascota.presentacion}
+									/>
+							</Card>
+						</List.Item>
+						)}
+					/>
 			</div>
 		);
 	}

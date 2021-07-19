@@ -9,8 +9,10 @@ import FormSearch     from '@/formcomponents/FormSearch';
 import FormNumber     from '@/formcomponents/FormNumber';
 import FormPassword   from '@/formcomponents/FormPassword';
 import FormtextArea   from '@/formcomponents/FormtextArea';
+import FormSwitch     from '@/formcomponents/FormSwitch';
+import FormMultiImage from '@/formcomponents/FormMultiImage';
 
-import { Form, Input, Row, Col } from 'antd';
+import { Form, Input, Row, Col, Modal } from 'antd';
 
 const validateMessages = {
 	required: "'${label}' es requerido"
@@ -24,6 +26,7 @@ class BaseFormStructure  extends React.Component{
 		this.fields        = this.props.fields ? this.props.fields : [];
 		this.vertical      = this.props.vertical ? this.props.vertical : false;
 		this.initialValues = this.props.initialValues ? this.props.initialValues : {};
+		this.modal         = this.props.modal ? this.props.modal : false;
 
 		// References
 		this.formRef       = React.createRef();
@@ -32,6 +35,59 @@ class BaseFormStructure  extends React.Component{
 		this.getField      = this.getField.bind(this);
 		this.validate      = this.validate.bind(this);
 		this.setValues     = this.setValues.bind(this);
+
+		this.state = {
+			modal: {
+				open: false,
+				title: "Hola mundo"
+			}
+		}
+
+		this.modalOnOk     = this.props.modalOnOk;
+		this.modalOnCancel = this.props.modalOnCancel;
+
+		this.handleOk      = this.handleOk.bind(this);
+		this.handleCancel  = this.handleCancel.bind(this);
+		this.open          = this.open.bind(this);
+	}
+
+	open(title) {
+		if(this.modal) {
+			this.setState({
+				modal: {
+					open: true,
+					title: title
+				}
+			})
+		}
+	}
+
+	async handleOk() {
+		let valid = await this.validate();
+		if(valid) {
+			if(this.modalOnOk) {
+				this.modalOnOk();
+			}
+			this.setState({
+				modal: {
+					title: this.state.modal.title,
+					open: false
+				}
+			});
+		}
+
+	}
+
+	handleCancel() {
+		if(this.modalOnCancel) {
+			this.modalOnCancel();
+		}
+		this.setState({
+			modal: {
+				title: this.state.modal.title,
+				open: false
+			}
+		});
 	}
 
 	async validate() {
@@ -65,6 +121,8 @@ class BaseFormStructure  extends React.Component{
 			"percent"         : (item) => <FormNumber name={item["id"]} percent={true} ref={item["id"]} {...item} />,
 			"password"        : (item) => <FormPassword name={item["id"]} ref={item["id"]} {...item} />,
 			"textarea"        : (item) => <FormtextArea name={item["id"]} ref={item["id"]} {...item} />,
+			"switch"          : (item) => <FormSwitch name={item["id"]} ref={item["id"]} {...item} />,
+			"multiimage"      : (item) => <FormMultiImage name={item["id"]} ref={item["id"]} {...item} />,
 		};
 
 		return <Col span={item["size"] * 2}>
@@ -86,8 +144,9 @@ class BaseFormStructure  extends React.Component{
 			}
 			return null;
 		});
-
-		return <Form
+		let form = <Form
+				labelCol={{ span: this.vertical ? 24 : 7 }}
+				wrapperCol={{ span: this.vertical ? 24 : 17 }}
 				validateMessages={ validateMessages }
 				name="register"
 				ref={this.formRef}
@@ -106,6 +165,14 @@ class BaseFormStructure  extends React.Component{
 				})
 			}
 		</Form>
+
+		if (this.modal) {
+			return <Modal style={{ top: 20 }} title={this.state.modal.title} visible={this.state.modal.open} onOk={this.handleOk} onCancel={this.handleCancel}>
+				{form}
+			</Modal>
+		}
+
+		return form;
 	}
 }
 

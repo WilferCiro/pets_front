@@ -119,7 +119,7 @@ class Login extends BasePanel{
 							</div>
 							<span>ó usa tus credenciales</span>
 
-							<LoginFormStructure ref={this.refFormLogin} />
+							<LoginFormStructure ref={this.refFormLogin} vertical={true} />
 
 							<a href="#" className="login">¿Olvidaste tu contraseña?</a>
 							<button className="login-button" onClick={(e) => this.onLogin()}>Iniciar sesión</button>

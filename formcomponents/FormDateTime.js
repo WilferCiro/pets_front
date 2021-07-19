@@ -1,7 +1,7 @@
 import React              from 'react';
 import BasePanel          from '@/containers/BasePanel';
 import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { DatePicker } from 'antd';
+import { DatePicker, Form } from 'antd';
 import moment from 'moment';
 
 class FormDateTime extends BaseFormComponent{
@@ -26,26 +26,18 @@ class FormDateTime extends BaseFormComponent{
 		const dateFormat = 'yyyy-MM-dd hh:mm:ss';
 
 		return (
-			<div className="input-text">
-				{this.getLabel()}
+			<Form.Item
+				label={this.getLabel()}
+				name={this.getName()}
+				rules={this.getRules()}
+				style={this.style}
+			>
 				<DatePicker
 					showTime
 					style={{width: "100%"}}
-					disabled={this.disabled}
-					onChange={this.handleChange}
-					ref={this.input}
-					className="form-text"
 					placeholder={this.getPlaceholder() + (this.required ? "*" : "")}
-					type="text"
-					value={moment(this.state.value, dateFormat)}
-					onKeyPress={this.handleKeyPress}
-					/><br />
-				{
-					(this.state.errores).map((item, index) => {
-						return <label key={Math.random()}>{item}</label>
-					})
-				}
-			</div>
+					/>
+			</Form.Item>
 		);
 	}
 }

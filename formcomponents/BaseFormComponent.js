@@ -1,7 +1,7 @@
 import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 
-class BaseFormComponent extends React.Component{
+class BaseFormComponent extends BasePanel{
 	constructor(props) {
 		super(props);
 		// Variables
@@ -16,6 +16,7 @@ class BaseFormComponent extends React.Component{
 		this.disabled         = props["disabled"];
 		this.name             = props["name"];
 		this.inputType        = props["inputType"];
+		this.tooltip          = props["tooltip"];
 
 		this.state = {
 			options : props.options ? props.options : [],
@@ -42,7 +43,7 @@ class BaseFormComponent extends React.Component{
 		this.getName          = this.getName.bind(this);
 		this.getRules         = this.getRules.bind(this);
 
-		this.style = {margin: "0px"};
+		this.style = {margin: "2px"};
 	}
 
 	getRules() {

@@ -28,34 +28,23 @@ class Constant{
 
 		/// Routes
 		this.route_index               = '/';
-		this.route_index_alias         = '/';
 		this.route_login               = '/login';
-		this.route_login_alias         = '/login';
 
 		this.route_mascotas            = '/mascotas';
-		this.route_mascotas_alias      = '/mascotas';
-		this.route_profile_mascotas            = '/mascotas/[pk]';
-		this.route_profile_mascotas_alias      = '/mascotas/{0}';
+		this.route_profile_mascotas    = '/mascotas/[pk]';
 
 		this.route_vacunas             = '/vacunas';
-		this.route_vacunas_alias       = '/vacunas';
 
 		this.route_razas               = '/razas';
-		this.route_razas_alias         = '/razas';
 
 		this.route_blog                = '/blog';
-		this.route_blog_alias          = '/blog';
 		this.route_subblog             = '/blog/[pk]';
-		this.route_subblog_alias       = '/blog/{0}';
 
 		this.route_tienda              = '/tienda';
-		this.route_tienda_alias        = '/tienda';
 
 		this.route_ayuda               = '/ayuda';
-		this.route_ayuda_alias         = '/ayuda';
 
 		this.route_perdidas            = '/perdidas';
-		this.route_perdidas_alias      = '/perdidas';
 
 
 		/*** IMÁGENES ***/

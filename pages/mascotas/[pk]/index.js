@@ -3,7 +3,7 @@ import BasePanel      from '@/containers/BasePanel';
 import Constant       from '@/components/Constant';
 
 import { Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider } from 'antd';
-import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined } from '@ant-design/icons';
+import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined } from '@ant-design/icons';
 import { QRCode } from 'react-qrcode-logo';
 
 const { TabPane } = Tabs;
@@ -69,7 +69,6 @@ class MascotasProfileView extends BasePanel{
 
 	render() {
 		let mascota = this.state.mascota;
-
 		if(!mascota) {
 			return (<div>Cargando</div>);
 		}
@@ -86,6 +85,7 @@ class MascotasProfileView extends BasePanel{
 
 		mascota = mascota[0];
 		this.isMissing = mascota["desaparecido"];
+		console.log(mascota["fotos"]);
 
 		let dataMascota = [
 			{title: "Fecha de nacimiento", description: mascota["fecha_nacimiento"]},
@@ -124,18 +124,14 @@ class MascotasProfileView extends BasePanel{
 							{
 								(mascota.fotos).map((foto, index) => {
 									return <div key={Math.random()} className="carouser-foto-container">
-									<img
-										className="carousel-foto"
-										src={foto["foto"]}
-										alt={foto["descripcion"]}
-										preview={{
-											src: foto["foto"],
-										}}
-									/>
-									<div className="description">
-										{foto["descripcion"]}
-									</div>
-
+										<img
+											className="carousel-foto"
+											src={foto["foto"]}
+											alt={foto["descripcion"]}
+										/>
+										<div className="description">
+											{foto["descripcion"]}
+										</div>
 									</div>
 								})
 							}
@@ -177,7 +173,7 @@ class MascotasProfileView extends BasePanel{
 								}
 							</Col>
 						</Row>
-						<p className="mascota-apodo">@{mascota.apodo}</p>
+						<p className="mascota-apodo">@{mascota.identificacion}</p>
 
 						<Tabs defaultActiveKey="1">
 							<TabPane tab="Datos básicos" key="1">
@@ -240,3 +236,16 @@ MascotasProfileView.getInitialProps = async ({query, ctx, req, pathname}) => {
 export default MascotasProfileView;
 
 //<img className="carousel-foto" src={foto["foto"]} />
+
+/*
+mascota.fotos.length === 0 ?
+<div key={Math.random()} className="carouser-foto-container">
+	<Avatar
+		style={{backgroundColor: "purple", verticalAlign: 'middle'}}
+		size={{ xs: 300, sm: 300, md: 250, lg: 250, xl: 300, xxl: 400 }}
+		>
+		Click para agregar foto
+	</Avatar>
+</div>
+:
+*/
