@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 @import "variables";
 
+$header-height: 62px;
+
 * {
 	box-sizing: border-box;
 }
@@ -101,13 +103,149 @@ p {
 	height: 100vh;
 }
 .complete-body{
-	width: 95%;
+	width: 100%;
 	margin: auto;
-	min-height: 500px;
 }
 .body{
+	min-height: calc(100vh - #{$header-height});
+	width: 90%;
+	margin: auto;
 }
 // _app.js
+
+// Home.js
+
+.landing-section{
+	min-height: calc(100vh - #{$header-height});
+	width: 100%;
+	display: block;
+}
+.beneficios-section{
+	position: relative;
+	border: solid 1px transparent;
+}
+.landing-title{
+	color: $color-1;
+	font-weight: bold;
+}
+.landing-h2{
+	font-size: 60px !important;
+}
+.landing-h4{
+	font-size: 40px !important;
+}
+.landing-left-item{
+	position: absolute;
+	width: 50%;
+	right: 0px;
+	height: 80vh;
+	background: linear-gradient(to left, $color-1, rgba(0, 0, 0, 0));
+	border-radius: 40% 50% 100% 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.landing-icon{
+	color: white !important;
+	font-size: 150px;
+}
+.landing-about-content{
+	z-index: 2;
+	div{
+		margin-top: 20vh;
+		width: 50%;
+		p{
+			color: $text-1;
+		}
+	}
+}
+
+.buy-section{
+	text-align: right;
+}
+.buy-section-productos{
+	width: 100%;
+	display: flex;
+	margin-top: 10vh;
+}
+.buy-section-item{
+	background: linear-gradient($color-1, #4F243F);
+	width: 100%;
+	height: 40vh;
+	border-radius: 30% 10% 20% 10%;
+	margin: 0px 15px;
+	cursor: pointer;
+	color: white;
+}
+
+.donation-section{
+	display: flex;
+	align-items: center;
+}
+.donation-list{
+	width: 100%;
+	margin-left: 30px;
+}
+.donation-item{
+	width: 100%;
+	background: linear-gradient(to left, $color-1, white);
+	text-align: right;
+	color: white;
+	padding: 10px 10px;
+	border-radius: 10px;
+	margin-bottom: 15px;
+}
+
+.inicia-ya{
+	background: $color-1;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 50px;
+}
+.landing-circle1{
+	background: url("public/images/index/gato.png"), $color-1;
+	background-size: 70%;
+	background-repeat: no-repeat;
+	background-position: 0px -10px;
+	width: 40%;
+	height: 60vh;
+	border-radius: 50% 0% 50% 100%;
+	right: 0px;
+	top: 0px;
+	position: absolute;
+	box-shadow: inset 0px 0px 40px #4F243F;
+}
+.landing-circle2{
+	background: $color-1;
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+	right: 45%;
+	top: 5vh;
+	position: absolute;
+	box-shadow: inset 0px 0px 40px pink;
+}
+.landing-circle3{
+	background: $color-1;
+	width: 150px;
+	height: 150px;
+	border-radius: 100%;
+	right: 55%;
+	top: 66vh;
+	position: absolute;
+	box-shadow: inset 0px 0px 40px #4F243F;
+}
+.landing-circle4{
+	background: $color-1;
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+	right: 15%;
+	top: 67vh;
+	position: absolute;
+	box-shadow: inset 0px 0px 40px pink;
+}
+// Home.js
 
 // LeftPanel.js
 .left-panel{
@@ -192,25 +330,45 @@ p {
 // header.js
 header{
 	width: 100%;
-	padding: 20px 0px;
+	padding: 10px 0px;
+	height: $header-height;
 	h2{
 		margin: 0px;
 	}
 }
+.affixed{
+	background: rgba(255, 255, 255, 0.5);
+	backdrop-filter: blur(9px);
+}
+.iniciar-sesion-header{
+	color: $color-1;
+	background: white;
+	padding: 5px 10px;
+	border-radius: 50px;
+	margin-left: 15px;
+	transition: all 0.5s;
+	&:hover{
+		color: white;
+		background: $color-1;
+	}
+}
 .header-divider{
 	display: grid;
-	grid-template-columns: 80% 20%;
+	grid-template-columns: 70% 30%;
 }
 .header-logo-container{
-	width: 50px;
+	display: flex;
+	align-items: center;
 }
 .logo{
 	width: 150px;
 	height: 30px;
 	border: solid 1px black;
+	margin-right: 20px;
 }
 .header-menu{
 	display: flex;
+	z-index: 50;
 }
 .header-menu-item{
 	margin-left: 20px;
@@ -222,6 +380,7 @@ header{
 	padding-top: 5px;
 	width: 40px;
 	line-height: 40px;
+	background: white;
 	.icon{
 		font-size: 25px;
 	}
@@ -262,6 +421,10 @@ span {
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
+	cursor: pointer;
+	&:hover{
+		opacity: 0.6;
+	}
 }
 
 .login-button:active {
@@ -317,6 +480,7 @@ input {
 	position: fixed;
 	background: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(5px);
+	z-index: 10;
 }
 .form-container {
 	position: absolute;

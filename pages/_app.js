@@ -9,7 +9,9 @@ import Footer          from '@/containers//Footer';
 import BasePanel       from '@/containers//BasePanel';
 import AlertLocal      from '@/components//AlertLocal';
 import LeftPanel       from '@/containers//LeftPanel';
-import { withRouter } from 'next/router'
+import { withRouter }  from 'next/router'
+import {ConfigProvider} from 'antd';
+import esEs            from 'antd/lib/locale/es_ES';
 
 import '../public/css/index.css';
 import '../public/css/responsive.css';
@@ -20,6 +22,7 @@ Router.events.on('routeChangeStart', (url) => {
 })
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
+
 
 export function redirectUser(ctx, location) {
 	const {res} = ctx;
@@ -268,24 +271,27 @@ class LocalDashboard extends App
 					<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
 				</Head>
-				<div>
+
+				<ConfigProvider locale={esEs}>
 					<div>
-						<div className="complete-page">
-							<div className="complete-left-panel">
-								<LeftPanel {...leftPanelProps} />
-							</div>
-							<div></div>
-							<div className="complete-body">
-								<Header empresas={this.props.empresas} />
-								<div className="body">
-									<Component {...pageProps}/>
+						<div>
+							<div className="complete-page">
+								<div className="complete-left-panel">
+									<LeftPanel {...leftPanelProps} />
 								</div>
-								<Footer />
+								<div></div>
+								<div className="complete-body">
+									<Header empresas={this.props.empresas} />
+									<div className="body">
+										<Component {...pageProps}/>
+									</div>
+									<Footer />
+								</div>
 							</div>
 						</div>
+						<AlertLocal ref={BasePanel.alertLocal} />
 					</div>
-					<AlertLocal ref={BasePanel.alertLocal} />
-				</div>
+				</ConfigProvider>
 
 			</div>
 		);

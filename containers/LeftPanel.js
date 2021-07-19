@@ -44,14 +44,7 @@ class LeftPanel extends BasePanel{
 						</div>
 					</div>
 					:
-					<div className="nav-userdata nav-userdata-register">
-						<div>
-							<Button block type="primary" onClick={e => this.redirectPage(this.constants.route_login)}>Iniciar sesión</Button>
-						</div>
-						<div>
-							<Button block type="primary" onClick={e => this.redirectPage(this.constants.route_login, {"signup" : true})}>Registrarse</Button>
-						</div>
-					</div>
+					null
 				}
 
 
@@ -126,3 +119,17 @@ LeftPanel.getInitialProps = async ({query, req, pathname}) => {
 }
 
 export default LeftPanel;
+
+
+
+/*
+
+<div className="nav-userdata nav-userdata-register">
+	<div>
+		<Button block type="primary" onClick={e => this.redirectPage(this.constants.route_login)}>Iniciar sesión</Button>
+	</div>
+	<div>
+		<Button block type="primary" onClick={e => this.redirectPage(this.constants.route_login, {"signup" : true})}>Registrarse</Button>
+	</div>
+</div>
+*/

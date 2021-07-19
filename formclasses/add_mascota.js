@@ -11,7 +11,7 @@ class AddMascotaFormStructure  extends BaseFormStructure{
 			{type: "datetime", container: 4, size: 12, id: "fecha_nacimiento", label: "Fecha de nacimiento"},
 			{type: "select", container: 4, size: 12, id: "tipo", label: "Tipo de mascota", service: "tipomascota", required : true},
 			{type: "select", container: 4, size: 12, id: "raza", label: "Raza mascota", service: "raza"},
-			{type: "switch", container: 4, size: 12, id: "visible", label: "¿Perfil público?", tooltip: "Permite administrar si esta mascota la pueden ver todos o solo tu. Déjala en 'No' si deseas esto último."},
+			{type: "switch", container: 4, size: 12, id: "visible", label: "¿Perfil público?", tooltip: "Selecciona 'No' si deseas que solo tu puedas ver esta mascota."},
 			{type: "textarea", container: 5, size: 12, id: "presentacion", label: "Presentación", placeholder:"Escribe una presentación corta de tu mascota", disabled: true, max: 100, required : true},
 			{type: "multiimage", container: 6, size: 12, id: "imagenes", label: "Imágenes", required : true}
 		];
