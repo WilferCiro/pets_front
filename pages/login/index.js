@@ -6,6 +6,7 @@ import {Divider}      from 'antd';
 import FormPassword   from '@/formcomponents//FormPassword';
 import FormInputText   from '@/formcomponents//FormInputText';
 import LoginFormStructure from '@/formclasses/login';
+import SignUpForm         from '@/formclasses/signup';
 
 import {FaFacebook, FaLinkedin} from 'react-icons/fa';
 import {AiOutlineGoogle} from 'react-icons/ai';
@@ -16,10 +17,12 @@ class Login extends BasePanel{
 		super(props);
 
 		this.refFormLogin    = React.createRef();
+		this.refFormSignup   = React.createRef();
 
 		this.onRegisterLogin   = this.onRegisterLogin.bind(this);
 		this.successLogin   = this.successLogin.bind(this);
 		this.onLogin   = this.onLogin.bind(this);
+		this.onSignUp   = this.onSignUp.bind(this);
 
 		this.handleSocialLogin = this.handleSocialLogin.bind(this);
 	}
@@ -32,6 +35,13 @@ class Login extends BasePanel{
 
 	onRegisterLogin() {
 		this.refs["container-login"].classList.toggle("right-panel-active");
+	}
+
+	async onSignUp() {
+		let valid = await this.refFormSignup.current.validate();
+		if(valid) {
+			console.log(this.refFormSignup.current.getValues());
+		}
 	}
 
 	async onLogin() {
@@ -92,10 +102,13 @@ class Login extends BasePanel{
 								<a href="#" className="social login"><FaLinkedin /></a>
 							</div>
 							<span>ó usa tu correo para registrarte</span>
-							<input type="text" placeholder="Name" />
-							<input type="email" placeholder="Email" />
-							<input type="password" placeholder="Password" />
-							<button className="login-button">Registrarse</button>
+
+							<SignUpForm
+								vertical={true}
+								ref={this.refFormSignup}
+							 />
+
+							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
 						</div>
 					</div>
 					<div className="form-container sign-in-container">
@@ -121,7 +134,7 @@ class Login extends BasePanel{
 
 							<LoginFormStructure ref={this.refFormLogin} vertical={true} />
 
-							<a href="#" className="login">¿Olvidaste tu contraseña?</a>
+							<a onClick={(e) => this.redirectPage(this.constants.route_recover)} className="login">¿Olvidaste tu contraseña?</a>
 							<button className="login-button" onClick={(e) => this.onLogin()}>Iniciar sesión</button>
 
 

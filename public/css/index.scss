@@ -89,6 +89,10 @@ p {
 	display: block;
 	margin: auto;
 }
+.foot-entry{
+	text-align: right;
+	color: $text-3;
+}
 // generic
 
 // _app.js
@@ -356,15 +360,23 @@ header{
 	display: grid;
 	grid-template-columns: 70% 30%;
 }
-.header-logo-container{
+.header-breadcrumb-container{
 	display: flex;
 	align-items: center;
+	padding-left: 30px;
 }
 .logo{
-	width: 150px;
-	height: 30px;
-	border: solid 1px black;
+	width: 100%;
+	height: 40px;
 	margin-right: 20px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	img{
+		height: 100%;
+		display: block;
+		margin: 0px 20px;
+	}
 }
 .header-menu{
 	display: flex;

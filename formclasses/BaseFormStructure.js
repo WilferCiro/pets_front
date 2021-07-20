@@ -11,6 +11,7 @@ import FormPassword   from '@/formcomponents/FormPassword';
 import FormtextArea   from '@/formcomponents/FormtextArea';
 import FormSwitch     from '@/formcomponents/FormSwitch';
 import FormMultiImage from '@/formcomponents/FormMultiImage';
+import FormPasswordRepeat from '@/formcomponents/FormPasswordRepeat';
 
 import { Form, Input, Row, Col, Modal } from 'antd';
 
@@ -123,6 +124,7 @@ class BaseFormStructure  extends React.Component{
 			"textarea"        : (item) => <FormtextArea name={item["id"]} ref={item["id"]} {...item} />,
 			"switch"          : (item) => <FormSwitch name={item["id"]} ref={item["id"]} {...item} />,
 			"multiimage"      : (item) => <FormMultiImage name={item["id"]} ref={item["id"]} {...item} />,
+			"password_repeat" : (item) => <FormPasswordRepeat name={item["id"]} ref={item["id"]} {...item} />
 		};
 
 		return <Col span={item["size"] * 2}>

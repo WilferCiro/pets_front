@@ -5,6 +5,7 @@ import Constant       from '@/components/Constant';
 import { Image, Result, Button } from 'antd';
 import {ArrowLeftOutlined} from '@ant-design/icons';
 
+
 class BlogProfileView extends BasePanel{
 	constructor(props) {
 		super(props);
@@ -39,9 +40,9 @@ class BlogProfileView extends BasePanel{
 						<p>Cargando...</p>
 					}
 				/>
-				<h2>{blog.titulo}</h2>
+				<h2 className="landing-title">{blog.titulo}</h2>
 				<div className="content" dangerouslySetInnerHTML={{__html: blog.cuerpo}}></div>
-				<p>Modificado: {blog.fecha_modificacion} por {blog.usuario}</p>
+				<p className="foot-entry">Modificado: {blog.fecha_modificacion.formatDateTime()} <br /> por {blog.usuario}</p>
 			</div>
 		);
 	}

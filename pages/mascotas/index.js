@@ -1,6 +1,6 @@
 import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
-import { Card, Avatar, Skeleton, Space, Result, Button, List, Row, Col, Tooltip, message } from 'antd';
+import { Card, Avatar, Skeleton, Space, Result, Button, List, Row, Col, Tooltip, message, Tag } from 'antd';
 import { PlusCircleFilled, EditOutlined, EllipsisOutlined, SettingOutlined, InboxOutlined } from '@ant-design/icons';
 
 import AddMascotaFormStructure from '@/formclasses/add_mascota';
@@ -29,6 +29,8 @@ class MascotasView extends BasePanel{
 
 	componentDidMount() {
 		this.searchMascotas(1);
+
+		BasePanel.refBreadcrumb.current.setItems([{"label" : "Mascotas"}])
 	}
 
 	searchMascotas(page) {
@@ -210,8 +212,16 @@ class MascotasView extends BasePanel{
 								}
 								>
 									<Meta
-										title={<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>{mascota.nombre} - @{mascota.identificacion}</a>}
-										description={mascota.presentacion}
+										title={<div>
+												<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>
+													{mascota.nombre} - @{mascota.identificacion}
+												</a>
+											</div>
+										}
+										description={<div>
+											{mascota.presentacion}
+											{mascota.desaparecido ? <div><Tag color="red">Desaparecid@</Tag></div> : null}
+										</div>}
 									/>
 							</Card>
 						</List.Item>

@@ -2,9 +2,12 @@ import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 import Constant       from '@/components/Constant';
 
-import { Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider } from 'antd';
+import { Popconfirm, Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider, message } from 'antd';
 import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined } from '@ant-design/icons';
 import { QRCode } from 'react-qrcode-logo';
+import EditMascotaFormStructure from '@/formclasses/edit_mascota';
+import EditDesaparecidoFormStructure from '@/formclasses/edit_desaparecido';
+import moment from 'moment';
 
 const { TabPane } = Tabs;
 
@@ -23,11 +26,26 @@ class MascotasProfileView extends BasePanel{
 
 		this.searchMascota        = this.searchMascota.bind(this);
 		this.successSearchMascota = this.successSearchMascota.bind(this);
+		this.openFormEdit         = this.openFormEdit.bind(this);
+		this.onEditMascota        = this.onEditMascota.bind(this);
+		this.successEditMascota   = this.successEditMascota.bind(this);
+		this.deleteDesaparecidoReporte   = this.deleteDesaparecidoReporte.bind(this);
+		this.openFormDesaparecido   = this.openFormDesaparecido.bind(this);
+
+		this.breadcrumbData = [
+			{"label" : "Mascotas", "route" : this.constants.route_mascotas, "params" : {}},
+		];
+		this.refFormEdit = React.createRef();
+		this.refFormDesaparecido = React.createRef();
 	}
 
 	componentDidMount() {
 		this.searchMascota(this.mascota_pk);
+
+		BasePanel.refBreadcrumb.current.setItems(this.breadcrumbData);
 	}
+
+
 
 	searchMascota(pk) {
 		let body = {
@@ -63,7 +81,91 @@ class MascotasProfileView extends BasePanel{
 		if(data["estado_p"] === 200) {
 			this.setState({
 				mascota: data["data"]
-			})
+			});
+			if(data["data"].length > 0){
+				let dataBC = {
+					"label" : data["data"][0].nombre
+				}
+				if (this.breadcrumbData.length === 2){
+					this.breadcrumbData.push(dataBC);
+				}
+				else{
+					this.breadcrumbData[2] = dataBC;
+				}
+				BasePanel.refBreadcrumb.current.setItems(this.breadcrumbData);
+			}
+		}
+	}
+
+	openFormEdit() {
+		this.refFormEdit.current.open("Editar datos de la mascota");
+	}
+	openFormDesaparecido() {
+		this.refFormDesaparecido.current.open("Reportar como desaparecida");
+	}
+
+	deleteDesaparecidoReporte(deleteReg = true) {
+		let body = {};
+		if(deleteReg){
+			body = {
+				"pk" : this.mascota_pk,
+				"modelo" : "modificar_desaparecido",
+				"fecha_desaparecido" : null,
+				"descripcion_desaparecido" : null,
+				"desaparecido" : false
+			}
+		}
+		else{
+			let values = this.refFormDesaparecido.current.getValues();
+			body = {
+				"pk" : this.mascota_pk,
+				"modelo" : "modificar_desaparecido",
+				"fecha_desaparecido" : values["fecha_desaparecido"],
+				"descripcion_desaparecido" : values["descripcion_desaparecido"],
+				"desaparecido" : true
+			}
+		}
+		console.log(body);
+		this.send({
+			endpoint: this.constants.getPrivateEndpoint() + "mascota",
+			method: 'PUT',
+			success: this.successEditMascota,
+			body: body,
+			showMessage : true,
+			requires_token: true
+		});
+	}
+
+	onEditMascota() {
+		let formValues = this.refFormEdit.current.getValues();
+		let body = {
+			"pk" : this.mascota_pk,
+			"modelo" : "modificar",
+			"nombre" : formValues["nombre"],
+			"fecha_nacimiento" : formValues["fecha_nacimiento"],
+			"tipo" : formValues["tipo"],
+			"raza" : formValues["raza"],
+			"visible" : formValues["visible"],
+			"presentacion" : formValues["presentacion"]
+		}
+
+		this.send({
+			endpoint: this.constants.getPrivateEndpoint() + "mascota",
+			method: 'PUT',
+			success: this.successEditMascota,
+			body: body,
+			showMessage : true,
+			requires_token: true
+		});
+	}
+
+	successEditMascota(data) {
+		if(data["estado_p"] === 200) {
+			this.searchMascota(this.mascota_pk);
+			message.success("Los datos de la mascota han sido editados con éxito");
+		}
+		else{
+			message.error("Hubo un error al editar los datos de la mascota");
 		}
 	}
 
@@ -84,11 +186,13 @@ class MascotasProfileView extends BasePanel{
 		}
 
 		mascota = mascota[0];
+		let mascotaEdit = Object.assign({}, mascota);
+		mascotaEdit["fecha_nacimiento"] = moment(mascotaEdit["fecha_nacimiento"], "YYYY-MM-DD hh:mm:ss")
+
 		this.isMissing = mascota["desaparecido"];
-		console.log(mascota["fotos"]);
 
 		let dataMascota = [
-			{title: "Fecha de nacimiento", description: mascota["fecha_nacimiento"]},
+			{title: "Fecha de nacimiento", description: mascota["fecha_nacimiento"] ? (mascota["fecha_nacimiento"] + "").formatDateTime() : "No hay fecha de nacimiento"},
 			{title: "Identificación", description: mascota["identificacion"]},
 			{title: "Presentación", description: mascota["presentacion"]},
 			{title: "Sexo", description: "Hembra"},
@@ -102,8 +206,32 @@ class MascotasProfileView extends BasePanel{
 			//{title: "Acciones", description: null},
 		];
 
+		let dataMissing = [
+			{title: "Fecha de desaparición", description: mascota["fecha_desaparecido"] ? (mascota["fecha_desaparecido"] + "").formatDateTime() : "No hay fecha registrada"},
+			{title: "Descripción", description: mascota["descripcion_desaparecido"]},
+		]
+
 		return (
 			<div>
+				{
+					this.canEdit ?
+						<div>
+							<EditMascotaFormStructure
+								modal={true}
+								vertical={false}
+								ref={this.refFormEdit}
+								modalOnOk={this.onEditMascota}
+								initialValues={mascotaEdit} />
+
+							<EditDesaparecidoFormStructure
+								modal={true}
+								vertical={false}
+								ref={this.refFormDesaparecido}
+								modalOnOk={e => this.deleteDesaparecidoReporte(false)} />
+						</div>
+					:
+						null
+				}
 				{
 					this.isMissing ?
 					<div>
@@ -140,7 +268,7 @@ class MascotasProfileView extends BasePanel{
 						{
 							this.canEdit && !this.isMissing ?
 								<Tooltip title="Reportar como desaparecido">
-									<Button size="large" danger type="primary" icon={<AlertOutlined />}>Reportar como desaparecido</Button>
+									<Button size="large" danger type="primary" icon={<AlertOutlined />} onClick={this.openFormDesaparecido}>Reportar como desaparecido</Button>
 								</Tooltip>
 							:
 							null
@@ -148,9 +276,14 @@ class MascotasProfileView extends BasePanel{
 
 						{
 							this.isMissing && this.canEdit ?
-								<Tooltip title="Eliminar reporte de desaparecido">
+								<Popconfirm
+									title="¿Está seguro que desea borrar este reporte?"
+									onConfirm={this.deleteDesaparecidoReporte}
+									okText="Si"
+									cancelText="No"
+									>
 									<Button size="large" type="primary" icon={<AlertOutlined />}>Eliminar reporte de desaparecido</Button>
-								</Tooltip>
+								</Popconfirm>
 							:
 							null
 						}
@@ -166,7 +299,7 @@ class MascotasProfileView extends BasePanel{
 								{
 									this.canEdit ?
 										<Tooltip title="Editar datos de la mascota">
-											<Button shape="circle" type="primary" icon={<EditOutlined />}></Button>
+											<Button shape="circle" type="primary" icon={<EditOutlined />} onClick={this.openFormEdit}></Button>
 										</Tooltip>
 									:
 									null
@@ -213,11 +346,50 @@ class MascotasProfileView extends BasePanel{
 							}
 
 							<TabPane tab="Vacunas" key="3">
-								Content of Tab Pane 2
+								<List
+									size="small"
+									itemLayout="horizontal"
+									dataSource={mascota["vacunas"]}
+									renderItem={item => (
+									<List.Item>
+										<List.Item.Meta
+											title={item.vacuna}
+											description={(item.fecha_aplicacion + "").formatDateTime()}
+										/>
+									</List.Item>
+									)}
+								/>
 							</TabPane>
-							<TabPane tab="Placa" key="4">
-								<QRCode value="Puto el que lo escanee" bgColor={"purple"} fgColor={"white"} qrStyle={"dots"} />
-							</TabPane>
+							{
+								this.canEdit ?
+									<TabPane tab="Placa" key="4">
+										<QRCode value="Puto el que lo escanee" bgColor={"purple"} fgColor={"white"} qrStyle={"dots"} />
+									</TabPane>
+								:
+								null
+							}
+
+							{
+								this.isMissing ?
+									<TabPane tab="Datos de desaparición" key="5">
+										<List
+											size="small"
+											itemLayout="horizontal"
+											dataSource={dataMissing}
+											renderItem={item => (
+											<List.Item>
+												<List.Item.Meta
+													title={item.title}
+													description={item.description}
+												/>
+											</List.Item>
+											)}
+										/>
+									</TabPane>
+								:
+								null
+							}
+
 						</Tabs>
 
 

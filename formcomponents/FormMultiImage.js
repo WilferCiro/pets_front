@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { Upload, Form, Button, Input, Select } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import ImgCrop from 'antd-img-crop';
-const { Option } = Select;
+import BasePanel           from '@/containers/BasePanel';
+import BaseFormComponent   from '@/formcomponents/BaseFormComponent';
+import { Upload, Form }    from 'antd';
+import { UploadOutlined }  from '@ant-design/icons';
+import ImgCrop             from 'antd-img-crop';
 
 
 

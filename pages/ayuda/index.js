@@ -36,6 +36,24 @@ class AyudaView extends BasePanel{
 						<Button type="primary">Enviar Mensaje</Button>
 					</div>
 				</section>
+
+				<section className="landing-section donation-section" id="donar">
+					<div>
+						<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
+						<p>El único ingreso monetario de la página es a través de la venta de collares para tus mascotas y donaciones de la comunidad. Tu donación es muy importante para la mejora y mantenimiento de la página.</p>
+					</div>
+					<div className="donation-list">
+						<div className="donation-item">
+							<b>Daviplata:</b> 3173587462
+						</div>
+						<div className="donation-item">
+							<b>Nequi:</b> 3173587462
+						</div>
+						<div className="donation-item">
+							<b>Buy me a coffee:</b> aquí
+						</div>
+					</div>
+				</section>
 			</div>
 		);
 	}

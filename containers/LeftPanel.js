@@ -23,6 +23,11 @@ class LeftPanel extends BasePanel{
 		return (
 			<div className="left-panel">
 
+				<div className="logo" onClick={this.goHome}>
+					<img src={this.constants.img_logo} />
+					Kiwi Peluditos
+				</div>
+
 				<div className="avatar-user">
 					<Avatar size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }} src={"https://s.france24.com/media/display/8c13820c-5b0e-11e9-bf90-005056a964fe/w:980/p:16x9/gato.webp"} />
 				</div>

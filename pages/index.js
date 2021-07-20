@@ -13,6 +13,7 @@ class Home extends BasePanel{
 	}
 
 	componentDidMount() {
+		BasePanel.refBreadcrumb.current.setItems([]);
 	}
 
 	render() {

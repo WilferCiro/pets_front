@@ -2,6 +2,8 @@ import NProgress from 'nprogress';
 import Cookie   from 'js-cookie';
 import jwt      from 'jsonwebtoken';
 import ConstantServer from '@/components/ConstantServer';
+import moment from 'moment';
+moment.locale('es');
 
 class Constant{
 	static instance = null;
@@ -45,6 +47,7 @@ class Constant{
 		this.route_ayuda               = '/ayuda';
 
 		this.route_perdidas            = '/perdidas';
+		this.route_recover             = '/recover'
 
 
 		/*** IMÁGENES ***/
@@ -89,31 +92,9 @@ class Constant{
 
 export default  new Constant();
 
-/**
- * @returns {string} a
- * @memberof Constant
- */
-String.prototype.format = function () {
-    let a = this;
-    for (let k in arguments) {
-        a = a.replace("{" + k + "}", encodeURIComponent(arguments[k]));
-    }
-    return a
+
+String.prototype.formatDateTime = function () {
+	let a = this;
+	let date = new Date(a);
+	return moment(a).format('DD MMMM [de] YYYY, h:mm:ss a');
 };
-
-/**
- * @param {number} decimales -Decimales aproximación
- * @param {number}  valor -Valor
- * @returns {number}
- * @memberof Constant
- */
-String.prototype.redondear = (valor,decimales) => {
-    decimales = (decimales===undefined && decimales == null)?2:decimales;
-    return Math.round(parseFloat(valor) * Math.pow(10, parseFloat(decimales))) / Math.pow(10, parseFloat(decimales));
-}
-
-String.prototype.removeAccents  = function (name ){
-	let data = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-	data = data.replace(/\//g, '-');
-	return data.replace(/ /g, "-");
-}

@@ -16,10 +16,10 @@ export default class BasePanel extends Component {
 	static service = Services;
 	static alertLocal = new React.createRef();
 	static user = User;
+	static refBreadcrumb = new React.createRef();
 
 	static store = Store;
 
-	static refEmpresa = new React.createRef();
 
 	constructor(props) {
 		super(props);
@@ -33,16 +33,8 @@ export default class BasePanel extends Component {
 		this.send = this.send.bind(this);
 		this.error = this.error.bind(this);
 		this.logout = this.logout.bind(this);
-
-		this.getSelectedEmpresa = this.getSelectedEmpresa.bind(this);
 	}
 
-	getSelectedEmpresa() {
-		if (BasePanel.refEmpresa.current){
-			return BasePanel.refEmpresa.current.getValue();
-		}
-		return null;
-	}
 
 	logout() {
 		BasePanel.user.deleteToken();

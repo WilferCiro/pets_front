@@ -7,7 +7,6 @@ class FormPassword extends BaseFormComponent{
 	constructor(props) {
 		super(props);
 
-		this.type = "FormPassword";
 	}
 
 	render() {
@@ -16,6 +15,7 @@ class FormPassword extends BaseFormComponent{
 				label={this.getLabel()}
 				name={this.getName()}
 				rules={this.getRules()}
+				style={this.style}
 			>
 				<Input.Password
 					iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
