@@ -1,7 +1,7 @@
 import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 import Constant       from '@/components//Constant';
-import {Divider}      from 'antd';
+import {Divider, message}      from 'antd';
 // Form Components
 import FormPassword   from '@/formcomponents//FormPassword';
 import FormInputText   from '@/formcomponents//FormInputText';
@@ -23,6 +23,7 @@ class Login extends BasePanel{
 		this.successLogin   = this.successLogin.bind(this);
 		this.onLogin   = this.onLogin.bind(this);
 		this.onSignUp   = this.onSignUp.bind(this);
+		this.successSignUp   = this.successSignUp.bind(this);
 
 		this.handleSocialLogin = this.handleSocialLogin.bind(this);
 	}
@@ -40,7 +41,36 @@ class Login extends BasePanel{
 	async onSignUp() {
 		let valid = await this.refFormSignup.current.validate();
 		if(valid) {
-			console.log(this.refFormSignup.current.getValues());
+			let values = this.refFormSignup.current.getValues();
+			let body = {
+				"email" : values["email"],
+				"password" : values["password"]["password1"],
+				"first_name" : values["nombres"],
+				"last_name" : values["apellidos"],
+				"modelo" : "registrarse",
+				"acepta_condicion" : true
+			}
+
+			console.log(body);
+			this.send({
+				endpoint: Constant.getPublicEndpoint() + "user",
+				method: 'POST',
+				success: this.successSignUp,
+				body: body,
+				showMessage : true
+			});
+		}
+	}
+
+	successSignUp(data) {
+		console.log(data);
+		if(data["estado_p"] === 200) {
+			message.success("Se ha registrado con éxito, se ha enviado un correo de confirmación.");
+			this.refFormSignup.current.clearValues();
+			this.onRegisterLogin();
+		}
+		else{
+			message.error("Hubo un error, por favor pruebelo de nuevo");
 		}
 	}
 
@@ -56,7 +86,6 @@ class Login extends BasePanel{
 			"username" : values["username"],
 			"password" : values["password"]
 		};
-		console.log(body);
 		this.send({
 			endpoint: Constant.getLoginEndPoint(),
 			method: 'POST',
@@ -86,7 +115,6 @@ class Login extends BasePanel{
 				<div className="container" id="container" ref="container-login">
 					<div className="form-container sign-up-container">
 						<div className="form">
-							<h1>Crear cuenta</h1>
 							<div className="social-container">
 								<a href="#" className="social login"><FaFacebook /></a>
 								<GoogleLogin
@@ -107,6 +135,7 @@ class Login extends BasePanel{
 								vertical={true}
 								ref={this.refFormSignup}
 							 />
+							 <p>Al registrarse usted acepta nuestra <a href="">política de privacidad de datos</a></p>
 
 							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
 						</div>

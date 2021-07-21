@@ -109,6 +109,7 @@ p {
 .complete-body{
 	width: 100%;
 	margin: auto;
+	background: $bg-1;
 }
 .body{
 	min-height: calc(100vh - #{$header-height});

@@ -114,7 +114,8 @@ class Services {
 		_headers=true,
 		formData=false,
 		requires_token=false,
-		page=1
+		page=1,
+		token=undefined
 	}={}) {
 		NProgress.start();
 		let xhr = new XMLHttpRequest();
@@ -151,7 +152,12 @@ class Services {
 			}
 			console.log("---", Store.readValue("token"));
 			if (_headers !== false && requires_token){
-				xhr.setRequestHeader('Authorization','Bearer ' + Store.readValue("token"));
+				if(token) {
+					xhr.setRequestHeader('Authorization','Bearer ' + token);
+				}
+				else{
+					xhr.setRequestHeader('Authorization','Bearer ' + Store.readValue("token"));
+				}
 			}
 			xhr.onload = function() {
 				const decoder = new TextDecoder("UTF-8");

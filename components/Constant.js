@@ -12,6 +12,7 @@ class Constant{
 	static URL_public = ConstantServer["URL_public"];
 	static URL_private = ConstantServer["URL_private"];
 	static URL_login = ConstantServer["URL_login"];
+	static URL_recover = ConstantServer["URL_recover"];
 
 	// Dev
 	//static URL_server = "http://127.0.0.1:8000";
@@ -48,6 +49,7 @@ class Constant{
 
 		this.route_perdidas            = '/perdidas';
 		this.route_recover             = '/recover'
+		this.route_profile             = '/profile'
 
 
 		/*** IMÁGENES ***/
@@ -81,6 +83,9 @@ class Constant{
 	}
 	getLoginEndPoint() {
 		return Constant.URL_server + Constant.URL_login;
+	}
+	getRecoverEndPoint() {
+		return Constant.URL_server + Constant.URL_recover;
 	}
 
 	get_key() {

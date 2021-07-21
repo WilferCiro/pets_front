@@ -50,6 +50,7 @@ class BaseFormStructure  extends React.Component{
 		this.handleOk      = this.handleOk.bind(this);
 		this.handleCancel  = this.handleCancel.bind(this);
 		this.open          = this.open.bind(this);
+		this.clearValues   = this.clearValues.bind(this);
 	}
 
 	open(title) {
@@ -89,6 +90,10 @@ class BaseFormStructure  extends React.Component{
 				open: false
 			}
 		});
+	}
+
+	clearValues() {
+		this.formRef.current.resetFields();
 	}
 
 	async validate() {

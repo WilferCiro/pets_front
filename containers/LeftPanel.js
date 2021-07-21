@@ -18,7 +18,7 @@ class LeftPanel extends BasePanel{
 		let currentPage = this.props.currentPage ? this.props.currentPage : "";
 		let isLogged = this.props.isLogged ? this.props.isLogged : false;
 
-		let userName = isLogged ? "Wilfer Daniel Ciro Maya" : "Kiwi Cat";
+		let userName = isLogged ? <a onClick={(e) => this.redirectPage(this.constants.route_profile)}>Wilfer Daniel Ciro Maya</a> : "Kiwi Cat";
 		let nicName  = isLogged ? "ciro" : "kiwicat";
 		return (
 			<div className="left-panel">
