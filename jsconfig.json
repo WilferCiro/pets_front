@@ -16,6 +16,9 @@
 		],
       "@/utils/*": [
         "utils/*"
+      ],
+      "@/tables/*": [
+        "tables/*"
       ]
     },
     "target": "es5",

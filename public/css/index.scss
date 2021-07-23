@@ -93,6 +93,25 @@ p {
 	text-align: right;
 	color: $text-3;
 }
+.text-uppercase{
+	text-transform: uppercase;
+}
+.carousel-container{
+	//display: flex;
+	position: relative;
+}
+.carousel-right{
+	position: absolute;
+	bottom: 0%;
+	left: 40px;
+	z-index: 1000;
+}
+.carousel-left{
+	position: absolute;
+	bottom: 0%;
+	left: 0px;
+	z-index: 1000;
+}
 // generic
 
 // _app.js
@@ -807,3 +826,33 @@ footer{
 	margin: auto;
 }
 // Ayuda/index.js
+
+
+// ModalMissing.js
+.perdido-container{
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	grid-column-gap: 2%;
+}
+.perdido-cartel{
+	text-align: center;
+	width: 100%;
+	//margin: auto;
+	border: solid 1px $text-3;
+	background: white;
+	padding: 15px 30px;
+	position: relative;
+}
+.perdido-cartel-footer{
+	padding: 10px 15px;
+	width: 90%;
+	margin: auto;
+	margin-top: 20px;
+}
+.perdido-cartel-qr{
+	width: 200px;
+	position: absolute;
+	left: 5px;
+	top: 15px;
+}
+// ModalMissing.js

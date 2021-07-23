@@ -6,7 +6,7 @@ class Label extends BasePanel{
 	constructor(props) {
 		super(props);
 		this.state = {
-			texto : this.props.texto
+			text : this.props.text
 		}
 		this.setText = this.setText.bind(this);
 	}
@@ -15,25 +15,23 @@ class Label extends BasePanel{
 
 	setText(text) {
 		this.setState({
-			texto: text
+			text: text
 		})
 	}
 
 	render() {
-		let icon = this.props.icon;
 		return (
 			<React.Fragment>
-				{icon}
 				{
-					(this.state.texto === null && this.props.showLoading) ?
+					(this.state.text === null && this.props.showLoading) ?
 						<label className="loading-text">Cargando...</label>
 					:
 					(this.props.renderHTML) ?
 					<span dangerouslySetInnerHTML={{
-						__html: this.state.texto
+						__html: this.state.text
 					}}/>
 					:
-					this.state.texto
+					this.state.text
 				}
 			</React.Fragment>
 		);

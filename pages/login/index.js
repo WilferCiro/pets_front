@@ -96,10 +96,12 @@ class Login extends BasePanel{
 	}
 
 	successLogin(data) {
-		console.log(data);
 		if(data["estado_p"] === 200) {
 			this.store.setToken(data["data"]["access"]);
-
+			this.store.saveData("full_name", data["data"]["full_name"]);
+			this.store.saveData("avatar", data["data"]["avatar"]);
+			this.store.saveData("cantidad_mascotas", data["data"]["cantidad_mascotas"]);
+			this.store.saveData("cantidad_pedidos", data["data"]["cantidad_pedidos"]);
 			this.goHome();
 		}
 	}

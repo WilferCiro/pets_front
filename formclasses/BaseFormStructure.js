@@ -51,6 +51,17 @@ class BaseFormStructure  extends React.Component{
 		this.handleCancel  = this.handleCancel.bind(this);
 		this.open          = this.open.bind(this);
 		this.clearValues   = this.clearValues.bind(this);
+
+		this.onChange       = this.onChange.bind(this);
+		this.onValuesChange = this.props.onValuesChange;
+
+		this.defaultFileList = this.props.defaultFileList || null;
+	}
+
+	onChange() {
+		if(this.onValuesChange) {
+			this.onValuesChange();
+		}
 	}
 
 	open(title) {
@@ -128,8 +139,8 @@ class BaseFormStructure  extends React.Component{
 			"password"        : (item) => <FormPassword name={item["id"]} ref={item["id"]} {...item} />,
 			"textarea"        : (item) => <FormtextArea name={item["id"]} ref={item["id"]} {...item} />,
 			"switch"          : (item) => <FormSwitch name={item["id"]} ref={item["id"]} {...item} />,
+			"password_repeat" : (item) => <FormPasswordRepeat name={item["id"]} ref={item["id"]} {...item} />,
 			"multiimage"      : (item) => <FormMultiImage name={item["id"]} ref={item["id"]} {...item} />,
-			"password_repeat" : (item) => <FormPasswordRepeat name={item["id"]} ref={item["id"]} {...item} />
 		};
 
 		return <Col span={item["size"] * 2}>
@@ -143,6 +154,18 @@ class BaseFormStructure  extends React.Component{
 		};
 
 		(this.fields).map((item, index) => {
+
+			if (this.defaultFileList){
+				let found = this.defaultFileList.find(function(post, index) {
+					if(post.id == item["id"]){
+						return true;
+					}
+				});
+				if (found){
+					item["defaultFileList"] = found["values"];
+				}
+			}
+
 			if(renderContainers[item["container"]]){
 				renderContainers[item["container"]].push(this.getField(item));
 			}
@@ -159,6 +182,7 @@ class BaseFormStructure  extends React.Component{
 				ref={this.formRef}
 				layout={this.vertical ? "vertical" : "horizontal"}
 				initialValues={this.initialValues}
+				onValuesChange={this.onChange}
 			>
 			{
 				Object.keys(renderContainers).map((key, index) => {

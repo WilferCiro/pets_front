@@ -10,6 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@react-pdf/renderer": "^2.0.16",
     "@zeit/next-css": "^1.0.1",
     "add": "^2.0.6",
     "antd": "^4.16.7",
@@ -18,8 +19,10 @@
     "classnames": "^2.3.1",
     "craco-less": "^1.18.0",
     "file-loader": "^6.2.0",
+    "file-saver": "^2.0.5",
     "format-unicorn": "^1.1.1",
     "framer-motion": "^4",
+    "html-to-image": "^1.6.2",
     "idb-keyval": "^5.0.6",
     "isomorphic-unfetch": "^3.1.0",
     "js-cookie": "^2.2.1",

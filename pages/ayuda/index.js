@@ -1,14 +1,52 @@
 import React              from 'react';
 import BasePanel          from '@/containers/BasePanel';
 import AyudaFormStructure from '@/formclasses/ayuda';
-import {Button, Divider}  from 'antd';
+import {Button, Divider, message}  from 'antd';
 
 class AyudaView extends BasePanel{
 	constructor(props) {
 		super(props);
+
+		this.sendMessage        = this.sendMessage.bind(this);
+		this.successSendMessage = this.successSendMessage.bind(this);
+
+		this.refFormMessage = React.createRef();
 	}
 
 	componentDidMount() {
+	}
+
+	async sendMessage() {
+		let valid = await this.refFormMessage.current.validate();
+
+		if(valid) {
+			let formValues = this.refFormMessage.current.getValues();
+			let body = {
+				"modelo" : "crear",
+				"email" : formValues["email"],
+				"nombre" : formValues["nombre"],
+				"asunto" : formValues["asunto"],
+				"mensaje" : formValues["mensaje"],
+			}
+
+			this.send({
+				endpoint: this.constants.getPublicEndpoint() + "mensaje",
+				method: 'POST',
+				success: this.successSendMessage,
+				body: body,
+				showMessage : true
+			});
+		}
+	}
+
+	successSendMessage(data){
+		if(data["estado_p"] === 200) {
+			message.success("Se ha enviado el mensaje con éxito");
+			this.refFormMessage.current.clearValues();
+		}
+		else{
+			message.error("Hubo un error al enviar el mensaje");
+		}
 	}
 
 	render() {
@@ -31,9 +69,9 @@ class AyudaView extends BasePanel{
 				<section className="landing-section">
 					<div className="help-form">
 						<h4 className="landing-h4 landing-title">Contáctanos</h4>
-						<AyudaFormStructure vertical={true} />
+						<AyudaFormStructure vertical={true} ref={this.refFormMessage} />
 						<Divider />
-						<Button type="primary">Enviar Mensaje</Button>
+						<Button type="primary" onClick={this.sendMessage}>Enviar Mensaje</Button>
 					</div>
 				</section>
 

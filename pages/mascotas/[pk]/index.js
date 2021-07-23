@@ -1,15 +1,20 @@
 import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 import Constant       from '@/components/Constant';
+import ModalMissing   from '@/containers/ModalMissing';
+import TableMascotasVacunas from '@/tables/MascotasVacunas';
 
 import { Popconfirm, Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider, message } from 'antd';
-import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined } from '@ant-design/icons';
+import { RightOutlined, LeftOutlined, EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined } from '@ant-design/icons';
 import { QRCode } from 'react-qrcode-logo';
-import EditMascotaFormStructure from '@/formclasses/edit_mascota';
+import AddMascotaFormStructure from '@/formclasses/add_mascota';
 import EditDesaparecidoFormStructure from '@/formclasses/edit_desaparecido';
 import moment from 'moment';
 
 const { TabPane } = Tabs;
+
+
+
 
 class MascotasProfileView extends BasePanel{
 	constructor(props) {
@@ -29,14 +34,21 @@ class MascotasProfileView extends BasePanel{
 		this.openFormEdit         = this.openFormEdit.bind(this);
 		this.onEditMascota        = this.onEditMascota.bind(this);
 		this.successEditMascota   = this.successEditMascota.bind(this);
+		this.successModifyPhotos  = this.successModifyPhotos.bind(this);
 		this.deleteDesaparecidoReporte   = this.deleteDesaparecidoReporte.bind(this);
 		this.openFormDesaparecido   = this.openFormDesaparecido.bind(this);
+		this.openMissingModal   = this.openMissingModal.bind(this);
+		this.nextImage   = this.nextImage.bind(this);
+		this.prevImage   = this.prevImage.bind(this);
 
 		this.breadcrumbData = [
 			{"label" : "Mascotas", "route" : this.constants.route_mascotas, "params" : {}},
 		];
 		this.refFormEdit = React.createRef();
 		this.refFormDesaparecido = React.createRef();
+		this.refModalMissing = React.createRef();
+		this.refPhotosCarousel = React.createRef();
+
 	}
 
 	componentDidMount() {
@@ -45,7 +57,9 @@ class MascotasProfileView extends BasePanel{
 		BasePanel.refBreadcrumb.current.setItems(this.breadcrumbData);
 	}
 
-
+	openMissingModal() {
+		this.refModalMissing.current.open();
+	}
 
 	searchMascota(pk) {
 		let body = {
@@ -125,7 +139,6 @@ class MascotasProfileView extends BasePanel{
 				"desaparecido" : true
 			}
 		}
-		console.log(body);
 		this.send({
 			endpoint: this.constants.getPrivateEndpoint() + "mascota",
 			method: 'PUT',
@@ -138,6 +151,7 @@ class MascotasProfileView extends BasePanel{
 
 	onEditMascota() {
 		let formValues = this.refFormEdit.current.getValues();
+		this.newFotos = formValues["imagenes"]["fotos"];
 		let body = {
 			"pk" : this.mascota_pk,
 			"modelo" : "modificar",
@@ -161,16 +175,89 @@ class MascotasProfileView extends BasePanel{
 
 	successEditMascota(data) {
 		if(data["estado_p"] === 200) {
-			this.searchMascota(this.mascota_pk);
-			message.success("Los datos de la mascota han sido editados con éxito");
+			this.refFormEdit.current.clearValues();
+
+			this.imagesTotal = 0;
+			this.countImages = 0;
+
+			let mascota = this.state.mascota[0];
+			for (let index in mascota["fotos"]){
+				let found = this.newFotos.find(function(post, ind) {
+					if(post.uid.toString() === mascota["fotos"][index]["pk"].toString()){
+						return true;
+					}
+				});
+				if (!found){
+
+					let body = {
+						"pk" : mascota["fotos"][index]["pk"]
+					}
+					this.send({
+						endpoint: this.constants.getPrivateEndpoint() + "fotomascota",
+						method: 'DELETE',
+						success: this.successModifyPhotos,
+						body: body,
+						showMessage : true,
+						requires_token: true
+					});
+					this.imagesTotal += 1;
+				}
+			}
+
+			for(let index in this.newFotos) {
+				if(this.newFotos[index]["uid"].includes("rc-upload-")){
+
+					let body = {
+						"modelo" : "crear",
+						"foto" : this.newFotos[index]["originFileObj"],
+						"mascota" : this.mascota_pk
+					}
+					this.send({
+						endpoint: this.constants.getPrivateEndpoint() + "filemascota",
+						method: 'POST',
+						success: this.successModifyPhotos,
+						body: body,
+						showMessage : true,
+						requires_token: true,
+						formData: true
+					});
+
+					this.imagesTotal += 1;
+				}
+			}
+
+			if(this.imagesTotal === 0) {
+				this.searchMascota(this.mascota_pk);
+				message.success("Los datos de la mascota han sido editados con éxito");
+			}
 		}
 		else{
 			message.error("Hubo un error al editar los datos de la mascota");
 		}
 	}
 
+	successModifyPhotos(data) {
+		this.countImages += 1;
+		if(this.imagesTotal === this.countImages){
+			this.searchMascota(this.mascota_pk);
+			message.success("Los datos de la mascota han sido editados con éxito");
+		}
+	}
+
+	prevImage() {
+		this.refPhotosCarousel.current.prev();
+	}
+	nextImage() {
+		this.refPhotosCarousel.current.next();
+	}
+
 	render() {
 		let mascota = this.state.mascota;
+		let fotos = [];
+		let mascotaEdit;
+		let dataMascota = [];
+		let dataConacto = [];
+		let dataMissing = [];
 		if(!mascota) {
 			return (<div>Cargando</div>);
 		}
@@ -186,48 +273,67 @@ class MascotasProfileView extends BasePanel{
 		}
 
 		mascota = mascota[0];
-		let mascotaEdit = Object.assign({}, mascota);
+		mascotaEdit = Object.assign({}, mascota);
 		mascotaEdit["fecha_nacimiento"] = moment(mascotaEdit["fecha_nacimiento"], "YYYY-MM-DD hh:mm:ss")
 
 		this.isMissing = mascota["desaparecido"];
 
-		let dataMascota = [
+		dataMascota = [
 			{title: "Fecha de nacimiento", description: mascota["fecha_nacimiento"] ? (mascota["fecha_nacimiento"] + "").formatDateTime() : "No hay fecha de nacimiento"},
 			{title: "Identificación", description: mascota["identificacion"]},
 			{title: "Presentación", description: mascota["presentacion"]},
-			{title: "Sexo", description: "Hembra"},
-			//{title: "Acciones", description: null},
+			{title: "Sexo", description: "Hembra"}
 		];
-		let dataConacto = [
+		dataConacto = [
 			{title: "Nombre Dueño", description: mascota["user__nombre"] ? mascota["user__nombre"] : "Información oculta"},
 			{title: "Celular 1", description: mascota["user__celular1"] ? mascota["user__celular1"] : "Información oculta"},
 			{title: "Celular 2", description: mascota["user__celular2"] ? mascota["user__celular2"] : "Información oculta"},
-			{title: "Email", description: mascota["user__email"] ? mascota["user__email"] : "Información oculta"},
-			//{title: "Acciones", description: null},
+			{title: "Email", description: mascota["user__email"] ? mascota["user__email"] : "Información oculta"}
 		];
 
-		let dataMissing = [
+		dataMissing = [
 			{title: "Fecha de desaparición", description: mascota["fecha_desaparecido"] ? (mascota["fecha_desaparecido"] + "").formatDateTime() : "No hay fecha registrada"},
 			{title: "Descripción", description: mascota["descripcion_desaparecido"]},
 		]
+		if(this.canEdit) {
+			dataMissing.push({title: "Acciones", description: <Button type="primary" onClick={this.openMissingModal}>Generar cartel</Button>});
+		}
+
+		for (let indexFoto in mascota["fotos"]) {
+			fotos.push({
+				uid: mascota["fotos"][indexFoto]["pk"] + "",
+				name: "foto" + indexFoto + ".png",
+				status: 'done',
+				url: mascota["fotos"][indexFoto]["foto"],
+			});
+		}
 
 		return (
 			<div>
 				{
 					this.canEdit ?
 						<div>
-							<EditMascotaFormStructure
+							<AddMascotaFormStructure
 								modal={true}
 								vertical={false}
 								ref={this.refFormEdit}
 								modalOnOk={this.onEditMascota}
-								initialValues={mascotaEdit} />
+								initialValues={mascotaEdit}
+								defaultFileList = {
+									[{"id" : "imagenes", "values" : fotos}]
+								}
+								/>
 
 							<EditDesaparecidoFormStructure
 								modal={true}
 								vertical={false}
 								ref={this.refFormDesaparecido}
 								modalOnOk={e => this.deleteDesaparecidoReporte(false)} />
+
+							<ModalMissing
+								mascotaData={mascota}
+								ref={this.refModalMissing}
+							/>
 						</div>
 					:
 						null
@@ -248,22 +354,30 @@ class MascotasProfileView extends BasePanel{
 				}
 				<Row  gutter={[40, 16]} align="top">
 					<Col xs={24} md={11} lg={8}>
-						<Carousel>
-							{
-								(mascota.fotos).map((foto, index) => {
-									return <div key={Math.random()} className="carouser-foto-container">
-										<img
-											className="carousel-foto"
-											src={foto["foto"]}
-											alt={foto["descripcion"]}
-										/>
-										<div className="description">
-											{foto["descripcion"]}
+						<div className="carousel-container">
+							<div className="carousel-left">
+								<Button type="primary" icon={<LeftOutlined />} onClick={this.prevImage}/>
+							</div>
+							<div className="carousel-right">
+								<Button type="primary" icon={<RightOutlined />} onClick={this.nextImage} />
+							</div>
+							<Carousel effect="fade" ref={this.refPhotosCarousel}>
+								{
+									(mascota.fotos).map((foto, index) => {
+										return <div key={Math.random()} className="carouser-foto-container">
+											<img
+												className="carousel-foto"
+												src={foto["foto"]}
+												alt={foto["descripcion"]}
+											/>
+											<div className="description">
+												{foto["descripcion"]}
+											</div>
 										</div>
-									</div>
-								})
-							}
-						</Carousel>
+									})
+								}
+							</Carousel>
+						</div>
 						<Divider />
 						{
 							this.canEdit && !this.isMissing ?
@@ -346,19 +460,7 @@ class MascotasProfileView extends BasePanel{
 							}
 
 							<TabPane tab="Vacunas" key="3">
-								<List
-									size="small"
-									itemLayout="horizontal"
-									dataSource={mascota["vacunas"]}
-									renderItem={item => (
-									<List.Item>
-										<List.Item.Meta
-											title={item.vacuna}
-											description={(item.fecha_aplicacion + "").formatDateTime()}
-										/>
-									</List.Item>
-									)}
-								/>
+								<TableMascotasVacunas vacunas={mascota["vacunas"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
 							</TabPane>
 							{
 								this.canEdit ?
@@ -370,8 +472,17 @@ class MascotasProfileView extends BasePanel{
 							}
 
 							{
+								this.canEdit ?
+									<TabPane tab="Fotos" key="5">
+										<TableMascotasVacunas vacunas={mascota["vacunas"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
+									</TabPane>
+								:
+								null
+							}
+
+							{
 								this.isMissing ?
-									<TabPane tab="Datos de desaparición" key="5">
+									<TabPane tab="Datos de desaparición" key="6">
 										<List
 											size="small"
 											itemLayout="horizontal"
@@ -380,7 +491,9 @@ class MascotasProfileView extends BasePanel{
 											<List.Item>
 												<List.Item.Meta
 													title={item.title}
-													description={item.description}
+													description={
+														item.description
+													}
 												/>
 											</List.Item>
 											)}

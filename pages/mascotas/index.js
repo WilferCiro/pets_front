@@ -94,7 +94,6 @@ class MascotasView extends BasePanel{
 			let pk = data["data"]["pk"];
 			this.newPk = pk;
 			this.uploaded = 0;
-			console.log("----", this.images);
 			for (let index in this.images) {
 				let body = {
 					"modelo" : "crear",
@@ -163,7 +162,8 @@ class MascotasView extends BasePanel{
 					modalOnOk={this.onAddMascota}
 					initialValues={{
 						"visible" : true
-					}} />
+					}}
+					/>
 				<Row gutter={[40, 16]} align="middle">
 					<Col span={19}>
 						<h2 className="mascota-name">Mis mascotas</h2>

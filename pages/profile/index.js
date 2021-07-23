@@ -4,7 +4,7 @@ import EditUserForm       from '@/formclasses/edit_user';
 import EditPasswordForm   from '@/formclasses/edit_password';
 
 import { Popconfirm, Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider, message } from 'antd';
-import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined } from '@ant-design/icons';
+import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined, KeyOutlined } from '@ant-design/icons';
 const { TabPane } = Tabs;
 
 class ProfileView extends BasePanel{
@@ -163,16 +163,14 @@ class ProfileView extends BasePanel{
 						<div key={Math.random()} className="carouser-foto-container">
 							{
 								user.avatar ?
-								<img
-									className="carousel-foto"
-									src={user.avatar}
-									alt={"foto de " + user.full_name}
-								/>
+									<Avatar src={user.avatar} size={{ xs: 250, sm: 250, md: 250, lg: 250, xl: 300, xxl: 350 }} />
 								:
-								<Avatar size={300}/>
+								<Avatar size={{ xs: 250, sm: 250, md: 250, lg: 250, xl: 300, xxl: 350 }}>
+									{user.first_name}
+								</Avatar>
 							}
 
-							<Button type="primary" onClick={this.openFormEditPassword}>Cambiar contraseña</Button>
+
 						</div>
 					</Col>
 					<Col xs={24} md={13} lg={16}>
@@ -181,9 +179,14 @@ class ProfileView extends BasePanel{
 								<h2 className="mascota-name">Mi perfil · {user.full_name}</h2>
 							</Col>
 							<Col span={5}>
-								<Tooltip title="Editar datos de la mascota">
-									<Button shape="circle" type="primary" icon={<EditOutlined />} onClick={this.openFormEdit}></Button>
-								</Tooltip>
+								<Space>
+									<Tooltip title="Editar datos de la mascota">
+										<Button shape="circle" type="primary" icon={<EditOutlined />} onClick={this.openFormEdit}></Button>
+									</Tooltip>
+									<Tooltip title="Editar Contraseña">
+										<Button shape="circle" icon={<KeyOutlined />} onClick={this.openFormEditPassword}></Button>
+									</Tooltip>
+								</Space>
 							</Col>
 						</Row>
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import BasePanel           from '@/containers/BasePanel';
 import BaseFormComponent   from '@/formcomponents/BaseFormComponent';
-import { Form, Input }     from 'antd';
+import { Form, Input, Space }     from 'antd';
 import {
 	EyeInvisibleOutlined,
 	EyeTwoTone
@@ -40,16 +40,20 @@ const PasswordRepeat = ({ value = {}, onChange }) => {
 
 	return (
 		<div>
-			<Input.Password
-				iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-				onChange={onChangePass1}
-				placeholder={"Contraseña 1"}
-			/>
-			<Input.Password
-				iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-				onChange={onChangePass2}
-				placeholder={"Contraseña 2"}
-			/>
+			<Space size={[4, 4]}>
+				<Input.Password
+					iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+					onChange={onChangePass1}
+					placeholder={"Contraseña"}
+					style={{width: "100%"}}
+				/>
+				<Input.Password
+					iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+					onChange={onChangePass2}
+					placeholder={"Repita la contraseña"}
+					style={{width: "100%"}}
+				/>
+			</Space>
 		</div>
 	);
 };

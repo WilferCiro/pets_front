@@ -17,9 +17,10 @@ class LeftPanel extends BasePanel{
 	render() {
 		let currentPage = this.props.currentPage ? this.props.currentPage : "";
 		let isLogged = this.props.isLogged ? this.props.isLogged : false;
+		let userData = this.props.userData;
 
-		let userName = isLogged ? <a onClick={(e) => this.redirectPage(this.constants.route_profile)}>Wilfer Daniel Ciro Maya</a> : "Kiwi Cat";
-		let nicName  = isLogged ? "ciro" : "kiwicat";
+		let userName = isLogged ? <a onClick={(e) => this.redirectPage(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a> : "Kiwi Cat";
+		let nicName  = isLogged ? "user" : "kiwicat";
 		return (
 			<div className="left-panel">
 
@@ -40,11 +41,11 @@ class LeftPanel extends BasePanel{
 					isLogged ?
 					<div className="nav-userdata">
 						<div>
-							<h5 className="title">5</h5>
+							<h5 className="title">{userData ? userData["cantidad_mascotas"] : "-"}</h5>
 							<h5 className="subtitle">Mascotas</h5>
 						</div>
 						<div>
-							<h5 className="title">1</h5>
+							<h5 className="title">{userData ? userData["cantidad_pedidos"] : "-"}</h5>
 							<h5 className="subtitle">Pedidos</h5>
 						</div>
 					</div>
@@ -119,22 +120,14 @@ class LeftPanel extends BasePanel{
 
 LeftPanel.getInitialProps = async ({query, req, pathname}) => {
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
+	let userData = {
+		"avatar" : BasePanel.store.readValue("avatar", {query, req, pathname}),
+		"full_name" : decodeURIComponent(BasePanel.store.readValue("full_name", {query, req, pathname})),
+		"cantidad_pedidos" : BasePanel.store.readValue("cantidad_pedidos", {query, req, pathname}),
+		"cantidad_mascotas" : BasePanel.store.readValue("cantidad_mascotas", {query, req, pathname}),
+	};
 	let currentPage = pathname;
-	return {query, isLogged, currentPage};
+	return {query, isLogged, currentPage, userData};
 }
 
 export default LeftPanel;
-
-
-
-/*
-
-<div className="nav-userdata nav-userdata-register">
-	<div>
-		<Button block type="primary" onClick={e => this.redirectPage(this.constants.route_login)}>Iniciar sesión</Button>
-	</div>
-	<div>
-		<Button block type="primary" onClick={e => this.redirectPage(this.constants.route_login, {"signup" : true})}>Registrarse</Button>
-	</div>
-</div>
-*/
