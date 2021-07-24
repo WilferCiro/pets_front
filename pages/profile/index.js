@@ -1,32 +1,57 @@
-import React              from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
+import React          from 'react';
+
+// Custom classes
 import BasePanel          from '@/containers/BasePanel';
 import EditUserForm       from '@/formclasses/edit_user';
 import EditPasswordForm   from '@/formclasses/edit_password';
 
-import { Popconfirm, Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider, message } from 'antd';
-import { EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined, KeyOutlined } from '@ant-design/icons';
+// Ant components and icons
+import {
+	Tooltip,
+	Tabs,
+	List,
+	Avatar,
+	Space,
+	Button,
+	Row,
+	Col,
+	message
+} from 'antd';
+import {
+	EditOutlined,
+	KeyOutlined
+} from '@ant-design/icons';
 const { TabPane } = Tabs;
 
 class ProfileView extends BasePanel{
 	constructor(props) {
 		super(props);
 
-		this.getUserData = this.getUserData.bind(this);
-		this.successGetUserData = this.successGetUserData.bind(this);
-		this.openFormEdit = this.openFormEdit.bind(this);
-		this.openFormEditPassword = this.openFormEditPassword.bind(this);
+		// Props
 
-		this.editUserData = this.editUserData.bind(this);
-		this.successEditUserData = this.successEditUserData.bind(this);
-		this.editUserPassword = this.editUserPassword.bind(this);
-		this.successEditUserPassword = this.successEditUserPassword.bind(this);
-
+		// States
 		this.state = {
 			user: null
 		}
 
-		this.refFormEdit = React.createRef();
+		//Methods
+		this.getUserData             = this.getUserData.bind(this);
+		this.successGetUserData      = this.successGetUserData.bind(this);
+		this.openFormEdit            = this.openFormEdit.bind(this);
+		this.openFormEditPassword    = this.openFormEditPassword.bind(this);
+		this.editUserData            = this.editUserData.bind(this);
+		this.successEditUserData     = this.successEditUserData.bind(this);
+		this.editUserPassword        = this.editUserPassword.bind(this);
+		this.successEditUserPassword = this.successEditUserPassword.bind(this);
+
+		// References
 		this.refFormEditPassword = React.createRef();
+		this.refFormEdit         = React.createRef();
 	}
 
 	componentDidMount() {

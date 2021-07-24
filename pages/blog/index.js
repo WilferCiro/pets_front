@@ -1,22 +1,44 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
-import { List, Avatar, Space, Card, Skeleton, Row, Col } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
+// NextJS libraries
+import Image from 'next/image'
 
+// Custom classes
+import BasePanel  from '@/containers/BasePanel';
 
+// Ant components and icons
+import {
+	List,
+	Avatar,
+	Card,
+	Skeleton,
+	Row,
+	Col,
+	Button,
+	Result
+} from 'antd';
+import {
+	MessageOutlined,
+	LikeOutlined,
+	StarOutlined,
+	InboxOutlined
+} from '@ant-design/icons';
 
 class BlogView extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// States
 		this.state = {
 			blogs : null,
 			paginator: null
 		}
 
-		this.searchBlogs        = this.searchBlogs.bind(this);
+		// Methods
 		this.successSearchBlogs = this.successSearchBlogs.bind(this);
+		this.searchBlogs        = this.searchBlogs.bind(this);
 	}
 
 	componentDidMount() {
@@ -109,11 +131,13 @@ class BlogView extends BasePanel{
 						<List.Item
 							key={item.titulo}
 							extra={
-								<img
+								<Image
+									className="image-card"
+									src={item.portada}
+									alt={"Portada del blog"}
+									layout='intrinsic'
 									width={200}
 									height={100}
-									alt="logo"
-									src={item.portada}
 								/>
 							}
 						>

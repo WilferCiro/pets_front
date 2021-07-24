@@ -163,9 +163,10 @@ class LocalDashboard extends App
 		return (
 			<div className="site">
 				<Head>
-					<title>{nombrePage} :: {lemaPage}</title>
 
-						// Site data
+					<title>{nombrePage + " :: " + lemaPage}</title>
+
+					{/* Site data */}
 					<meta charSet="UTF-8" />
 					{
 						(pageProps.query !== undefined && pageProps.query !== null && pageProps.query.isAmp === true)?
@@ -178,7 +179,7 @@ class LocalDashboard extends App
 					<link rel="icon" href="/favicon.png" />
 					<meta name="theme-color" content="#00132B" />
 
-					// Additional data
+					{/* Additional data */}
 					<meta httpEquiv="Expires" content="0"/>
 					<meta httpEquiv="Last-Modified" content="0"/>
 					<meta httpEquiv="Cache-Control" content="no-cache, mustrevalidate"/>
@@ -186,19 +187,18 @@ class LocalDashboard extends App
 					<meta httpEquiv="Content-Type" content="text/html; charset=UTF-8"/>
 					<meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
 
-					// The Open Graph protocol
+					{/* The Open Graph protocol */}
 					<meta property="og:type" content="website"/>
 					<meta property="og:locale" content="es_ES"/>
 					<meta property="og:url" content={urlPage}/>
 
-					// Twitter card tags
+					{/* Twitter card tags */}
 					<meta name="twitter:card" content="summary_large_image" />
 					<meta name="twitter:site" content={urlPage} />
 
 					<link rel="canonical" href={urlPage + this.props.router.asPath} />
 
-					// Dynamic meta
-
+					{/* Dynamic meta */}
 					{
 						(pageProps.query !== undefined && pageProps.query.head !== undefined && pageProps.query.head.keywords !== undefined) ?
 							<React.Fragment>
@@ -255,7 +255,7 @@ class LocalDashboard extends App
 							</React.Fragment>
 					}
 
-					// Social Media data
+					{/* Social Media data */}
 					<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
 
 				</Head>

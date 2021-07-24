@@ -1,23 +1,47 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-import { Card, Avatar, Skeleton, Space, Result, Button, List, Row, Col, Tooltip, message, Tag } from 'antd';
-import { PlusCircleFilled, EditOutlined, EllipsisOutlined, SettingOutlined, InboxOutlined } from '@ant-design/icons';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
-import AddMascotaFormStructure from '@/formclasses/add_mascota';
-import MascotaCard  from '@/components/MascotaCard';
+// React Components
+import React          from 'react';
+
+// Custom classes
+import BasePanel      from '@/containers/BasePanel';
+import AddMascotaForm from '@/formclasses/add_mascota';
+import MascotaCard    from '@/components/MascotaCard';
+
+// Ant components and icons
+import {
+	Card,
+	Result,
+	Button,
+	List,
+	Tooltip,
+	message
+} from 'antd';
+import {
+	PlusCircleFilled,
+	InboxOutlined
+} from '@ant-design/icons';
+
 
 const { Meta } = Card;
 class MascotasView extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// Props
+
+		// States
 		this.state = {
 			mascotas: null,
 			paginator: null
 		}
 
+		//Variables
 		this.pageSize = 9;
 
+		// Methods
 		this.searchMascotas        = this.searchMascotas.bind(this);
 		this.successSearchMascotas = this.successSearchMascotas.bind(this);
 		this.addMascota            = this.addMascota.bind(this);
@@ -25,6 +49,7 @@ class MascotasView extends BasePanel{
 		this.successAddMascota     = this.successAddMascota.bind(this);
 		this.successUploadPhotos   = this.successUploadPhotos.bind(this);
 
+		// References
 		this.refFormAdd = React.createRef();
 	}
 
@@ -144,7 +169,7 @@ class MascotasView extends BasePanel{
 
 		return (
 			<div>
-				<AddMascotaFormStructure
+				<AddMascotaForm
 					modal={true}
 					vertical={false}
 					ref={this.refFormAdd}

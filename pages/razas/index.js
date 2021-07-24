@@ -2,8 +2,6 @@ import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 
 // Form Components
-import FacturacionFormStructure from '@/formclasses/facturacion';
-import TableProductsFactura  from '@/containers/TableProductsFactura';
 
 class RazasView extends BasePanel{
 	constructor(props) {

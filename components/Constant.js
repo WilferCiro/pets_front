@@ -55,6 +55,7 @@ class Constant{
 
 		/*** IMÁGENES ***/
 		this.img_logo                       = "/images/general/logo.png";
+		this.img_no_mascota                 = "/images/general/logo.png";
 		this.img_lupa_white                 = "/images/icons/lupa-white.svg";
 		this.img_box_black                  = "/images/icons/box-black.svg";
 		this.img_shop_black                 = "/images/icons/shop-black.svg";

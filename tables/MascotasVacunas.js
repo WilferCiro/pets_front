@@ -1,32 +1,47 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
+
+// Custom classes
+import BasePanel           from '@/containers/BasePanel';
 import MascotaVacunaForm   from '@/formclasses/mascota_vacuna';
 
-import { Table, Space, Popconfirm, Button, message } from 'antd';
-
+// Ant components and icons
+import {
+	Table,
+	Space,
+	Popconfirm,
+	Button,
+	message
+} from 'antd';
 
 class TableMascotasVacunas extends BasePanel{
 	constructor(props) {
 		super(props);
 
-
-		this.canEdit = this.props.canEdit || false;
+		// Props
+		this.canEdit    = this.props.canEdit || false;
 		this.mascota_pk = this.props.mascota_pk;
 
+		// States
 		this.state = {
 			vacunas : this.props.vacunas || []
 		}
 
-		this.openFormVacuna    = this.openFormVacuna.bind(this);
-		this.onAddVacuna       = this.onAddVacuna.bind(this);
-		this.successAddVacuna  = this.successAddVacuna.bind(this);
+		// Methods
 		this.successGetVacunas = this.successGetVacunas.bind(this);
+		this.successAddVacuna  = this.successAddVacuna.bind(this);
+		this.openFormVacuna    = this.openFormVacuna.bind(this);
 		this.onDeleteVacuna    = this.onDeleteVacuna.bind(this);
+		this.onAddVacuna       = this.onAddVacuna.bind(this);
 
-
+		// References
 		this.refFormVacuna = React.createRef();
 
-
+		// Variables
 		this.columnsVacunas = [
 			{
 				title: 'Vacuna',
@@ -61,8 +76,6 @@ class TableMascotasVacunas extends BasePanel{
 			});
 		}
 
-	}
-	componentDidMount() {
 	}
 
 	openFormVacuna() {

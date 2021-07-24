@@ -1,21 +1,21 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-
-import { List, Avatar, Space, Card, Skeleton, Row, Col } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
-
-
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+// Custom classes
+import BasePanel from '@/containers/BasePanel';
 
 class ConfirmView extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// States
 		this.state = {
 			success: null
 		}
 
-		this.sendConfirmation        = this.sendConfirmation.bind(this);
+		// Methods
 		this.successSendConfirmation = this.successSendConfirmation.bind(this);
+		this.sendConfirmation        = this.sendConfirmation.bind(this);
 	}
 
 	componentDidMount() {

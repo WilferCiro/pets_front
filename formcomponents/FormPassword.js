@@ -1,12 +1,24 @@
-import React                                 from 'react';
-import BaseFormComponent                     from '@/formcomponents/BaseFormComponent';
-import { Input, Space, Form }                from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone }  from '@ant-design/icons';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
+import BaseFormComponent from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
+import {
+	Input,
+	Space,
+	Form
+}  from 'antd';
+import {
+	EyeInvisibleOutlined,
+	EyeTwoTone
+} from '@ant-design/icons';
 
 class FormPassword extends BaseFormComponent{
 	constructor(props) {
 		super(props);
-
 	}
 
 	render() {

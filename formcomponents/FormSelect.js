@@ -1,18 +1,26 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import Constant           from '@/components/Constant';
 import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { Dropdown } from 'primereact/dropdown';
-import { Select, Form } from 'antd';
+
+// Ant components and icons
+import {
+	Select,
+	Form
+} from 'antd';
 const { Option } = Select;
 
 class FormSelect extends BaseFormComponent{
 	constructor(props) {
 		super(props);
 
+		// Props
 		this.service = props.service;
 
-
+		// Methods
 		this.searchService       = this.searchService.bind(this);
 		this.succesSearchService = this.succesSearchService.bind(this);
 	}

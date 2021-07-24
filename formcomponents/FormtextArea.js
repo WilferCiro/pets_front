@@ -1,14 +1,20 @@
-import React              from 'react';
-import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { Input, Form }    from 'antd';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
+// Custom classes
+import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
+import {
+	Input,
+	Form
+}    from 'antd';
 const { TextArea } = Input;
 
 class FormtextArea extends BaseFormComponent{
 	constructor(props) {
 		super(props);
-
-		this.type = "FormtextArea";
 	}
 
 	render() {

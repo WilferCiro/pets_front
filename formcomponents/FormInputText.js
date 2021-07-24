@@ -1,7 +1,15 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { Input, Form } from 'antd';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
+import BaseFormComponent from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
+import {
+	Input,
+	Form
+} from 'antd';
 
 class FormInputText extends BaseFormComponent{
 	constructor(props) {

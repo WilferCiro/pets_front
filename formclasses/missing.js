@@ -1,10 +1,15 @@
-import React             from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BaseFormStructure from '@/formclasses/BaseFormStructure';
 
 class MissingForm  extends BaseFormStructure{
 	constructor(props) {
 		super(props);
 
+		// Variables
 		this.fields = [
 			{type: "text", container: 5, size: 12, id: "nombre", label: "Nombre del dueño", placeholder:"Escribe el nombre del dueño", max: 40, required : true},
 			{type: "text", container: 5, size: 12, id: "celulares", label: "Ingresa información de contacto", placeholder:"Celular1 - Celular2", max: 30, required : true},

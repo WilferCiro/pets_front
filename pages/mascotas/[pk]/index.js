@@ -1,49 +1,81 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+// React Components
 import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-import Constant       from '@/components/Constant';
-import ModalMissing   from '@/containers/ModalMissing';
-import TableMascotasVacunas from '@/tables/MascotasVacunas';
 
-import { Popconfirm, Alert, Tooltip, Tabs, List, Card, Avatar, Skeleton, Space, Result, Button, Row, Col, Carousel, Image, Divider, message } from 'antd';
-import { RightOutlined, LeftOutlined, EditOutlined, HeartFilled, QrcodeOutlined, AlertOutlined, AntDesignOutlined } from '@ant-design/icons';
+// NextJS libraries
+import Image from 'next/image'
+
+// Custom classes
+import EditDesaparecidoForm from '@/formclasses/edit_desaparecido';
+import TableMascotasVacunas from '@/tables/MascotasVacunas';
+import AddMascotaForm       from '@/formclasses/add_mascota';
+import ModalMissing         from '@/containers/ModalMissing';
+import BasePanel            from '@/containers/BasePanel';
+
+// Third part
 import { QRCode } from 'react-qrcode-logo';
-import AddMascotaFormStructure from '@/formclasses/add_mascota';
-import EditDesaparecidoFormStructure from '@/formclasses/edit_desaparecido';
 import moment from 'moment';
 
+// Ant components and icons
+import {
+	Popconfirm,
+	Alert,
+	Tooltip,
+	Tabs,
+	List,
+	Avatar,
+	Result,
+	Button,
+	Row,
+	Col,
+	Carousel,
+	Divider,
+	message
+} from 'antd';
+import {
+	RightOutlined,
+	LeftOutlined,
+	EditOutlined,
+	AlertOutlined
+} from '@ant-design/icons';
+
 const { TabPane } = Tabs;
-
-
-
 
 class MascotasProfileView extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// Props
+		this.mascota_pk = this.props.mascota_pk;
+
+		// States
 		this.state = {
 			mascota : null
 		}
 
-		this.canEdit = true;
-		this.isMissing = false;
-
-		this.mascota_pk = this.props.mascota_pk;
-
-		this.searchMascota        = this.searchMascota.bind(this);
-		this.successSearchMascota = this.successSearchMascota.bind(this);
-		this.openFormEdit         = this.openFormEdit.bind(this);
-		this.onEditMascota        = this.onEditMascota.bind(this);
-		this.successEditMascota   = this.successEditMascota.bind(this);
-		this.successModifyPhotos  = this.successModifyPhotos.bind(this);
-		this.deleteDesaparecidoReporte   = this.deleteDesaparecidoReporte.bind(this);
-		this.openFormDesaparecido   = this.openFormDesaparecido.bind(this);
-		this.openMissingModal   = this.openMissingModal.bind(this);
-		this.nextImage   = this.nextImage.bind(this);
-		this.prevImage   = this.prevImage.bind(this);
-
+		// Variables
+		this.canEdit        = true;
+		this.isMissing      = false;
 		this.breadcrumbData = [
 			{"label" : "Mascotas", "route" : this.constants.route_mascotas, "params" : {}},
 		];
+
+		// Methods
+		this.searchMascota             = this.searchMascota.bind(this);
+		this.successSearchMascota      = this.successSearchMascota.bind(this);
+		this.openFormEdit              = this.openFormEdit.bind(this);
+		this.onEditMascota             = this.onEditMascota.bind(this);
+		this.successEditMascota        = this.successEditMascota.bind(this);
+		this.successModifyPhotos       = this.successModifyPhotos.bind(this);
+		this.deleteDesaparecidoReporte = this.deleteDesaparecidoReporte.bind(this);
+		this.openFormDesaparecido      = this.openFormDesaparecido.bind(this);
+		this.openMissingModal          = this.openMissingModal.bind(this);
+		this.nextImage                 = this.nextImage.bind(this);
+		this.prevImage                 = this.prevImage.bind(this);
+
+		// References
 		this.refFormEdit = React.createRef();
 		this.refFormDesaparecido = React.createRef();
 		this.refModalMissing = React.createRef();
@@ -53,7 +85,6 @@ class MascotasProfileView extends BasePanel{
 
 	componentDidMount() {
 		this.searchMascota(this.mascota_pk);
-
 		BasePanel.refBreadcrumb.current.setItems(this.breadcrumbData);
 	}
 
@@ -313,7 +344,7 @@ class MascotasProfileView extends BasePanel{
 				{
 					this.canEdit ?
 						<div>
-							<AddMascotaFormStructure
+							<AddMascotaForm
 								modal={true}
 								vertical={false}
 								ref={this.refFormEdit}
@@ -321,7 +352,7 @@ class MascotasProfileView extends BasePanel{
 								initialValues={mascotaEdit}
 								/>
 
-							<EditDesaparecidoFormStructure
+							<EditDesaparecidoForm
 								modal={true}
 								vertical={false}
 								ref={this.refFormDesaparecido}
@@ -369,28 +400,28 @@ class MascotasProfileView extends BasePanel{
 								{
 									(mascota.fotos).map((foto, index) => {
 										return <div key={Math.random()} className="carouser-foto-container">
-											<img
+											<Image
 												className="carousel-foto"
 												src={foto["foto"]}
 												alt={foto["descripcion"]}
+												layout='responsive'
+												width={200}
+												height={200}
 											/>
-											<div className="description">
-												{foto["descripcion"]}
-											</div>
 										</div>
 									})
 								}
 								{
 									(mascota.fotos.length === 0) ?
 									<div key={Math.random()} className="carouser-foto-container">
-										<img
+										<Image
 											className="carousel-foto"
-											src={this.constants.img_logo}
+											src={this.constants.img_no_mascota}
 											alt={"Esta mascota no tiene fotos"}
+											layout='responsive'
+											width={200}
+											height={200}
 										/>
-										<div className="description">
-											{"Esta mascota no tiene fotos"}
-										</div>
 									</div>
 									:
 									null

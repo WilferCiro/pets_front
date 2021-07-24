@@ -1,6 +1,14 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React, { useState, useEffect } from 'react';
-import BasePanel           from '@/containers/BasePanel';
+
+// Custom classes
 import BaseFormComponent   from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
 import { Upload, Form }    from 'antd';
 import { UploadOutlined }  from '@ant-design/icons';
 import ImgCrop             from 'antd-img-crop';
@@ -45,6 +53,7 @@ class FormMultiImage extends BaseFormComponent{
 	constructor(props) {
 		super(props);
 
+		// Methods
 		this.checkValidator = this.checkValidator.bind(this);
 	}
 

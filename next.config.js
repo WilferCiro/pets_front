@@ -2,29 +2,24 @@
 const withAntdLess = require('next-plugin-antd-less');
 
 module.exports = withAntdLess({
-  // optional
-  modifyVars: { '@primary-color': 'purple', '@link-color': 'purple' },
-  // optional
-  //lessVarsFilePathAppendToEndOfContent: false,
-  // optional https://github.com/webpack-contrib/css-loader#object
-  //cssLoaderOptions: {},
+	// optional
+	modifyVars: { '@primary-color': 'purple', '@link-color': 'purple' },
+	// optional
+	lessVarsFilePathAppendToEndOfContent: false,
+	// optional https://github.com/webpack-contrib/css-loader#object
+	cssLoaderOptions: {},
 
-  // Other Config Here...
-  images: {
-	  domains: [
-		  '127.0.0.1',
-		  'kiwipyme.pythonanywhere.com'
-	  ],
-  },
+	// Other Config Here...
+	images: {
+		domains: [
+			'127.0.0.1',
+			'kiwipyme.pythonanywhere.com'
+		],
+	},
 
-  webpack(config) {
-    return config;
-  },
-
-  // ONLY for Next.js 10, if you use Next.js 11, delete this block
-  future: {
-    webpack5: true,
-  },
+	webpack(config) {
+		return config;
+	},
 });
 
 

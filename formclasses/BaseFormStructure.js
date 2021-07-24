@@ -1,19 +1,32 @@
-import React          from 'react';
-import FormInputText  from '@/formcomponents/FormInputText';
-import FormImage      from '@/formcomponents/FormImage';
-import FormUrl        from '@/formcomponents/FormUrl';
-import FormDateTime   from '@/formcomponents/FormDateTime';
-import FormSelect     from '@/formcomponents/FormSelect';
-import FormLabel      from '@/formcomponents/FormLabel';
-import FormSearch     from '@/formcomponents/FormSearch';
-import FormNumber     from '@/formcomponents/FormNumber';
-import FormPassword   from '@/formcomponents/FormPassword';
-import FormtextArea   from '@/formcomponents/FormtextArea';
-import FormSwitch     from '@/formcomponents/FormSwitch';
-import FormMultiImage from '@/formcomponents/FormMultiImage';
-import FormPasswordRepeat from '@/formcomponents/FormPasswordRepeat';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
-import { Form, Input, Row, Col, Modal } from 'antd';
+// React Components
+import React              from 'react';
+
+// Custom classes
+import FormPasswordRepeat from '@/formcomponents/FormPasswordRepeat';
+import FormMultiImage     from '@/formcomponents/FormMultiImage';
+import FormInputText      from '@/formcomponents/FormInputText';
+import FormPassword       from '@/formcomponents/FormPassword';
+import FormtextArea       from '@/formcomponents/FormtextArea';
+import FormDateTime       from '@/formcomponents/FormDateTime';
+import FormSelect         from '@/formcomponents/FormSelect';
+import FormSearch         from '@/formcomponents/FormSearch';
+import FormNumber         from '@/formcomponents/FormNumber';
+import FormSwitch         from '@/formcomponents/FormSwitch';
+import FormLabel          from '@/formcomponents/FormLabel';
+import FormUrl            from '@/formcomponents/FormUrl';
+
+// Ant components and icons
+import {
+	Form,
+	Input,
+	Row,
+	Col,
+	Modal
+} from 'antd';
 
 const validateMessages = {
 	required: "'${label}' es requerido"
@@ -24,18 +37,15 @@ class BaseFormStructure  extends React.Component{
 		super(props);
 
 		// Props Data
-		this.fields        = this.props.fields ? this.props.fields : [];
-		this.vertical      = this.props.vertical ? this.props.vertical : false;
-		this.initialValues = this.props.initialValues ? this.props.initialValues : {};
-		this.modal         = this.props.modal ? this.props.modal : false;
+		this.fields         = this.props.fields || [];
+		this.vertical       = this.props.vertical || false;
+		this.initialValues  = this.props.initialValues || {};
+		this.modal          = this.props.modal || false;
+		this.modalOnOk      = this.props.modalOnOk;
+		this.modalOnCancel  = this.props.modalOnCancel;
+		this.onValuesChange = this.props.onValuesChange;
 
-		// References
-		this.formRef       = React.createRef();
-
-		// Methods
-		this.validate      = this.validate.bind(this);
-		this.setValues     = this.setValues.bind(this);
-
+		// States
 		this.state = {
 			modal: {
 				open: false,
@@ -44,17 +54,18 @@ class BaseFormStructure  extends React.Component{
 			defaultFileList : this.props.defaultFileList || null
 		}
 
-		this.modalOnOk     = this.props.modalOnOk;
-		this.modalOnCancel = this.props.modalOnCancel;
+		// References
+		this.formRef       = React.createRef();
 
+		// Methods
+		this.validate      = this.validate.bind(this);
+		this.setValues     = this.setValues.bind(this);
 		this.handleOk      = this.handleOk.bind(this);
 		this.handleCancel  = this.handleCancel.bind(this);
 		this.open          = this.open.bind(this);
 		this.clearValues   = this.clearValues.bind(this);
-
-		this.onChange       = this.onChange.bind(this);
-		this.getField       = this.getField.bind(this);
-		this.onValuesChange = this.props.onValuesChange;
+		this.onChange      = this.onChange.bind(this);
+		this.getField      = this.getField.bind(this);
 
 	}
 
@@ -130,7 +141,6 @@ class BaseFormStructure  extends React.Component{
 			"tiktok_url"      : (item) => <FormUrl name={item["id"]} ref={item["id"]} {...item} beforeText="https://tiktok.com/" regex={/^(https?:\/\/){0,1}(www\.){0,1}tiktok\.com/} />,
 			"url"             : (item) => <FormInputText name={item["id"]} ref={item["id"]} {...item} inputType={"url"} />,
 			"email"           : (item) => <FormInputText name={item["id"]} ref={item["id"]} {...item} inputType={"email"} max={200} />,
-			"photo"           : (item) => <FormImage name={item["id"]} ref={item["id"]} {...item} />,
 			"datetime"        : (item) => <FormDateTime name={item["id"]} ref={item["id"]} {...item} />,
 			"select"          : (item) => <FormSelect name={item["id"]} ref={item["id"]} {...item} />,
 			"label"           : (item) => <FormLabel name={item["id"]} ref={item["id"]} {...item} />,

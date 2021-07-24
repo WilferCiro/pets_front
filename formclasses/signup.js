@@ -1,10 +1,15 @@
-import React             from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BaseFormStructure from '@/formclasses/BaseFormStructure';
 
 class SignUpForm  extends BaseFormStructure{
 	constructor(props) {
 		super(props);
 
+		// Variables
 		this.fields = [
 			{type: "text", container: 1, size: 12, id: "nombres", placeholder: "Nombre(s)", required: true, max: 40},
 			{type: "text", container: 2, size: 12, id: "apellidos", placeholder: "Apellido(s)", required: true, max: 40},

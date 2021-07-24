@@ -1,13 +1,19 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { DatePicker, Form } from 'antd';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
+import BaseFormComponent from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
+import {
+	DatePicker,
+	Form
+} from 'antd';
 
 class FormDateTime extends BaseFormComponent{
 	constructor(props) {
 		super(props);
-
-		this.type = "FormInputText";
 	}
 
 	render() {

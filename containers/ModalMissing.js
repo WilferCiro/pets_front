@@ -9,7 +9,6 @@ import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 import Label          from '@/components/Label';
 import MissingForm    from '@/formclasses/missing';
-import PDFMissing     from '@/components/PDFMissing';
 
 // Third part libraries
 import * as htmlToImage from 'html-to-image';

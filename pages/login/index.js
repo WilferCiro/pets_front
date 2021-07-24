@@ -1,31 +1,42 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-import Constant       from '@/components//Constant';
-import {Divider, message}      from 'antd';
-// Form Components
-import FormPassword   from '@/formcomponents//FormPassword';
-import FormInputText   from '@/formcomponents//FormInputText';
-import LoginFormStructure from '@/formclasses/login';
-import SignUpForm         from '@/formclasses/signup';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
-import {FaFacebook, FaLinkedin} from 'react-icons/fa';
-import {AiOutlineGoogle} from 'react-icons/ai';
+// React Components
+import React from 'react';
+
+// Custom classes
+import BasePanel       from '@/containers/BasePanel';
+import FormPassword    from '@/formcomponents//FormPassword';
+import FormInputText   from '@/formcomponents//FormInputText';
+import LoginForm       from '@/formclasses/login';
+import SignUpForm      from '@/formclasses/signup';
+
+// Third part libraries
 import { GoogleLogin } from 'react-google-login';
+
+// Ant components and icons
+import {
+	Divider,
+	message
+} from 'antd';
 
 class Login extends BasePanel{
 	constructor(props) {
 		super(props);
 
-		this.refFormLogin    = React.createRef();
-		this.refFormSignup   = React.createRef();
+		// References
+		this.refFormLogin  = React.createRef();
+		this.refFormSignup = React.createRef();
+		this.refContainer  = React.createRef();
 
-		this.onRegisterLogin   = this.onRegisterLogin.bind(this);
-		this.successLogin   = this.successLogin.bind(this);
-		this.onLogin   = this.onLogin.bind(this);
-		this.onSignUp   = this.onSignUp.bind(this);
-		this.successSignUp   = this.successSignUp.bind(this);
-
+		// Methods
 		this.handleSocialLogin = this.handleSocialLogin.bind(this);
+		this.onRegisterLogin   = this.onRegisterLogin.bind(this);
+		this.successSignUp     = this.successSignUp.bind(this);
+		this.successLogin      = this.successLogin.bind(this);
+		this.onSignUp          = this.onSignUp.bind(this);
+		this.onLogin           = this.onLogin.bind(this);
 	}
 
 	componentDidMount() {
@@ -35,7 +46,7 @@ class Login extends BasePanel{
 	}
 
 	onRegisterLogin() {
-		this.refs["container-login"].classList.toggle("right-panel-active");
+		this.refContainer.current.classList.toggle("right-panel-active");
 	}
 
 	async onSignUp() {
@@ -53,7 +64,7 @@ class Login extends BasePanel{
 
 			console.log(body);
 			this.send({
-				endpoint: Constant.getPublicEndpoint() + "user",
+				endpoint: this.constants.getPublicEndpoint() + "user",
 				method: 'POST',
 				success: this.successSignUp,
 				body: body,
@@ -87,7 +98,7 @@ class Login extends BasePanel{
 			"password" : values["password"]
 		};
 		this.send({
-			endpoint: Constant.getLoginEndPoint(),
+			endpoint: this.constants.getLoginEndPoint(),
 			method: 'POST',
 			success: this.successLogin,
 			body: body,
@@ -114,7 +125,7 @@ class Login extends BasePanel{
 
 		return (
 			<div className="container-login">
-				<div className="container" id="container" ref="container-login">
+				<div className="container" id="container" ref={this.refContainer}>
 					<div className="form-container sign-up-container">
 						<div className="form">
 							<h1>Registrarse</h1>
@@ -134,22 +145,22 @@ class Login extends BasePanel{
 						<div className="form">
 							<h1>Iniciar sesión</h1>
 							<div className="social-container">
-								<a href="#" className="social login"><FaFacebook /></a>
+								<a href="#" className="social login"></a>
 								<GoogleLogin
 									clientId="727749759287-8jo5384msksp9qv9vll5ene8pmdmrt7g.apps.googleusercontent.com"
 									render={renderProps => (
-										<a onClick={renderProps.onClick} disabled={renderProps.disabled} className="social login"><AiOutlineGoogle /></a>
+										<a onClick={renderProps.onClick} disabled={renderProps.disabled} className="social login"></a>
 									)}
 									buttonText="Login"
 									onSuccess={this.handleSocialLogin}
 									onFailure={this.handleSocialLogin}
 									cookiePolicy={'single_host_origin'}
 								/>
-								<a href="#" className="social login"><FaLinkedin /></a>
+								<a href="#" className="social login"></a>
 							</div>
 							<span>ó usa tus credenciales</span>
 
-							<LoginFormStructure ref={this.refFormLogin} vertical={true} />
+							<LoginForm ref={this.refFormLogin} vertical={true} />
 
 							<a onClick={(e) => this.redirectPage(this.constants.route_recover)} className="login">¿Olvidaste tu contraseña?</a>
 							<button className="login-button" onClick={(e) => this.onLogin()}>Iniciar sesión</button>

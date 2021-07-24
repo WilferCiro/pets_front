@@ -1,17 +1,24 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
-import { InputNumber } from 'antd';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
+// Custom classes
+import BaseFormComponent from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
+import {
+	InputNumber
+} from 'antd';
 
 class FormNumber extends BaseFormComponent{
 	constructor(props) {
 		super(props);
 
-		this.price   = this.props.price ? this.props.price : false;
+		// Props
 		this.percent = this.props.percent ? this.props.percent : false;
-		this.type    = "FormNumber";
+		this.price   = this.props.price ? this.props.price : false;
 
+		// Methods
 		this.formatter = this.formatter.bind(this);
 		this.parser    = this.parser.bind(this);
 	}

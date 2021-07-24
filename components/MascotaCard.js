@@ -2,6 +2,9 @@
 	* Creado por Wilfer Daniel Ciro Maya - 2021
 **/
 
+// NextJS libraries
+import Image from 'next/image'
+
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
@@ -48,10 +51,13 @@ class MascotaCard extends BasePanel{
 				key={Math.random()}
 				style={{ width: "100%" }}
 				cover={
-					<img
+					<Image
 						className="image-card"
+						src={mascota.foto.length > 0 ? mascota.foto[0].foto : this.constants.img_no_mascota}
 						alt={mascota.foto.length > 0 ? mascota.foto[0].descripcion : "Foto de mascota"}
-						src={mascota.foto.length > 0 ? mascota.foto[0].foto : "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"}
+						layout='intrinsic'
+						width={200}
+						height={200}
 					/>
 				}
 				>

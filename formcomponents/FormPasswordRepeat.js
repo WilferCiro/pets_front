@@ -1,11 +1,23 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React, { useState } from 'react';
-import BasePanel           from '@/containers/BasePanel';
+
+// Custom classes
 import BaseFormComponent   from '@/formcomponents/BaseFormComponent';
-import { Form, Input, Space }     from 'antd';
+
+// Ant components and icons
+import {
+	Form,
+	Input,
+	Space
+} from 'antd';
 import {
 	EyeInvisibleOutlined,
 	EyeTwoTone
-}                          from '@ant-design/icons';
+} from '@ant-design/icons';
 
 const PasswordRepeat = ({ value = {}, onChange }) => {
 	const [password1, setPassword1] = useState([]);
@@ -63,6 +75,7 @@ class FormPasswordRepeat extends BaseFormComponent{
 	constructor(props) {
 		super(props);
 
+		// Methods
 		this.checkValidator = this.checkValidator.bind(this);
 	}
 

@@ -1,12 +1,16 @@
-import React             from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BaseFormStructure from '@/formclasses/BaseFormStructure';
 
-class AddMascotaFormStructure  extends BaseFormStructure{
+class AddMascotaForm extends BaseFormStructure{
 	constructor(props) {
 		super(props);
 
+		// Variables
 		this.fields = [
-			//{type: "photo", id: "foto", label: "Foto"},
 			{type: "text", container: 1, size: 12, id: "nombre", label: "Nombre", placeholder: "Nombre de la mascota", required: true, max: 20},
 			{type: "datetime", container: 4, size: 12, id: "fecha_nacimiento", label: "Fecha de nacimiento"},
 			{type: "select", container: 4, size: 12, id: "tipo", label: "Tipo de mascota", service: "tipomascota", required : true},
@@ -18,4 +22,4 @@ class AddMascotaFormStructure  extends BaseFormStructure{
 	}
 }
 
-export default AddMascotaFormStructure;
+export default AddMascotaForm;

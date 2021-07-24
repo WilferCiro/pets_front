@@ -1,27 +1,50 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React          from 'react';
+
+// Custom classes
+import AddMascotaForm from '@/formclasses/add_mascota';
+import MascotaCard    from '@/components/MascotaCard';
 import BasePanel      from '@/containers/BasePanel';
-import { Card, Avatar, Skeleton, Space, Result, Button, List, Row, Col, Tooltip, message, Tag, Divider } from 'antd';
-import { PlusCircleFilled, EditOutlined, EllipsisOutlined, SettingOutlined, InboxOutlined } from '@ant-design/icons';
 
-import AddMascotaFormStructure from '@/formclasses/add_mascota';
-import MascotaCard  from '@/components/MascotaCard';
+// Ant components and icons
+import {
+	Card,
+	Skeleton,
+	Space,
+	Result,
+	Button,
+	List,
+	message,
+} from 'antd';
+import {
+	InboxOutlined
+} from '@ant-design/icons';
 
-const { Meta } = Card;
 
 class PerdidasView extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// Props
+
+		// States
 		this.state = {
 			mascotas: null,
 			paginator: null
 		}
 
+		// Variables
 		this.pageSize = 9;
 
+		// Methods
 		this.searchMascotas        = this.searchMascotas.bind(this);
 		this.successSearchMascotas = this.successSearchMascotas.bind(this);
 
+		// References
 		this.refFormAdd = React.createRef();
 	}
 
@@ -88,7 +111,7 @@ class PerdidasView extends BasePanel{
 
 		return (
 			<div>
-				<AddMascotaFormStructure
+				<AddMascotaForm
 					modal={true}
 					vertical={false}
 					ref={this.refFormAdd}

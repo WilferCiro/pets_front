@@ -1,20 +1,34 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import RecoverPassForm    from '@/formclasses/recover_pass';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
+import React          from 'react';
+
+// Custom classes
+import BasePanel            from '@/containers/BasePanel';
+import RecoverPassForm      from '@/formclasses/recover_pass';
 import RecoverPassFinalForm from '@/formclasses/recover_pass_final';
 
-import {Button, Divider, Alert, message}  from 'antd';
+// Ant components and icons
+import {
+	Button,
+	Divider,
+	Alert,
+	message
+} from 'antd';
 
 class RecoverView extends BasePanel{
 	constructor(props) {
 		super(props);
 
-		this.sendEmail        = this.sendEmail.bind(this);
-		this.successSendEmail = this.successSendEmail.bind(this);
-
+		// Methods
+		this.sendEmail         = this.sendEmail.bind(this);
+		this.successSendEmail  = this.successSendEmail.bind(this);
 		this.changePass        = this.changePass.bind(this);
 		this.successChangePass = this.successChangePass.bind(this);
 
+		// References
 		this.refFormFinal    = React.createRef();
 		this.refFormEmail    = React.createRef();
 	}

@@ -1,12 +1,13 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
+import BaseFormComponent from '@/formcomponents/BaseFormComponent';
 
 class FormLabel extends BaseFormComponent{
 	constructor(props) {
 		super(props);
-
-		this.type = "FormLabel";
 	}
 
 	render() {

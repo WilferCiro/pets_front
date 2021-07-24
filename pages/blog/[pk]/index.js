@@ -1,18 +1,27 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-import Constant       from '@/components/Constant';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
-import { Image, Result, Button } from 'antd';
-import {ArrowLeftOutlined} from '@ant-design/icons';
+// NextJS libraries
+import Image from 'next/image'
+
+// Custom classes
+import BasePanel from '@/containers/BasePanel';
+import Constant  from '@/components/Constant';
+
+// Ant components and icons
+import {
+	Result,
+	Button
+} from 'antd';
+import {
+	ArrowLeftOutlined
+} from '@ant-design/icons';
 
 
 class BlogProfileView extends BasePanel{
 	constructor(props) {
 		super(props);
-
-	}
-
-	componentDidMount() {
 	}
 
 	render() {
@@ -34,11 +43,12 @@ class BlogProfileView extends BasePanel{
 				<br />
 				<br />
 				<Image
-					width={"100%"}
+					className="image-card"
 					src={blog.portada}
-					placeholder={
-						<p>Cargando...</p>
-					}
+					alt={"Portada del blog"}
+					layout='responsive'
+					width={700}
+					height={100}
 				/>
 				<h2 className="landing-title">{blog.titulo}</h2>
 				<div className="content" dangerouslySetInnerHTML={{__html: blog.cuerpo}}></div>

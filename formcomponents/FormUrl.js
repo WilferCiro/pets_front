@@ -1,13 +1,16 @@
-import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
+
+// Ant components and icons
 import { Input } from 'antd';
 
 class FormUrl extends BaseFormComponent{
 	constructor(props) {
 		super(props);
-
-		this.type = "FormUrl";
 	}
 
 	render() {

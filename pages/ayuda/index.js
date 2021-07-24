@@ -1,19 +1,31 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React              from 'react';
-import BasePanel          from '@/containers/BasePanel';
-import AyudaFormStructure from '@/formclasses/ayuda';
-import {Button, Divider, message}  from 'antd';
+
+// Custom classes
+import BasePanel from '@/containers/BasePanel';
+import AyudaForm from '@/formclasses/ayuda';
+
+// Ant components and icons
+import {
+	Button,
+	Divider,
+	message
+} from 'antd';
 
 class AyudaView extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// References
+		this.refFormMessage = React.createRef();
+
+		// Methods
 		this.sendMessage        = this.sendMessage.bind(this);
 		this.successSendMessage = this.successSendMessage.bind(this);
-
-		this.refFormMessage = React.createRef();
-	}
-
-	componentDidMount() {
 	}
 
 	async sendMessage() {
@@ -69,7 +81,7 @@ class AyudaView extends BasePanel{
 				<section className="landing-section">
 					<div className="help-form">
 						<h4 className="landing-h4 landing-title">Contáctanos</h4>
-						<AyudaFormStructure vertical={true} ref={this.refFormMessage} />
+						<AyudaForm vertical={true} ref={this.refFormMessage} />
 						<Divider />
 						<Button type="primary" onClick={this.sendMessage}>Enviar Mensaje</Button>
 					</div>

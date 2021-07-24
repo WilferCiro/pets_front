@@ -1,10 +1,19 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-import {Button}       from 'antd';
-import {QrcodeOutlined} from '@ant-design/icons'
-import { Anchor, Col, Row, Space } from 'antd';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
 
-const { Link } = Anchor;
+// React Components
+import React          from 'react';
+
+// Custom classes
+import BasePanel      from '@/containers/BasePanel';
+
+// Ant components and icons
+import {
+	Col,
+	Row
+} from 'antd';
+import {QrcodeOutlined} from '@ant-design/icons'
 
 class Home extends BasePanel{
 	constructor(props) {
