@@ -28,12 +28,12 @@ class Store {
 
 
 	readValue(index, ctx = null) {
-		if (ctx) {
+		if (ctx && ctx.req && ctx.req.headers.cookie) {
 			return this.getDataServer(index, ctx, null);
 		}
-		else if(typeof document) {
+		/*else if(typeof document) {
 			return this.getDataServer(index, null, document);
-		}
+		}*/
 		return this.getData(index);
 	}
 

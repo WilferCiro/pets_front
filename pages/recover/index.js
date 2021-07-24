@@ -132,5 +132,7 @@ RecoverView.getInitialProps = async ({query}) => {
 	let token = query.token;
 	return {query, token};
 }
-
+RecoverView.getPageName = () => {
+	return "Recuperar contraseña";
+}
 export default RecoverView;

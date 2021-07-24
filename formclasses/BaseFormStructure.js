@@ -33,7 +33,6 @@ class BaseFormStructure  extends React.Component{
 		this.formRef       = React.createRef();
 
 		// Methods
-		this.getField      = this.getField.bind(this);
 		this.validate      = this.validate.bind(this);
 		this.setValues     = this.setValues.bind(this);
 
@@ -41,7 +40,8 @@ class BaseFormStructure  extends React.Component{
 			modal: {
 				open: false,
 				title: "Hola mundo"
-			}
+			},
+			defaultFileList : this.props.defaultFileList || null
 		}
 
 		this.modalOnOk     = this.props.modalOnOk;
@@ -53,9 +53,9 @@ class BaseFormStructure  extends React.Component{
 		this.clearValues   = this.clearValues.bind(this);
 
 		this.onChange       = this.onChange.bind(this);
+		this.getField       = this.getField.bind(this);
 		this.onValuesChange = this.props.onValuesChange;
 
-		this.defaultFileList = this.props.defaultFileList || null;
 	}
 
 	onChange() {
@@ -64,13 +64,14 @@ class BaseFormStructure  extends React.Component{
 		}
 	}
 
-	open(title) {
+	open(title, defaultFileList = null) {
 		if(this.modal) {
 			this.setState({
 				modal: {
 					open: true,
 					title: title
-				}
+				},
+				defaultFileList: defaultFileList !== null ? defaultFileList : this.state.defaultFileList
 			})
 		}
 	}
@@ -154,9 +155,8 @@ class BaseFormStructure  extends React.Component{
 		};
 
 		(this.fields).map((item, index) => {
-
-			if (this.defaultFileList){
-				let found = this.defaultFileList.find(function(post, index) {
+			if (this.state.defaultFileList){
+				let found = this.state.defaultFileList.find(function(post, index) {
 					if(post.id == item["id"]){
 						return true;
 					}
@@ -178,7 +178,7 @@ class BaseFormStructure  extends React.Component{
 				labelCol={{ span: this.vertical ? 24 : 7 }}
 				wrapperCol={{ span: this.vertical ? 24 : 17 }}
 				validateMessages={ validateMessages }
-				name="register"
+				name={"register"}
 				ref={this.formRef}
 				layout={this.vertical ? "vertical" : "horizontal"}
 				initialValues={this.initialValues}

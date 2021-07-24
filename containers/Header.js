@@ -3,10 +3,10 @@ import BasePanel      from '@/containers/BasePanel';
 import Constant       from '@/components//Constant';
 import ImageLocal     from '@/components//ImageLocal';
 import FormSelect     from '@/formcomponents//FormSelect';
-import { BellOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import {Button, Affix} from 'antd';
+import { BellOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
+import {Button, Affix, Badge, Space} from 'antd';
 import Notifications   from '@/containers/Notifications';
-import CustomBreadcrumb from '@/components/CustomBreadcrumb';
+import Label          from '@/components/Label';
 
 class Header extends BasePanel{
 	constructor(props) {
@@ -36,17 +36,21 @@ class Header extends BasePanel{
 				<header ref={this.headerRef}>
 					<Notifications ref={this.refNotifications} />
 					<div className="header-divider">
-						<div className="header-breadcrumb-container">
-							<CustomBreadcrumb ref={BasePanel.refBreadcrumb} />
+						<div className="header-title-container">
+							<h2 className="header-page-title">
+								{this.props.pageName}
+							</h2>
 						</div>
 						<div className="header-menu">
-							<div className="header-menu-item" onClick={(e) => this.openNotifications()}>
-								<BellOutlined className="icon" />
-							</div>
-							<div className="header-menu-item" onClick={(e) => this.logout() }>
-								<ShoppingCartOutlined className="icon" />
-							</div>
-							<a onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Iniciar sesión</a>
+							<Space size={"middle"} align="center">
+								<Badge status="primary" dot>
+									<Button shape="circle" icon={<BellOutlined />} onClick={(e) => this.openNotifications()} />
+								</Badge>
+								<Badge count={5} style={{ backgroundColor: 'purple' }}>
+									<Button shape="circle" icon={<ShoppingCartOutlined />} />
+								</Badge>
+							</Space>
+							<a onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
 						</div>
 					</div>
 				</header>

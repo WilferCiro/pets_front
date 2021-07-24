@@ -19,25 +19,34 @@ class CustomBreadcrumb extends BasePanel{
 	}
 
 	render() {
-		return (
-			<Breadcrumb>
-				<Breadcrumb.Item>
-					<a onClick={this.goHome}>Inicio</a>
-				</Breadcrumb.Item>
-				{
-					(this.state.items).map((item, index) => {
-						return <Breadcrumb.Item key={Math.random()}>
-						{
-							item.route ?
-							<a onClick={(e) => this.redirectPage(item.route, item.params)}>{item.label}</a>
-							:
-							<React.Fragment>{item.label}</React.Fragment>
-						}
 
-						</Breadcrumb.Item>
-					})
-				}
-			</Breadcrumb>
+		if(this.state.items.length === 0) {
+			return (
+				<div />
+			);
+		}
+
+		return (
+			<div className="breadcrumb-container">
+				<Breadcrumb>
+					<Breadcrumb.Item>
+						<a onClick={this.goHome}>Inicio</a>
+					</Breadcrumb.Item>
+					{
+						(this.state.items).map((item, index) => {
+							return <Breadcrumb.Item key={Math.random()}>
+							{
+								item.route ?
+								<a onClick={(e) => this.redirectPage(item.route, item.params)}>{item.label}</a>
+								:
+								<React.Fragment>{item.label}</React.Fragment>
+							}
+
+							</Breadcrumb.Item>
+						})
+					}
+				</Breadcrumb>
+			</div>
 		);
 	}
 }

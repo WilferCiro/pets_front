@@ -26,5 +26,7 @@ class RazasView extends BasePanel{
 RazasView.getInitialProps = async ({query}) => {
 	return {query};
 }
-
+RazasView.getPageName = () => {
+	return "Razas";
+}
 export default RazasView;

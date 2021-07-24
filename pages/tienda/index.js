@@ -23,5 +23,7 @@ class TiendaView extends BasePanel{
 TiendaView.getInitialProps = async ({query}) => {
 	return {query};
 }
-
+TiendaView.getPageName = () => {
+	return "E-commerce";
+}
 export default TiendaView;

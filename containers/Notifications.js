@@ -39,7 +39,6 @@ class Notifications extends BasePanel{
 				closable={true}
 				onClose={this.close}
 				visible={this.state.isOpen}
-				width={640}
 			>
 				Content
 			</Drawer>

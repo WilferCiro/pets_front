@@ -81,5 +81,7 @@ ConfirmView.getInitialProps = async ({query}) => {
 	let user = query.user;
 	return {query, user, code};
 }
-
+ConfirmView.getPageName = () => {
+	return "Confirmación de correo";
+}
 export default ConfirmView;

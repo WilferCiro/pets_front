@@ -102,4 +102,8 @@ AyudaView.getInitialProps = async ({query}) => {
 	return {query};
 }
 
+AyudaView.getPageName = () => {
+	return "Ayuda";
+}
+
 export default AyudaView;

@@ -69,7 +69,9 @@ BlogProfileView.getInitialProps = async ({query, req, pathname}) => {
 	}
 	return {query, blog};
 }
-
+BlogProfileView.getPageName = () => {
+	return "Entrada de blog";
+}
 export default BlogProfileView;
 
 //<img className="carousel-foto" src={foto["foto"]} />

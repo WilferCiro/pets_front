@@ -38,7 +38,7 @@ export default class BasePanel extends Component {
 
 	logout() {
 		BasePanel.user.deleteToken();
-		this.redirectPage(this.constants.route_login);
+		this.redirectPage(this.constants.route_index);
 	}
 	error(data) {
 		console.log("--ERRR----", data);

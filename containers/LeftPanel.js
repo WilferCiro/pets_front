@@ -13,14 +13,13 @@ class LeftPanel extends BasePanel{
 	componentDidMount() {
 	}
 
-
 	render() {
 		let currentPage = this.props.currentPage ? this.props.currentPage : "";
 		let isLogged = this.props.isLogged ? this.props.isLogged : false;
 		let userData = this.props.userData;
 
-		let userName = isLogged ? <a onClick={(e) => this.redirectPage(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a> : "Kiwi Cat";
-		let nicName  = isLogged ? "user" : "kiwicat";
+		let userName = isLogged ? <a onClick={(e) => this.redirectPage(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a> : "Kiwi invitado";
+		let nicName  = isLogged ? "user" : "kiwi_invitado";
 		return (
 			<div className="left-panel">
 
@@ -30,7 +29,10 @@ class LeftPanel extends BasePanel{
 				</div>
 
 				<div className="avatar-user">
-					<Avatar size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }} src={"https://s.france24.com/media/display/8c13820c-5b0e-11e9-bf90-005056a964fe/w:980/p:16x9/gato.webp"} />
+					<Avatar
+						size={90}
+						src={userData ? userData["avatar"] : this.constants.img_logo}
+					/>
 				</div>
 				<h4 className="nav-username">
 					{userName}
@@ -120,12 +122,15 @@ class LeftPanel extends BasePanel{
 
 LeftPanel.getInitialProps = async ({query, req, pathname}) => {
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
-	let userData = {
-		"avatar" : BasePanel.store.readValue("avatar", {query, req, pathname}),
-		"full_name" : decodeURIComponent(BasePanel.store.readValue("full_name", {query, req, pathname})),
-		"cantidad_pedidos" : BasePanel.store.readValue("cantidad_pedidos", {query, req, pathname}),
-		"cantidad_mascotas" : BasePanel.store.readValue("cantidad_mascotas", {query, req, pathname}),
-	};
+	let userData = null;
+	if(isLogged) {
+		userData = {
+			"avatar" : BasePanel.store.readValue("avatar", {query, req, pathname}),
+			"full_name" : decodeURIComponent(BasePanel.store.readValue("full_name", {query, req, pathname})),
+			"cantidad_pedidos" : BasePanel.store.readValue("cantidad_pedidos", {query, req, pathname}),
+			"cantidad_mascotas" : BasePanel.store.readValue("cantidad_mascotas", {query, req, pathname}),
+		};
+	}
 	let currentPage = pathname;
 	return {query, isLogged, currentPage, userData};
 }

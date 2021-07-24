@@ -145,12 +145,11 @@ class Services {
 		}
 
 		if(endpoint !== undefined) {
-			console.log(method, endpoint);
+			//console.log(method, endpoint);
 			xhr.open(method, endpoint, true);
 			if (_headers !== false && !(formData)){
 				xhr.setRequestHeader('Content-Type','application/json');
 			}
-			console.log("---", Store.readValue("token"));
 			if (_headers !== false && requires_token){
 				if(token) {
 					xhr.setRequestHeader('Authorization','Bearer ' + token);

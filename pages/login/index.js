@@ -117,21 +117,8 @@ class Login extends BasePanel{
 				<div className="container" id="container" ref="container-login">
 					<div className="form-container sign-up-container">
 						<div className="form">
-							<div className="social-container">
-								<a href="#" className="social login"><FaFacebook /></a>
-								<GoogleLogin
-									clientId="727749759287-8jo5384msksp9qv9vll5ene8pmdmrt7g.apps.googleusercontent.com"
-									render={renderProps => (
-										<a onClick={renderProps.onClick} disabled={renderProps.disabled} className="social login"><AiOutlineGoogle /></a>
-									)}
-									buttonText="Login"
-									onSuccess={this.handleSocialLogin}
-									onFailure={this.handleSocialLogin}
-									cookiePolicy={'single_host_origin'}
-								/>
-								<a href="#" className="social login"><FaLinkedin /></a>
-							</div>
-							<span>ó usa tu correo para registrarte</span>
+							<h1>Registrarse</h1>
+							<span>Usa tu correo para registrarte</span>
 
 							<SignUpForm
 								vertical={true}
@@ -140,13 +127,12 @@ class Login extends BasePanel{
 							 <p>Al registrarse usted acepta nuestra <a href="">política de privacidad de datos</a></p>
 
 							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
+							<a className="login" onClick={(e) => this.onRegisterLogin()}>Iniciar sesión</a>
 						</div>
 					</div>
 					<div className="form-container sign-in-container">
 						<div className="form">
 							<h1>Iniciar sesión</h1>
-
-
 							<div className="social-container">
 								<a href="#" className="social login"><FaFacebook /></a>
 								<GoogleLogin
@@ -167,10 +153,10 @@ class Login extends BasePanel{
 
 							<a onClick={(e) => this.redirectPage(this.constants.route_recover)} className="login">¿Olvidaste tu contraseña?</a>
 							<button className="login-button" onClick={(e) => this.onLogin()}>Iniciar sesión</button>
-
-
+							<a className="login" id="signIn" onClick={(e) => this.onRegisterLogin()}>Registrarse</a>
 						</div>
 					</div>
+
 					<div className="overlay-container">
 						<div className="overlay">
 							<div className="overlay-panel overlay-left">

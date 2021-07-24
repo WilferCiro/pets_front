@@ -95,9 +95,6 @@ class PerdidasView extends BasePanel{
 					initialValues={{
 						"visible" : true
 					}} />
-
-				<h2 className="mascota-name">Mascotas reportadas como desaparecidas</h2>
-
 				<List
 					itemLayout="vertical"
 					size="large"
@@ -154,5 +151,7 @@ class PerdidasView extends BasePanel{
 		);
 	}
 }
-
+PerdidasView.getPageName = () => {
+	return "Mascotas Perdidas";
+}
 export default PerdidasView;

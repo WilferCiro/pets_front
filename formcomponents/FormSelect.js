@@ -36,7 +36,6 @@ class FormSelect extends BaseFormComponent{
 		});
 	}
 	succesSearchService(data) {
-		console.log(",,,,", data);
 		if(data["estado_p"] === 200) {
 			let newData = [];
 			for (let index in data["data"]) {

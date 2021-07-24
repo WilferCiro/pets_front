@@ -133,5 +133,7 @@ class BlogView extends BasePanel{
 BlogView.getInitialProps = async ({query}) => {
 	return {query};
 }
-
+BlogView.getPageName = () => {
+	return "Blog";
+}
 export default BlogView;

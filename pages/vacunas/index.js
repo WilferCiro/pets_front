@@ -22,5 +22,7 @@ class VacunasView extends BasePanel{
 VacunasView.getInitialProps = async ({query}) => {
 	return {query};
 }
-
+VacunasView.getPageName = () => {
+	return "Vacunas";
+}
 export default VacunasView;

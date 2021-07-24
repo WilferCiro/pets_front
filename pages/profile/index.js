@@ -31,6 +31,8 @@ class ProfileView extends BasePanel{
 
 	componentDidMount() {
 		this.getUserData();
+
+		BasePanel.refBreadcrumb.current.setItems([{"label" : "Mi perfil"}])
 	}
 
 	editUserData() {
@@ -43,18 +45,26 @@ class ProfileView extends BasePanel{
 			"celular2" : formValues["celular2"],
 			"telefono" : formValues["telefono"]
 		}
-
+		if(formValues["avatar"]["fotos"].length > 0 && formValues["avatar"]["fotos"][0]["uid"].includes("rc-upload")) {
+			body["avatar"] = formValues["avatar"]["fotos"].length > 0 ? formValues["avatar"]["fotos"][0]["originFileObj"] : null;
+		}
+		else if(formValues["avatar"]["fotos"].length === 0) {
+			body["avatar"] = "";
+		}
+		console.log(body);
 		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "user",
+			endpoint: this.constants.getPrivateEndpoint() + "fileuser",
 			method: 'PUT',
 			success: this.successEditUserData,
 			body: body,
 			showMessage : true,
-			requires_token: true
+			requires_token: true,
+			formData: true
 		});
 	}
 
 	successEditUserData(data) {
+		console.log(data);
 		if(data["estado_p"] === 200) {
 			this.getUserData();
 			message.success("Se han editados sus datos exitosamente");
@@ -65,7 +75,17 @@ class ProfileView extends BasePanel{
 	}
 
 	openFormEdit() {
-		this.refFormEdit.current.open("Editar mis datos");
+		let fotos = [];
+		if(this.state.user["avatar"] !== "" && this.state.user["avatar"] !== null) {
+			fotos.push({
+				uid: this.state.user["pk"] + "",
+				name: "foto" + this.state.user["pk"] + ".png",
+				status: 'done',
+				url: this.state.user["avatar"],
+			});
+		}
+
+		this.refFormEdit.current.open("Editar mis datos", [{"id" : "avatar", "values" : fotos}]);
 	}
 
 	openFormEditPassword() {
@@ -251,5 +271,7 @@ class ProfileView extends BasePanel{
 ProfileView.getInitialProps = async ({query}) => {
 	return {query};
 }
-
+ProfileView.getPageName = () => {
+	return "Mi perfil";
+}
 export default ProfileView;

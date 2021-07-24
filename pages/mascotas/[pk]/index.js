@@ -91,7 +91,6 @@ class MascotasProfileView extends BasePanel{
 		}
 	}
 	successSearchMascota(data) {
-		console.log(data);
 		if(data["estado_p"] === 200) {
 			this.setState({
 				mascota: data["data"]
@@ -112,7 +111,18 @@ class MascotasProfileView extends BasePanel{
 	}
 
 	openFormEdit() {
-		this.refFormEdit.current.open("Editar datos de la mascota");
+		let mascota = this.state.mascota[0];
+		let fotos = [];
+		for (let indexFoto in mascota["fotos"]) {
+			fotos.push({
+				uid: mascota["fotos"][indexFoto]["pk"] + "",
+				name: "foto" + indexFoto + ".png",
+				status: 'done',
+				url: mascota["fotos"][indexFoto]["foto"],
+			});
+		}
+
+		this.refFormEdit.current.open("Editar datos de la mascota", [{"id" : "imagenes", "values" : fotos}]);
 	}
 	openFormDesaparecido() {
 		this.refFormDesaparecido.current.open("Reportar como desaparecida");
@@ -175,7 +185,6 @@ class MascotasProfileView extends BasePanel{
 
 	successEditMascota(data) {
 		if(data["estado_p"] === 200) {
-			this.refFormEdit.current.clearValues();
 
 			this.imagesTotal = 0;
 			this.countImages = 0;
@@ -253,7 +262,6 @@ class MascotasProfileView extends BasePanel{
 
 	render() {
 		let mascota = this.state.mascota;
-		let fotos = [];
 		let mascotaEdit;
 		let dataMascota = [];
 		let dataConacto = [];
@@ -299,14 +307,6 @@ class MascotasProfileView extends BasePanel{
 			dataMissing.push({title: "Acciones", description: <Button type="primary" onClick={this.openMissingModal}>Generar cartel</Button>});
 		}
 
-		for (let indexFoto in mascota["fotos"]) {
-			fotos.push({
-				uid: mascota["fotos"][indexFoto]["pk"] + "",
-				name: "foto" + indexFoto + ".png",
-				status: 'done',
-				url: mascota["fotos"][indexFoto]["foto"],
-			});
-		}
 
 		return (
 			<div>
@@ -319,9 +319,6 @@ class MascotasProfileView extends BasePanel{
 								ref={this.refFormEdit}
 								modalOnOk={this.onEditMascota}
 								initialValues={mascotaEdit}
-								defaultFileList = {
-									[{"id" : "imagenes", "values" : fotos}]
-								}
 								/>
 
 							<EditDesaparecidoFormStructure
@@ -355,12 +352,19 @@ class MascotasProfileView extends BasePanel{
 				<Row  gutter={[40, 16]} align="top">
 					<Col xs={24} md={11} lg={8}>
 						<div className="carousel-container">
-							<div className="carousel-left">
-								<Button type="primary" icon={<LeftOutlined />} onClick={this.prevImage}/>
-							</div>
-							<div className="carousel-right">
-								<Button type="primary" icon={<RightOutlined />} onClick={this.nextImage} />
-							</div>
+							{
+								(mascota.fotos.length > 1) ?
+								<div>
+									<div className="carousel-left">
+										<Button type="primary" icon={<LeftOutlined />} onClick={this.prevImage}/>
+									</div>
+									<div className="carousel-right">
+										<Button type="primary" icon={<RightOutlined />} onClick={this.nextImage} />
+									</div>
+								</div>
+								:
+								null
+							}
 							<Carousel effect="fade" ref={this.refPhotosCarousel}>
 								{
 									(mascota.fotos).map((foto, index) => {
@@ -375,6 +379,21 @@ class MascotasProfileView extends BasePanel{
 											</div>
 										</div>
 									})
+								}
+								{
+									(mascota.fotos.length === 0) ?
+									<div key={Math.random()} className="carouser-foto-container">
+										<img
+											className="carousel-foto"
+											src={this.constants.img_logo}
+											alt={"Esta mascota no tiene fotos"}
+										/>
+										<div className="description">
+											{"Esta mascota no tiene fotos"}
+										</div>
+									</div>
+									:
+									null
 								}
 							</Carousel>
 						</div>
@@ -472,15 +491,6 @@ class MascotasProfileView extends BasePanel{
 							}
 
 							{
-								this.canEdit ?
-									<TabPane tab="Fotos" key="5">
-										<TableMascotasVacunas vacunas={mascota["vacunas"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
-									</TabPane>
-								:
-								null
-							}
-
-							{
 								this.isMissing ?
 									<TabPane tab="Datos de desaparición" key="6">
 										<List
@@ -517,7 +527,9 @@ MascotasProfileView.getInitialProps = async ({query, ctx, req, pathname}) => {
 	let mascota_pk = query.pk;
 	return {query, mascota_pk};
 }
-
+MascotasProfileView.getPageName = () => {
+	return "Perfil de mascota";
+}
 export default MascotasProfileView;
 
 //<img className="carousel-foto" src={foto["foto"]} />

@@ -164,16 +164,9 @@ class MascotasView extends BasePanel{
 						"visible" : true
 					}}
 					/>
-				<Row gutter={[40, 16]} align="middle">
-					<Col span={19}>
-						<h2 className="mascota-name">Mis mascotas</h2>
-					</Col>
-					<Col span={5}>
-						<Tooltip title="Editar datos de la mascota">
-							<Button type="primary" icon={<PlusCircleFilled />} onClick={this.addMascota}>Agregar mascota</Button>
-						</Tooltip>
-					</Col>
-				</Row>
+				<Tooltip title="Registrar nueva mascota">
+					<Button type="primary" icon={<PlusCircleFilled />} onClick={this.addMascota}>Registrar mascota</Button>
+				</Tooltip>
 
 				<List
 					itemLayout="vertical"
@@ -231,5 +224,7 @@ class MascotasView extends BasePanel{
 		);
 	}
 }
-
+MascotasView.getPageName = () => {
+	return "Mis mascotas";
+}
 export default MascotasView;

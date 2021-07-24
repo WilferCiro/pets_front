@@ -1,5 +1,26 @@
 @import "variables";
 
+@media (max-width: 992px) {
+	.layout-content{
+		margin-left: 0px;
+	}
+	.ant-layout-sider-zero-width-trigger{
+		top: 5px !important;
+		background: purple !important;
+		color: white !important;
+		border-radius: 5px;
+	}
+	.header-page-title{
+		margin-left: 35px;
+		display: flex;
+		align-items: center;
+		font-size: 18px !important;
+	}
+	.help-form{
+		width: 95%;
+		margin: auto;
+	}
+}
 
 @media (max-width: 767px) {
 	.complete-left-panel{
@@ -7,17 +28,36 @@
 		overflow: hidden;
 	}
 
+	.sidebar{
+		z-index: 1000;
+	}
+
 	.complete-page{
 		display: grid;
 		grid-template-columns: 0% 100%;
 	}
 
+	// Header.js
 	.header-divider{
 		display: grid;
-		grid-template-columns: 60% 40%;
+		grid-template-columns: 70% 30%;
 	}
+	.header-breadcrumb-container{
+		padding-left: 10px;
+	}
+	// Header.js
 
-
+	// Home.js
+	.landing-left-item{
+		width: 90%;
+		height: 50vh;
+	}
+	.landing-h4{
+		font-size: 25px !important;
+	}
+	.landing-h2{
+		font-size: 40px !important;
+	}
 	.landing-about-content{
 		div{
 			margin-top: 40vh;
@@ -31,4 +71,44 @@
 	.landing-circle2, .landing-circle3, .landing-circle4{
 		display: none;
 	}
+	// Home.js
+
+	// Login.js
+	.overlay-container{
+		display: none;
+	}
+	.sign-in-container {
+		width: 100%;
+	}
+	.sign-up-container {
+		width: 0%;
+	}
+	.right-panel-active{
+		.sign-in-container {
+			width: 0%;
+		}
+		.sign-up-container {
+			width: 100%;
+			-webkit-transform: translateX(0%) !important;
+			transform: translateX(0%) !important;
+		}
+	}
+	.form {
+		padding: 0 10px;
+	}
+	// Login.js
+
+	// index.js
+	.donation-section{
+		display: flex;
+		flex-wrap: wrap;
+		align-content: center;
+	}
+	// index.js
+
+	// Footer.js
+	.footer-separator{
+		display: block;
+	}
+	// Footer.js
 }

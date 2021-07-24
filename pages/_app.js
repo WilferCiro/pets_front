@@ -10,8 +10,9 @@ import BasePanel       from '@/containers//BasePanel';
 import AlertLocal      from '@/components//AlertLocal';
 import LeftPanel       from '@/containers//LeftPanel';
 import { withRouter }  from 'next/router'
-import {ConfigProvider} from 'antd';
+import {ConfigProvider, Layout, Menu} from 'antd';
 import esEs            from 'antd/lib/locale/es_ES';
+import CustomBreadcrumb from '@/components/CustomBreadcrumb';
 
 import '../public/css/index.css';
 import '../public/css/responsive.css';
@@ -22,6 +23,8 @@ Router.events.on('routeChangeStart', (url) => {
 })
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
+
+const { Content, Sider } = Layout;
 
 
 export function redirectUser(ctx, location) {
@@ -42,6 +45,7 @@ class LocalDashboard extends App
 		let urls_servidores = [];
 		let redirect = true;
 		let isLogged = true;
+		let pageName = "";
 
 		isLogged = BasePanel.store.isLogged(ctx);//BasePanel.user.isLoggedServer(ctx) || BasePanel.user.isLogged();
 		//isLogged = BasePanel.store.isLoggedServer(ctx) || BasePanel.store.isLogged();
@@ -61,28 +65,12 @@ class LocalDashboard extends App
 			}
 		}
 		leftPanelProps = await LeftPanel.getInitialProps(ctx);
-
 		if(redirect && Component.getInitialProps){
 			pageProps = await Component.getInitialProps(ctx);
 		}
+		pageName = Component.getPageName ? Component.getPageName() : "";
 
-		let empresas = [];
-		/*let [_empresas] = await Promise.all([
-			BasePanel.send(
-			{
-				endpoint: Constant.getPrivateEndpoint() + "user_empresa",
-				method: 'GET',
-				token: true,
-				body: {
-					"modelo" : "nombres"
-				}
-			}),
-		]);
-		if(_empresas["estado_p"] === 200) {
-			empresas = _empresas["data"];
-		}*/
-
-		return {pageProps, leftPanelProps};
+		return {pageProps, leftPanelProps, pageName};
 	}
 
 	componentDidMount() {
@@ -273,24 +261,31 @@ class LocalDashboard extends App
 				</Head>
 
 				<ConfigProvider locale={esEs}>
-					<div>
-						<div>
-							<div className="complete-page">
-								<div className="complete-left-panel">
-									<LeftPanel {...leftPanelProps} />
-								</div>
-								<div></div>
-								<div className="complete-body">
-									<Header empresas={this.props.empresas} />
-									<div className="body">
-										<Component {...pageProps}/>
-									</div>
-									<Footer />
-								</div>
-							</div>
-						</div>
-						<AlertLocal ref={BasePanel.alertLocal} />
-					</div>
+					<Layout>
+						<Sider
+							breakpoint="lg"
+							collapsedWidth="0"
+							theme="light"
+							width="255"
+							style={{
+								height: "100vh",
+								position: "fixed",
+								backgroundColor: "#f0f2f5",
+								border: "none"
+							}}
+							className="sidebar"
+						>
+							<LeftPanel {...leftPanelProps} />
+						</Sider>
+						<Layout className="layout-content" style={{backgroundColor: "white"}}>
+							<Header empresas={this.props.empresas} pageName={this.props.pageName} />
+							<CustomBreadcrumb ref={BasePanel.refBreadcrumb} />
+							<Content style={{padding: "10px 20px"}}>
+								<Component {...pageProps}/>
+							</Content>
+							<Footer />
+						</Layout>
+					</Layout>
 				</ConfigProvider>
 
 			</div>
