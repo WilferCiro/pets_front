@@ -4,6 +4,7 @@ import { Card, Avatar, Skeleton, Space, Result, Button, List, Row, Col, Tooltip,
 import { PlusCircleFilled, EditOutlined, EllipsisOutlined, SettingOutlined, InboxOutlined } from '@ant-design/icons';
 
 import AddMascotaFormStructure from '@/formclasses/add_mascota';
+import MascotaCard  from '@/components/MascotaCard';
 
 const { Meta } = Card;
 class MascotasView extends BasePanel{
@@ -127,19 +128,7 @@ class MascotasView extends BasePanel{
 	render() {
 		if (!this.state.mascotas) {
 			return (
-				<Card
-					style={{ width: 300, marginTop: 16 }}
-					>
-					<Space>
-						<Skeleton.Image style={{width: 260}} />
-					</Space>
-					<Skeleton loading={true} active />
-					<Space>
-						<Skeleton.Button active={true} size={"default"} shape={"default"} />
-						<Skeleton.Button active={true} size={"default"} shape={"default"} />
-						<Skeleton.Button active={true} size={"default"} shape={"default"} />
-					</Space>
-				</Card>
+				<MascotaCard loading={true} />
 			);
 		}
 
@@ -193,30 +182,7 @@ class MascotasView extends BasePanel{
 						<List.Item
 							key={Math.random()}
 						>
-							<Card
-								key={Math.random()}
-								style={{ width: "100%" }}
-								cover={
-									<img
-										className="image-card"
-										alt={mascota.foto.length > 0 ? mascota.foto[0].descripcion : "Foto de mascota"}
-										src={mascota.foto.length > 0 ? mascota.foto[0].foto : "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"}
-									/>
-								}
-								>
-									<Meta
-										title={<div>
-												<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>
-													{mascota.nombre} - @{mascota.identificacion}
-												</a>
-											</div>
-										}
-										description={<div>
-											{mascota.presentacion}
-											{mascota.desaparecido ? <div><Tag color="red">Desaparecid@</Tag></div> : null}
-										</div>}
-									/>
-							</Card>
+							<MascotaCard mascota={mascota} />
 						</List.Item>
 						)}
 					/>

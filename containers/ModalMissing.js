@@ -1,44 +1,51 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React          from 'react';
+
+// Custom classes
 import BasePanel      from '@/containers/BasePanel';
 import Label          from '@/components/Label';
+import MissingForm    from '@/formclasses/missing';
+import PDFMissing     from '@/components/PDFMissing';
 
-import { Modal, Button, Avatar, Divider } from 'antd';
-
-import { CloudDownloadOutlined } from '@ant-design/icons';
-
-import MissingForm from '@/formclasses/missing';
-
-import PDFMissing from '@/components/PDFMissing';
+// Third part libraries
 import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
-import { QRCode } from 'react-qrcode-logo';
-import { saveAs } from 'file-saver';
+import { QRCode }       from 'react-qrcode-logo';
+import { saveAs }       from 'file-saver';
+import { toBlob }       from 'html-to-image';
+
+// Ant components and icons
+import { Modal, Button, Avatar, Divider } from 'antd';
+import { CloudDownloadOutlined } from '@ant-design/icons';
 
 class ModalMissing extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// States
 		this.state = {
 			open: false
 		}
 
+		// References
+		this.refLabelDescripcion = React.createRef();
+		this.refFormMissing      = React.createRef();
+		this.refLabelPhones      = React.createRef();
+		this.refLabelUser        = React.createRef();
+		this.node                = React.createRef();
+
+		// Props
 		this.mascotaData = this.props.mascotaData;
 
-		this.download = this.download.bind(this);
+		// Methods
 		this.onValuesChange = this.onValuesChange.bind(this);
-		this.open = this.open.bind(this);
-		this.close = this.close.bind(this);
+		this.download       = this.download.bind(this);
+		this.close          = this.close.bind(this);
+		this.open           = this.open.bind(this);
 
-		this.node = React.createRef();
-
-		this.refFormMissing = React.createRef();
-		this.refLabelDescripcion = React.createRef();
-		this.refLabelUser = React.createRef();
-		this.refLabelPhones = React.createRef();
-	}
-
-	componentDidMount() {
-		//this.node = document.getElementById('my-node');
 	}
 
 	open() {

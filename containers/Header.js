@@ -1,24 +1,40 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React          from 'react';
+
+// Custom classes
 import BasePanel      from '@/containers/BasePanel';
-import Constant       from '@/components//Constant';
-import ImageLocal     from '@/components//ImageLocal';
 import FormSelect     from '@/formcomponents//FormSelect';
-import { BellOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
-import {Button, Affix, Badge, Space} from 'antd';
-import Notifications   from '@/containers/Notifications';
+import Notifications  from '@/containers/Notifications';
 import Label          from '@/components/Label';
+
+// Ant components and icons
+import {
+	BellOutlined,
+	ShoppingCartOutlined,
+	MenuOutlined
+} from '@ant-design/icons';
+import {
+	Button,
+	Affix,
+	Badge,
+	Space
+} from 'antd';
 
 class Header extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// References
 		this.refNotifications = React.createRef();
-		this.openNotifications = this.openNotifications.bind(this);
+		this.headerRef        = React.createRef();
 
-		this.changeAffixed = this.changeAffixed.bind(this);
-		this.headerRef = React.createRef();
-	}
-	componentDidMount() {
+		// Methods
+		this.openNotifications = this.openNotifications.bind(this);
+		this.changeAffixed     = this.changeAffixed.bind(this);
 	}
 
 	openNotifications() {
@@ -29,8 +45,8 @@ class Header extends BasePanel{
 		this.headerRef.current.className = (affixed) ? "affixed" : "";
 	}
 
-
 	render() {
+		let isLogged = this.props.isLogged;
 		return (
 			<Affix offsetTop={0} onChange={affixed => this.changeAffixed(affixed)}>
 				<header ref={this.headerRef}>
@@ -50,7 +66,13 @@ class Header extends BasePanel{
 									<Button shape="circle" icon={<ShoppingCartOutlined />} />
 								</Badge>
 							</Space>
-							<a onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
+							{
+								(!isLogged)?
+								<a onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
+								:
+								null
+							}
+
 						</div>
 					</div>
 				</header>
@@ -58,4 +80,10 @@ class Header extends BasePanel{
 		);
 	}
 }
+
+Header.getInitialProps = async ({query, req, pathname}) => {
+	let isLogged = BasePanel.store.isLogged({query, req, pathname});
+	return {query, isLogged};
+}
+
 export default Header;

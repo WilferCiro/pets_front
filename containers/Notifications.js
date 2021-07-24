@@ -1,23 +1,31 @@
-import React          from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
-import { Sidebar } from 'primereact/sidebar';
-import { Drawer, Button } from 'antd';
+// Ant components and icons
+import {
+	Drawer,
+	Button
+} from 'antd';
 
 
 class Notifications extends BasePanel{
 	constructor(props) {
 		super(props);
 
+		// States
 		this.state = {
 			isOpen : false
 		}
 
+		// Methods
 		this.close = this.close.bind(this);
-		this.open = this.open.bind(this);
+		this.open  = this.open.bind(this);
 	}
-	componentDidMount() {
-	}
+
 
 	close() {
 		this.setState({

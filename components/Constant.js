@@ -13,6 +13,7 @@ class Constant{
 	static URL_private = ConstantServer["URL_private"];
 	static URL_login = ConstantServer["URL_login"];
 	static URL_recover = ConstantServer["URL_recover"];
+	static Name_webpage = "Kiwi Peluditos";
 
 	// Dev
 	//static URL_server = "http://127.0.0.1:8000";
@@ -72,6 +73,9 @@ class Constant{
 		return s;
 	}
 
+	getWebName() {
+		return Constant.Name_webpage;
+	}
 	getServer() {
 		return Constant.URL_server;
 	}

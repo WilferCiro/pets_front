@@ -1,38 +1,46 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React, {
 	Component
 } from 'react';
 
-import router       from 'next/router';
+// NextJS libraries
+import router                 from 'next/router';
 import Router, { withRouter } from 'next/router'
 
+// Custom classes
 import Constant     from '@/components/Constant';
 import Services     from '@/utils/Services';
-import User         from '@/utils//User';
 import Store        from '@/utils//Store';
+import User         from '@/utils//User';
 
 export default class BasePanel extends Component {
-	static history = undefined;
 	static urls_servidores = undefined;
-	static service = Services;
-	static alertLocal = new React.createRef();
-	static user = User;
+	static history         = undefined;
+	static service         = Services;
+	static store           = Store;
+	static user            = User;
+
+	// Global references
 	static refBreadcrumb = new React.createRef();
-
-	static store = Store;
-
 
 	constructor(props) {
 		super(props);
+
+		// Variables
 		this.constants = Constant;
+		this.URLSave   = null;
 		this.store     = BasePanel.store;
 
+		// Methods
 		this.redirectPage = this.redirectPage.bind(this);
-		this.goHome = this.goHome.bind(this);
-		this.URLSave = null;
-
-		this.send = this.send.bind(this);
-		this.error = this.error.bind(this);
-		this.logout = this.logout.bind(this);
+		this.goHome       = this.goHome.bind(this);
+		this.logout       = this.logout.bind(this);
+		this.error        = this.error.bind(this);
+		this.send         = this.send.bind(this);
 	}
 
 
@@ -45,7 +53,6 @@ export default class BasePanel extends Component {
 	}
 
 	redirectPage(to, query = {}) {
-		//router.push(to, alias);
 		Router.push({ pathname: to, query: query });
 	}
 

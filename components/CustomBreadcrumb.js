@@ -1,14 +1,28 @@
-import React          from 'react';
-import BasePanel      from '@/containers/BasePanel';
-import {Breadcrumb}    from 'antd';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
+import React     from 'react';
+
+// Custom classes
+import BasePanel from '@/containers/BasePanel';
+
+// Ant components and icons
+import {
+	Breadcrumb
+} from 'antd';
 
 class CustomBreadcrumb extends BasePanel{
 	constructor(props) {
 		super(props);
+
+		// States
 		this.state = {
 			items : []
 		};
 
+		// Methods
 		this.setItems = this.setItems.bind(this);
 	}
 

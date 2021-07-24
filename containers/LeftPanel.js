@@ -1,16 +1,29 @@
-import React          from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
-import { Avatar, Button } from 'antd';
-import { AlertOutlined, UserOutlined, LogoutOutlined, IdcardFilled, HeartFilled, CheckCircleFilled, FileTextFilled, ShopFilled, QuestionCircleFilled  } from '@ant-design/icons';
+// Ant components and icons
+import {
+	Avatar
+} from 'antd';
+import {
+	AlertOutlined,
+	LogoutOutlined,
+	IdcardFilled,
+	HeartFilled,
+	CheckCircleFilled,
+	FileTextFilled,
+	ShopFilled,
+	QuestionCircleFilled
+} from '@ant-design/icons';
 
 
 class LeftPanel extends BasePanel{
 	constructor(props) {
 		super(props);
-
-	}
-	componentDidMount() {
 	}
 
 	render() {

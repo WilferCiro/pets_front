@@ -27,7 +27,7 @@ class Home extends BasePanel{
 					<div className="landing-circle4" />
 					<div className="landing-about-content">
 						<div>
-							<h2 className="landing-h2 landing-title">Kiwi Cat</h2>
+							<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
 							<a className="inicia-ya">Inicia ya </a>
 						</div>

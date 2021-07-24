@@ -7,7 +7,6 @@ import Constant        from '@/components//Constant';
 import Header          from '@/containers//Header';
 import Footer          from '@/containers//Footer';
 import BasePanel       from '@/containers//BasePanel';
-import AlertLocal      from '@/components//AlertLocal';
 import LeftPanel       from '@/containers//LeftPanel';
 import { withRouter }  from 'next/router'
 import {ConfigProvider, Layout, Menu} from 'antd';
@@ -42,6 +41,7 @@ class LocalDashboard extends App
 
 		let pageProps = {};
 		let leftPanelProps = {};
+		let headerProps = {}
 		let urls_servidores = [];
 		let redirect = true;
 		let isLogged = true;
@@ -65,12 +65,13 @@ class LocalDashboard extends App
 			}
 		}
 		leftPanelProps = await LeftPanel.getInitialProps(ctx);
+		headerProps = await Header.getInitialProps(ctx);
 		if(redirect && Component.getInitialProps){
 			pageProps = await Component.getInitialProps(ctx);
 		}
 		pageName = Component.getPageName ? Component.getPageName() : "";
 
-		return {pageProps, leftPanelProps, pageName};
+		return {pageProps, leftPanelProps, pageName, headerProps};
 	}
 
 	componentDidMount() {
@@ -107,13 +108,12 @@ class LocalDashboard extends App
 	}
 
 	render(){
-		//console.log("***", this.props.isLogged);
-		let {Component, pageProps, leftPanelProps} = this.props;
+		let {Component, pageProps, leftPanelProps, headerProps} = this.props;
 		let urlPage = Constant.URL_webpage;
-		let nombrePage = "LuloCat";
+		let nombrePage = Constant.getWebName();
 		let defaultDescription = nombrePage + " Dashboard.";
 		let imageBlog = urlPage + "/images/index/pic01.jpg";
-		let lemaPage = "Dashboard";
+		let lemaPage = "Inicio";
 
 		const structuredData = {
 			"@context": "https://schema.org",
@@ -278,7 +278,7 @@ class LocalDashboard extends App
 							<LeftPanel {...leftPanelProps} />
 						</Sider>
 						<Layout className="layout-content" style={{backgroundColor: "white"}}>
-							<Header empresas={this.props.empresas} pageName={this.props.pageName} />
+							<Header empresas={this.props.empresas} pageName={this.props.pageName} {...headerProps} />
 							<CustomBreadcrumb ref={BasePanel.refBreadcrumb} />
 							<Content style={{padding: "10px 20px"}}>
 								<Component {...pageProps}/>

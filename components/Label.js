@@ -1,13 +1,23 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Components
 import React          from 'react';
+
+// Custom classes
 import BasePanel      from '@/containers/BasePanel';
-import Constant       from '@/components//Constant';
 
 class Label extends BasePanel{
 	constructor(props) {
 		super(props);
+
+		// States
 		this.state = {
 			text : this.props.text
 		}
+
+		// Methods
 		this.setText = this.setText.bind(this);
 	}
 	componentDidMount() {

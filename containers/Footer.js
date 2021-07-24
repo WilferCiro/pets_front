@@ -1,25 +1,42 @@
-import React          from 'react';
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// Custom classes
 import BasePanel      from '@/containers/BasePanel';
-import {Divider, message}      from 'antd';
-import { FacebookFilled, TwitterSquareFilled, InstagramFilled, YoutubeFilled, WhatsAppOutlined } from '@ant-design/icons';
+
+// Ant components and icons
+import {
+	Divider,
+	message
+} from 'antd';
+import {
+	FacebookFilled,
+	TwitterSquareFilled,
+	InstagramFilled,
+	YoutubeFilled,
+	WhatsAppOutlined
+} from '@ant-design/icons';
 
 class Footer extends BasePanel{
 	constructor(props) {
 		super(props);
 
-		this.online  = this.online.bind(this);
-		this.offline = this.offline.bind(this);
-
+		// States
 		this.state = {
 			online: true
 		}
+
+		// Methods
+		this.online  = this.online.bind(this);
+		this.offline = this.offline.bind(this);
 	}
+
 	componentDidMount() {
 		let isOnline = navigator.onLine;
 		console.log(isOnline);
 		window.addEventListener('online', () => this.online());
 		window.addEventListener('offline', () => this.offline());
-
 	}
 
 	online() {
