@@ -15,14 +15,10 @@ import Router, { withRouter } from 'next/router'
 import Constant     from '@/components/Constant';
 import Services     from '@/utils/Services';
 import Store        from '@/utils//Store';
-import User         from '@/utils//User';
 
 export default class BasePanel extends Component {
-	static urls_servidores = undefined;
-	static history         = undefined;
 	static service         = Services;
 	static store           = Store;
-	static user            = User;
 
 	// Global references
 	static refBreadcrumb = new React.createRef();
@@ -39,8 +35,6 @@ export default class BasePanel extends Component {
 		this.redirectPage  = this.redirectPage.bind(this);
 		this.goHome        = this.goHome.bind(this);
 		this.logout        = this.logout.bind(this);
-		this.error         = this.error.bind(this);
-		this.send          = this.send.bind(this);
 		this.setBreadCrumb = this.setBreadCrumb.bind(this);
 	}
 
@@ -54,9 +48,6 @@ export default class BasePanel extends Component {
 		BasePanel.user.deleteToken();
 		this.redirectPage(this.constants.route_index);
 	}
-	error(data) {
-		console.log("--ERRR----", data);
-	}
 
 	redirectPage(to, query = {}) {
 		Router.push({ pathname: to, query: query });
@@ -64,15 +55,6 @@ export default class BasePanel extends Component {
 
 	goHome() {
 		this.redirectPage(this.constants.route_index);
-	}
-
-	send(data) {
-		BasePanel.service.setAlertModel(BasePanel.alertDavinci);
-		BasePanel.service.send(data);
-	}
-	static async send(endpoint, method, body, success, error, fields, showMessage, _headers) {
-		BasePanel.service.setAlertModel(BasePanel.alertModel);
-		return await BasePanel.service.sendServer(endpoint, method, body, success, error, fields, showMessage, _headers);
 	}
 
 }

@@ -8,7 +8,8 @@ import BasePanel      from '@/containers/BasePanel';
 // Ant components and icons
 import {
 	Divider,
-	message
+	message,
+	notification
 } from 'antd';
 import {
 	FacebookFilled,
@@ -34,7 +35,6 @@ class Footer extends BasePanel{
 
 	componentDidMount() {
 		let isOnline = navigator.onLine;
-		console.log(isOnline);
 		window.addEventListener('online', () => this.online());
 		window.addEventListener('offline', () => this.offline());
 	}
@@ -42,14 +42,23 @@ class Footer extends BasePanel{
 	online() {
 		this.setState({
 			online: true
-		})
+		});
+		notification.success({
+			duration: 0,
+			message: 'Internet',
+			description: 'Vuelves a estar con internet.',
+		});
 		message.success("Vuelves a estar con internet");
 	}
 	offline() {
 		this.setState({
 			online: false
-		})
-		message.error("Estás sin internet");
+		});
+		notification.error({
+			duration: 0,
+			message: 'Sin internet',
+			description: 'Estas sin internet.',
+		});
 	}
 
 	render() {
