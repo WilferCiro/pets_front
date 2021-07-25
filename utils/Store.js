@@ -21,9 +21,10 @@ class Store {
 		this.setEmpresa = this.setEmpresa.bind(this);
 
 		// Token
-		this.setToken   = this.setToken.bind(this);
-		this.checkIsLogged   = this.checkIsLogged.bind(this);
-		this.isLogged   = this.isLogged.bind(this);
+		this.setToken       = this.setToken.bind(this);
+		this.deleteData     = this.deleteData.bind(this);
+		this.checkIsLogged  = this.checkIsLogged.bind(this);
+		this.isLogged       = this.isLogged.bind(this);
 	}
 
 
@@ -53,6 +54,10 @@ class Store {
 
 	saveData(index, data) {
 		Cookie.set(index, data, { sameSite: 'strict'});
+	}
+
+	deleteData(index) {
+		Cookie.remove(index);
 	}
 
 	getData(index) {

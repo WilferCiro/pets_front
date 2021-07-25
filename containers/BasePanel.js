@@ -45,7 +45,11 @@ export default class BasePanel extends Component {
 	}
 
 	logout() {
-		BasePanel.user.deleteToken();
+		this.store.deleteData("token");
+		this.store.deleteData("full_name");
+		this.store.deleteData("avatar");
+		this.store.deleteData("cantidad_mascotas");
+		this.store.deleteData("cantidad_pedidos");
 		this.redirectPage(this.constants.route_index);
 	}
 
