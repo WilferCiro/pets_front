@@ -22,7 +22,7 @@ class Home extends BasePanel{
 	}
 
 	componentDidMount() {
-		BasePanel.refBreadcrumb.current.setItems([]);
+		this.setBreadCrumb([]);
 	}
 
 	render() {

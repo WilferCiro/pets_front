@@ -48,7 +48,9 @@ class MascotasProfileView extends BasePanel{
 		super(props);
 
 		// Props
-		this.mascota_pk = this.props.mascota_pk;
+		this.mascota_pk     = this.props.mascota_pk;
+		this.isLogged       = this.props.isLogged;
+		this.listMascotasPK = this.props.listMascotasPK;
 
 		// States
 		this.state = {
@@ -64,11 +66,9 @@ class MascotasProfileView extends BasePanel{
 
 		// Methods
 		this.searchMascota             = this.searchMascota.bind(this);
-		this.successSearchMascota      = this.successSearchMascota.bind(this);
 		this.openFormEdit              = this.openFormEdit.bind(this);
 		this.onEditMascota             = this.onEditMascota.bind(this);
 		this.successEditMascota        = this.successEditMascota.bind(this);
-		this.successModifyPhotos       = this.successModifyPhotos.bind(this);
 		this.deleteDesaparecidoReporte = this.deleteDesaparecidoReporte.bind(this);
 		this.openFormDesaparecido      = this.openFormDesaparecido.bind(this);
 		this.openMissingModal          = this.openMissingModal.bind(this);
@@ -76,53 +76,51 @@ class MascotasProfileView extends BasePanel{
 		this.prevImage                 = this.prevImage.bind(this);
 
 		// References
-		this.refFormEdit = React.createRef();
+		this.refFormEdit         = React.createRef();
 		this.refFormDesaparecido = React.createRef();
-		this.refModalMissing = React.createRef();
-		this.refPhotosCarousel = React.createRef();
+		this.refModalMissing     = React.createRef();
+		this.refPhotosCarousel   = React.createRef();
 
 	}
 
 	componentDidMount() {
-		this.searchMascota(this.mascota_pk);
-		BasePanel.refBreadcrumb.current.setItems(this.breadcrumbData);
+		this.searchMascota();
+		this.setBreadCrumb(this.breadcrumbData);
 	}
 
 	openMissingModal() {
 		this.refModalMissing.current.open();
 	}
 
-	searchMascota(pk) {
+	async searchMascota() {
 		let body = {
-			"modelo" : "todo",
 			"campos" : {
 				"pk" : this.mascota_pk
 			}
 		}
-		if(BasePanel.store.isLogged()){
+		let data = {};
+		if(this.isLogged){
 			this.canEdit = true;
-			this.send({
-				endpoint: this.constants.getPrivateEndpoint() + "mascota",
-				method: 'GET',
-				success: this.successSearchMascota,
-				body: body,
-				showMessage : true,
-				requires_token: true
+			data = await BasePanel.service.apiSend({
+				method: "GET",
+				register: "mascota",
+				model: "todo",
+				isPublic: false,
+				body: body
 			});
 		}
 		else{
 			this.canEdit = false;
-			this.send({
-				endpoint: this.constants.getPublicEndpoint() + "mascota",
-				method: 'GET',
-				success: this.successSearchMascota,
-				body: body,
-				showMessage : true
+			data = await BasePanel.service.apiSend({
+				method: "GET",
+				register: "mascota",
+				model: "todo",
+				isPublic: true,
+				body: body
 			});
 		}
-	}
-	successSearchMascota(data) {
-		if(data["estado_p"] === 200) {
+
+		if(data["code"] === 200) {
 			this.setState({
 				mascota: data["data"]
 			});
@@ -136,8 +134,13 @@ class MascotasProfileView extends BasePanel{
 				else{
 					this.breadcrumbData[2] = dataBC;
 				}
-				BasePanel.refBreadcrumb.current.setItems(this.breadcrumbData);
+				this.setBreadCrumb(this.breadcrumbData);
 			}
+		}
+		else{
+			this.setState({
+				mascota: []
+			});
 		}
 	}
 
@@ -159,12 +162,11 @@ class MascotasProfileView extends BasePanel{
 		this.refFormDesaparecido.current.open("Reportar como desaparecida");
 	}
 
-	deleteDesaparecidoReporte(deleteReg = true) {
+	async deleteDesaparecidoReporte(deleteReg = true) {
 		let body = {};
 		if(deleteReg){
 			body = {
 				"pk" : this.mascota_pk,
-				"modelo" : "modificar_desaparecido",
 				"fecha_desaparecido" : null,
 				"descripcion_desaparecido" : null,
 				"desaparecido" : false
@@ -174,28 +176,29 @@ class MascotasProfileView extends BasePanel{
 			let values = this.refFormDesaparecido.current.getValues();
 			body = {
 				"pk" : this.mascota_pk,
-				"modelo" : "modificar_desaparecido",
 				"fecha_desaparecido" : values["fecha_desaparecido"],
 				"descripcion_desaparecido" : values["descripcion_desaparecido"],
 				"desaparecido" : true
 			}
 		}
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "mascota",
-			method: 'PUT',
-			success: this.successEditMascota,
+
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "mascota",
+			model: "modificar_desaparecido",
 			body: body,
-			showMessage : true,
-			requires_token: true
+			isPublic: false
 		});
+
+		this.successEditMascota(data);
+
 	}
 
-	onEditMascota() {
+	async onEditMascota() {
 		let formValues = this.refFormEdit.current.getValues();
 		this.newFotos = formValues["imagenes"]["fotos"];
 		let body = {
 			"pk" : this.mascota_pk,
-			"modelo" : "modificar",
 			"nombre" : formValues["nombre"],
 			"fecha_nacimiento" : formValues["fecha_nacimiento"],
 			"tipo" : formValues["tipo"],
@@ -204,21 +207,19 @@ class MascotasProfileView extends BasePanel{
 			"presentacion" : formValues["presentacion"]
 		}
 
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "mascota",
-			method: 'PUT',
-			success: this.successEditMascota,
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "mascota",
+			model: "modificar",
 			body: body,
-			showMessage : true,
-			requires_token: true
+			isPublic: false
 		});
+
+		this.successEditMascota(data);
 	}
 
-	successEditMascota(data) {
-		if(data["estado_p"] === 200) {
-
-			this.imagesTotal = 0;
-			this.countImages = 0;
+	async successEditMascota(data) {
+		if(data["code"] === 200) {
 
 			let mascota = this.state.mascota[0];
 			for (let index in mascota["fotos"]){
@@ -232,15 +233,13 @@ class MascotasProfileView extends BasePanel{
 					let body = {
 						"pk" : mascota["fotos"][index]["pk"]
 					}
-					this.send({
-						endpoint: this.constants.getPrivateEndpoint() + "fotomascota",
-						method: 'DELETE',
-						success: this.successModifyPhotos,
+					let data = await BasePanel.service.apiSend({
+						method: "DELETE",
+						register: "fotomascota",
+						model: "delete",
 						body: body,
-						showMessage : true,
-						requires_token: true
+						isPublic: false
 					});
-					this.imagesTotal += 1;
 				}
 			}
 
@@ -248,39 +247,27 @@ class MascotasProfileView extends BasePanel{
 				if(this.newFotos[index]["uid"].includes("rc-upload-")){
 
 					let body = {
-						"modelo" : "crear",
 						"foto" : this.newFotos[index]["originFileObj"],
 						"mascota" : this.mascota_pk
 					}
-					this.send({
-						endpoint: this.constants.getPrivateEndpoint() + "filemascota",
-						method: 'POST',
-						success: this.successModifyPhotos,
+
+					let data = await BasePanel.service.apiSend({
+						method: "POST",
+						register: "filemascota",
+						model: "crear",
 						body: body,
-						showMessage : true,
-						requires_token: true,
+						isPublic: false,
 						formData: true
 					});
 
-					this.imagesTotal += 1;
 				}
 			}
 
-			if(this.imagesTotal === 0) {
-				this.searchMascota(this.mascota_pk);
-				message.success("Los datos de la mascota han sido editados con éxito");
-			}
+			this.searchMascota();
+			message.success("Los datos de la mascota han sido editados con éxito");
 		}
 		else{
 			message.error("Hubo un error al editar los datos de la mascota");
-		}
-	}
-
-	successModifyPhotos(data) {
-		this.countImages += 1;
-		if(this.imagesTotal === this.countImages){
-			this.searchMascota(this.mascota_pk);
-			message.success("Los datos de la mascota han sido editados con éxito");
 		}
 	}
 
@@ -556,7 +543,9 @@ class MascotasProfileView extends BasePanel{
 
 MascotasProfileView.getInitialProps = async ({query, ctx, req, pathname}) => {
 	let mascota_pk = query.pk;
-	return {query, mascota_pk};
+	let isLogged = BasePanel.store.isLogged({query, req, pathname});
+	let listMascotasPK = [];
+	return {query, mascota_pk, isLogged, listMascotasPK};
 }
 MascotasProfileView.getPageName = () => {
 	return "Perfil de mascota";

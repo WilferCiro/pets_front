@@ -37,6 +37,7 @@ class BaseFormStructure  extends React.Component{
 		super(props);
 
 		// Props Data
+		this.id             = this.props.id || "";
 		this.fields         = this.props.fields || [];
 		this.vertical       = this.props.vertical || false;
 		this.initialValues  = this.props.initialValues || {};
@@ -188,7 +189,7 @@ class BaseFormStructure  extends React.Component{
 				labelCol={{ span: this.vertical ? 24 : 7 }}
 				wrapperCol={{ span: this.vertical ? 24 : 17 }}
 				validateMessages={ validateMessages }
-				name={"register"}
+				name={"form" + this.id}
 				ref={this.formRef}
 				layout={this.vertical ? "vertical" : "horizontal"}
 				initialValues={this.initialValues}

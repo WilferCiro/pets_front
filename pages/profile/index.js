@@ -41,13 +41,10 @@ class ProfileView extends BasePanel{
 
 		//Methods
 		this.getUserData             = this.getUserData.bind(this);
-		this.successGetUserData      = this.successGetUserData.bind(this);
 		this.openFormEdit            = this.openFormEdit.bind(this);
 		this.openFormEditPassword    = this.openFormEditPassword.bind(this);
 		this.editUserData            = this.editUserData.bind(this);
-		this.successEditUserData     = this.successEditUserData.bind(this);
 		this.editUserPassword        = this.editUserPassword.bind(this);
-		this.successEditUserPassword = this.successEditUserPassword.bind(this);
 
 		// References
 		this.refFormEditPassword = React.createRef();
@@ -57,13 +54,12 @@ class ProfileView extends BasePanel{
 	componentDidMount() {
 		this.getUserData();
 
-		BasePanel.refBreadcrumb.current.setItems([{"label" : "Mi perfil"}])
+		this.setBreadCrumb([{"label" : "Mi perfil"}])
 	}
 
-	editUserData() {
+	async editUserData() {
 		let formValues = this.refFormEdit.current.getValues();
 		let body = {
-			"modelo" : "modificar",
 			"first_name" : formValues["first_name"],
 			"last_name" : formValues["last_name"],
 			"celular1" : formValues["celular1"],
@@ -76,21 +72,16 @@ class ProfileView extends BasePanel{
 		else if(formValues["avatar"]["fotos"].length === 0) {
 			body["avatar"] = "";
 		}
-		console.log(body);
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "fileuser",
-			method: 'PUT',
-			success: this.successEditUserData,
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "fileuser",
+			model: "modificar",
+			isPublic: false,
 			body: body,
-			showMessage : true,
-			requires_token: true,
 			formData: true
 		});
-	}
 
-	successEditUserData(data) {
-		console.log(data);
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			this.getUserData();
 			message.success("Se han editados sus datos exitosamente");
 		}
@@ -98,6 +89,7 @@ class ProfileView extends BasePanel{
 			message.error("Hubo un error al editar los datos");
 		}
 	}
+
 
 	openFormEdit() {
 		let fotos = [];
@@ -117,51 +109,40 @@ class ProfileView extends BasePanel{
 		this.refFormEditPassword.current.open("Editar contraseña");
 	}
 
-	editUserPassword() {
+	async editUserPassword() {
 		let formValues = this.refFormEditPassword.current.getValues();
 		let body = {
-			"modelo" : "password",
 			"last_password" : formValues["last_password"],
 			"password" : formValues["password"]["password1"]
 		}
 
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "user",
-			method: 'PUT',
-			success: this.successEditUserPassword,
-			body: body,
-			showMessage : true,
-			requires_token: true
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "user",
+			model: "password",
+			isPublic: false,
+			body: body
 		});
-	}
 
-	successEditUserPassword(data) {
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			message.success("Se ha editado su contraseña exitosamente");
 		}
 		else{
 			message.error("Hubo un error al editar los datos");
 		}
+
 	}
 
-
-	getUserData() {
-		let body = {
-			"modelo" : "todo"
-		}
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "user",
-			method: 'GET',
-			success: this.successGetUserData,
-			body: body,
-			showMessage : true,
-			requires_token: true
+	async getUserData() {
+		let body = {};
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "user",
+			model: "todo",
+			isPublic: false,
+			body: body
 		});
-	}
-
-	successGetUserData(data) {
-		console.log(data);
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			this.setState({
 				user: data["data"][0]
 			})

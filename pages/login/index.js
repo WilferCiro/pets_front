@@ -33,8 +33,6 @@ class Login extends BasePanel{
 		// Methods
 		this.handleSocialLogin = this.handleSocialLogin.bind(this);
 		this.onRegisterLogin   = this.onRegisterLogin.bind(this);
-		this.successSignUp     = this.successSignUp.bind(this);
-		this.successLogin      = this.successLogin.bind(this);
 		this.onSignUp          = this.onSignUp.bind(this);
 		this.onLogin           = this.onLogin.bind(this);
 	}
@@ -58,30 +56,25 @@ class Login extends BasePanel{
 				"password" : values["password"]["password1"],
 				"first_name" : values["nombres"],
 				"last_name" : values["apellidos"],
-				"modelo" : "registrarse",
 				"acepta_condicion" : true
 			}
 
-			console.log(body);
-			this.send({
-				endpoint: this.constants.getPublicEndpoint() + "user",
-				method: 'POST',
-				success: this.successSignUp,
-				body: body,
-				showMessage : true
+			let data = await BasePanel.service.apiSend({
+				method: "POST",
+				register: "user",
+				model: "registrarse",
+				isPublic: true,
+				body: body
 			});
-		}
-	}
+			if(data["code"] === 200) {
+				message.success("Se ha registrado con éxito, se ha enviado un correo de confirmación.");
+				this.refFormSignup.current.clearValues();
+				this.onRegisterLogin();
+			}
+			else{
+				message.error("Hubo un error, por favor pruebelo de nuevo");
+			}
 
-	successSignUp(data) {
-		console.log(data);
-		if(data["estado_p"] === 200) {
-			message.success("Se ha registrado con éxito, se ha enviado un correo de confirmación.");
-			this.refFormSignup.current.clearValues();
-			this.onRegisterLogin();
-		}
-		else{
-			message.error("Hubo un error, por favor pruebelo de nuevo");
 		}
 	}
 
@@ -97,23 +90,23 @@ class Login extends BasePanel{
 			"username" : values["username"],
 			"password" : values["password"]
 		};
-		this.send({
-			endpoint: this.constants.getLoginEndPoint(),
-			method: 'POST',
-			success: this.successLogin,
-			body: body,
-			showMessage : true
+		let data = await BasePanel.service.apiSend({
+			method: "POST",
+			register: "login",
+			model: "login",
+			isPublic: true,
+			body: body
 		});
-	}
-
-	successLogin(data) {
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			this.store.setToken(data["data"]["access"]);
 			this.store.saveData("full_name", data["data"]["full_name"]);
 			this.store.saveData("avatar", data["data"]["avatar"]);
 			this.store.saveData("cantidad_mascotas", data["data"]["cantidad_mascotas"]);
 			this.store.saveData("cantidad_pedidos", data["data"]["cantidad_pedidos"]);
 			this.goHome();
+		}
+		else{
+			message.error("Usuario o contraseña incorrectos");
 		}
 	}
 
@@ -134,8 +127,9 @@ class Login extends BasePanel{
 							<SignUpForm
 								vertical={true}
 								ref={this.refFormSignup}
-							 />
-							 <p>Al registrarse usted acepta nuestra <a href="">política de privacidad de datos</a></p>
+								id="signup"
+							/>
+							<p>Al registrarse usted acepta nuestra <a href="">política de privacidad de datos</a></p>
 
 							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
 							<a className="login" onClick={(e) => this.onRegisterLogin()}>Iniciar sesión</a>

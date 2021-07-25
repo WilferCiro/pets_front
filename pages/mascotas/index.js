@@ -43,11 +43,8 @@ class MascotasView extends BasePanel{
 
 		// Methods
 		this.searchMascotas        = this.searchMascotas.bind(this);
-		this.successSearchMascotas = this.successSearchMascotas.bind(this);
 		this.addMascota            = this.addMascota.bind(this);
 		this.onAddMascota          = this.onAddMascota.bind(this);
-		this.successAddMascota     = this.successAddMascota.bind(this);
-		this.successUploadPhotos   = this.successUploadPhotos.bind(this);
 
 		// References
 		this.refFormAdd = React.createRef();
@@ -55,47 +52,42 @@ class MascotasView extends BasePanel{
 
 	componentDidMount() {
 		this.searchMascotas(1);
-
-		BasePanel.refBreadcrumb.current.setItems([{"label" : "Mascotas"}])
+		this.setBreadCrumb([{"label" : "Mascotas"}])
 	}
 
-	searchMascotas(page) {
+	async searchMascotas(page) {
 		let body = {
 			"cantidad" : this.pageSize,
 			"pagina" : page,
-			"modelo" : "card",
 			"ordenar_por" : "-pk"
 		}
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "mascota",
-			method: 'GET',
-			success: this.successSearchMascotas,
-			body: body,
-			showMessage : true,
-			requires_token: true
-		});
-	}
 
-	successSearchMascotas(data) {
-		console.log(data);
-		if(data["estado_p"] === 200) {
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "mascota",
+			model: "card",
+			isPublic: false,
+			body: body
+		});
+
+		if(data["code"] === 200) {
 			this.setState({
 				mascotas: data["data"],
 				paginator: data["paginator"]
 			});
 		}
+
 	}
 
 	addMascota() {
 		this.refFormAdd.current.open("Registrar nueva mascota");
 	}
 
-	onAddMascota() {
+	async onAddMascota() {
 		let formValues = this.refFormAdd.current.getValues();
 		this.images = formValues["imagenes"]["fotos"];
 		this.uploaded = 0;
 		let body = {
-			"modelo" : "crear",
 			"nombre" : formValues["nombre"],
 			"fecha_nacimiento" : formValues["fecha_nacimiento"],
 			"tipo" : formValues["tipo"],
@@ -104,49 +96,33 @@ class MascotasView extends BasePanel{
 			"presentacion" : formValues["presentacion"]
 		}
 
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "mascota",
-			method: 'POST',
-			success: this.successAddMascota,
-			body: body,
-			showMessage : true,
-			requires_token: true
+		let data = await BasePanel.service.apiSend({
+			method: "POST",
+			register: "mascota",
+			model: "crear",
+			isPublic: false,
+			body: body
 		});
-	}
 
-	successAddMascota(data) {
-		if(data["estado_p"] === 200) {
-
+		if(data["code"] === 200) {
 			let pk = data["data"]["pk"];
-			this.newPk = pk;
-			this.uploaded = 0;
 			for (let index in this.images) {
 				let body = {
 					"modelo" : "crear",
 					"foto" : this.images[index]["originFileObj"],
 					"mascota" : pk
 				}
-				console.log(body);
-				this.send({
-					endpoint: this.constants.getPrivateEndpoint() + "filemascota",
-					method: 'POST',
-					success: this.successUploadPhotos,
+				let dataImg = await BasePanel.service.apiSend({
+					method: "POST",
+					register: "filemascota",
+					model: "crear",
+					isPublic: false,
 					body: body,
-					showMessage : true,
-					requires_token: true,
 					formData: true
 				});
 			}
-			//
-		}
-	}
-
-	successUploadPhotos(data){
-		console.log(data, this.uploaded, this.images.length);
-		this.uploaded += 1;
-		if (this.uploaded === this.images.length) {
 			message.success("La mascota ha sido registada con éxito");
-			this.redirectPage(this.constants.route_profile_mascotas, {"pk" : this.newPk});
+			this.redirectPage(this.constants.route_profile_mascotas, {"pk" : pk});
 		}
 	}
 

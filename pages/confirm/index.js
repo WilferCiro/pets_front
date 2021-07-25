@@ -14,7 +14,6 @@ class ConfirmView extends BasePanel{
 		}
 
 		// Methods
-		this.successSendConfirmation = this.successSendConfirmation.bind(this);
 		this.sendConfirmation        = this.sendConfirmation.bind(this);
 	}
 
@@ -22,23 +21,19 @@ class ConfirmView extends BasePanel{
 		this.sendConfirmation();
 	}
 
-	sendConfirmation() {
+	async sendConfirmation() {
 		let body = {
 			"pk" : this.props.user,
-			"codigo_confirmado" : this.props.code,
-			"modelo" : "confirmar"
+			"codigo_confirmado" : this.props.code
 		}
-		this.send({
-			endpoint: this.constants.getPublicEndpoint() + "user",
-			method: 'PUT',
-			success: this.successSendConfirmation,
-			body: body,
-			showMessage : true
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "user",
+			model: "confirmar",
+			body: body
 		});
-	}
 
-	successSendConfirmation(data) {
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			this.setState({
 				success: true
 			});

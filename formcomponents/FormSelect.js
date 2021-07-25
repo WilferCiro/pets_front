@@ -4,6 +4,7 @@
 
 // Custom classes
 import Constant           from '@/components/Constant';
+import BasePanel          from '@/containers/BasePanel';
 import BaseFormComponent  from '@/formcomponents/BaseFormComponent';
 
 // Ant components and icons
@@ -22,7 +23,6 @@ class FormSelect extends BaseFormComponent{
 
 		// Methods
 		this.searchService       = this.searchService.bind(this);
-		this.succesSearchService = this.succesSearchService.bind(this);
 	}
 
 	componentDidMount() {
@@ -31,20 +31,16 @@ class FormSelect extends BaseFormComponent{
 		}
 	}
 
-	searchService() {
-		let body = {
-			"modelo" : "select"
-		}
-		this.send({
-			endpoint: Constant.getPublicEndpoint() + this.service,
-			method: 'GET',
-			success: this.succesSearchService,
-			body: body,
-			showMessage : true
+	async searchService() {
+		let body = {}
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: this.service,
+			model: "select",
+			body: body
 		});
-	}
-	succesSearchService(data) {
-		if(data["estado_p"] === 200) {
+
+		if(data["code"] === 200) {
 			let newData = [];
 			for (let index in data["data"]) {
 				newData.push({
@@ -52,13 +48,11 @@ class FormSelect extends BaseFormComponent{
 					"value" : data["data"][index]["pk"],
 				});
 			}
-
 			this.setState({
 				options: newData
 			})
 		}
 	}
-
 
 	render() {
 		return (

@@ -42,7 +42,6 @@ class PerdidasView extends BasePanel{
 
 		// Methods
 		this.searchMascotas        = this.searchMascotas.bind(this);
-		this.successSearchMascotas = this.successSearchMascotas.bind(this);
 
 		// References
 		this.refFormAdd = React.createRef();
@@ -51,28 +50,23 @@ class PerdidasView extends BasePanel{
 	componentDidMount() {
 		this.searchMascotas(1);
 
-		BasePanel.refBreadcrumb.current.setItems([{"label" : "Mascotas desaparecidas"}])
+		this.setBreadCrumb([{"label" : "Mascotas desaparecidas"}])
 	}
 
-	searchMascotas(page) {
+	async searchMascotas(page) {
 		let body = {
 			"cantidad" : this.pageSize,
 			"pagina" : page,
 			"modelo" : "perdidas",
 			"ordenar_por" : "-pk"
 		}
-		this.send({
-			endpoint: this.constants.getPublicEndpoint() + "mascota",
-			method: 'GET',
-			success: this.successSearchMascotas,
-			body: body,
-			showMessage : true
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "mascota",
+			model: "perdidas",
+			body: body
 		});
-	}
-
-	successSearchMascotas(data) {
-		console.log(data);
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			this.setState({
 				mascotas: data["data"],
 				paginator: data["paginator"]

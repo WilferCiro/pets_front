@@ -25,7 +25,6 @@ class AyudaView extends BasePanel{
 
 		// Methods
 		this.sendMessage        = this.sendMessage.bind(this);
-		this.successSendMessage = this.successSendMessage.bind(this);
 	}
 
 	async sendMessage() {
@@ -34,30 +33,26 @@ class AyudaView extends BasePanel{
 		if(valid) {
 			let formValues = this.refFormMessage.current.getValues();
 			let body = {
-				"modelo" : "crear",
 				"email" : formValues["email"],
 				"nombre" : formValues["nombre"],
 				"asunto" : formValues["asunto"],
 				"mensaje" : formValues["mensaje"],
 			}
 
-			this.send({
-				endpoint: this.constants.getPublicEndpoint() + "mensaje",
-				method: 'POST',
-				success: this.successSendMessage,
-				body: body,
-				showMessage : true
+			let data = await BasePanel.service.apiSend({
+				method: "POST",
+				register: "mensaje",
+				model: "crear",
+				body: body
 			});
-		}
-	}
 
-	successSendMessage(data){
-		if(data["estado_p"] === 200) {
-			message.success("Se ha enviado el mensaje con éxito");
-			this.refFormMessage.current.clearValues();
-		}
-		else{
-			message.error("Hubo un error al enviar el mensaje");
+			if(data["code"] === 200) {
+				message.success("Se ha enviado el mensaje con éxito");
+				this.refFormMessage.current.clearValues();
+			}
+			else{
+				message.error("Hubo un error al enviar el mensaje");
+			}
 		}
 	}
 

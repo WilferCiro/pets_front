@@ -24,9 +24,7 @@ class RecoverView extends BasePanel{
 
 		// Methods
 		this.sendEmail         = this.sendEmail.bind(this);
-		this.successSendEmail  = this.successSendEmail.bind(this);
 		this.changePass        = this.changePass.bind(this);
-		this.successChangePass = this.successChangePass.bind(this);
 
 		// References
 		this.refFormFinal    = React.createRef();
@@ -45,49 +43,47 @@ class RecoverView extends BasePanel{
 		let body = {
 			"email" : values["email"]
 		};
-		console.log(body);
-		this.send({
-			endpoint: this.constants.getRecoverEndPoint(),
-			method: 'POST',
-			success: this.successSendEmail,
-			body: body,
-			showMessage : true
+		let data = await BasePanel.service.apiSend({
+			method: "POST",
+			register: "recover",
+			model: "recover",
+			body: body
 		});
-	}
-
-	successSendEmail(data) {
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			message.info("Se ha enviado un correo electrónico");
 			this.refFormEmail.current.clearValues();
 		}
 	}
 
 	async changePass() {
+
+		// FIXME: Comprobar que el token sea válido
+
 		let valid = await this.refFormFinal.current.validate();
 		if(!valid) {
 			return;
 		}
 		let values = this.refFormFinal.current.getValues();
 		let body = {
-			"password" : values["password"]["password1"],
-			"modelo" : "recuperar"
+			"password" : values["password"]["password1"]
 		};
 		console.log(body);
-		this.send({
-			endpoint: this.constants.getPrivateEndpoint() + "recover",
-			method: 'PUT',
-			success: this.successChangePass,
+
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "recover",
+			model: "recuperar",
 			body: body,
-			showMessage : true,
-			requires_token: true,
+			isPublic: false,
 			token: this.props.token
 		});
-	}
 
-	successChangePass(data) {
-		if(data["estado_p"] === 200) {
+		if(data["code"] === 200) {
 			message.info("Se ha cambiado la contraseña con éxito, por favor inicia sesión");
 			this.redirectPage(this.constants.route_login, {});
+		}
+		else{
+			message.error("Ocurrió un error al cambiar la contraseña");
 		}
 	}
 
@@ -110,7 +106,7 @@ class RecoverView extends BasePanel{
 							<Divider />
 							<RecoverPassFinalForm vertical={true} ref={this.refFormFinal} />
 							<Divider />
-							<Button type="primary" onClick={this.changePass}>Enviar instrucciones</Button>
+							<Button type="primary" onClick={this.changePass}>Modificar mi contraseña</Button>
 						</div>
 					</section>
 

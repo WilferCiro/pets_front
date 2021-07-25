@@ -36,13 +36,19 @@ export default class BasePanel extends Component {
 		this.store     = BasePanel.store;
 
 		// Methods
-		this.redirectPage = this.redirectPage.bind(this);
-		this.goHome       = this.goHome.bind(this);
-		this.logout       = this.logout.bind(this);
-		this.error        = this.error.bind(this);
-		this.send         = this.send.bind(this);
+		this.redirectPage  = this.redirectPage.bind(this);
+		this.goHome        = this.goHome.bind(this);
+		this.logout        = this.logout.bind(this);
+		this.error         = this.error.bind(this);
+		this.send          = this.send.bind(this);
+		this.setBreadCrumb = this.setBreadCrumb.bind(this);
 	}
 
+	setBreadCrumb(data) {
+		if(BasePanel.refBreadcrumb.current) {
+			BasePanel.refBreadcrumb.current.setItems(data);
+		}
+	}
 
 	logout() {
 		BasePanel.user.deleteToken();

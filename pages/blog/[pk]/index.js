@@ -39,9 +39,6 @@ class BlogProfileView extends BasePanel{
 
 		return (
 			<div>
-				<Button icon={<ArrowLeftOutlined />} primary>Atrás</Button>
-				<br />
-				<br />
 				<Image
 					className="image-card"
 					src={blog.portada}
@@ -52,7 +49,7 @@ class BlogProfileView extends BasePanel{
 				/>
 				<h2 className="landing-title">{blog.titulo}</h2>
 				<div className="content" dangerouslySetInnerHTML={{__html: blog.cuerpo}}></div>
-				<p className="foot-entry">Modificado: {blog.fecha_modificacion.formatDateTime()} <br /> por {blog.usuario}</p>
+				<p className="foot-entry">Modificado: {blog.fecha_modificacion} <br /> por {blog.usuario}</p>
 			</div>
 		);
 	}
@@ -61,21 +58,21 @@ class BlogProfileView extends BasePanel{
 BlogProfileView.getInitialProps = async ({query, req, pathname}) => {
 	let blog = null;
 	let [_blogs] = await Promise.all([
-		BasePanel.send(
-		{
-			endpoint: Constant.getPublicEndpoint() + "blog",
-			method: 'GET',
-			token: true,
+		BasePanel.service.apiSend({
+			method: "GET",
+			register: "blog",
+			model: "todo",
+			showLoad: false,
 			body: {
-				"modelo" : "todo",
 				"campos" : {
 					"pk" : 1
 				}
 			}
-		}),
+		})
 	]);
-	if(_blogs["estado_p"] === 200) {
+	if(_blogs["code"] === 200) {
 		blog = _blogs["data"][0];
+		blog["fecha_modificacion"] = blog["fecha_modificacion"].formatDateTime();
 	}
 	return {query, blog};
 }
@@ -83,5 +80,3 @@ BlogProfileView.getPageName = () => {
 	return "Entrada de blog";
 }
 export default BlogProfileView;
-
-//<img className="carousel-foto" src={foto["foto"]} />

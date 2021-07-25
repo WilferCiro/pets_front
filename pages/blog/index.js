@@ -37,7 +37,6 @@ class BlogView extends BasePanel{
 		}
 
 		// Methods
-		this.successSearchBlogs = this.successSearchBlogs.bind(this);
 		this.searchBlogs        = this.searchBlogs.bind(this);
 	}
 
@@ -45,25 +44,19 @@ class BlogView extends BasePanel{
 		this.searchBlogs(1);
 	}
 
-	searchBlogs(page) {
+	async searchBlogs(page) {
 		let body = {
 			"cantidad" : 10,
-			"pagina" : page,
-			"modelo" : "card"
+			"pagina" : page
 		}
-		this.send({
-			endpoint: this.constants.getPublicEndpoint() + "blog",
-			method: 'GET',
-			success: this.successSearchBlogs,
-			body: body,
-			showMessage : true
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "blog",
+			model: "card",
+			isPublic: true,
+			body: body
 		});
-	}
-
-	successSearchBlogs(data) {
-		console.log(data);
-		if(data["estado_p"] === 200) {
-
+		if(data["code"] === 200) {
 			this.setState({
 				blogs: data["data"],
 				paginator: data["paginator"]
@@ -144,7 +137,7 @@ class BlogView extends BasePanel{
 							<List.Item.Meta
 								avatar={<Avatar src={item.portada} size={60} />}
 								title={<a onClick={(e) => this.redirectPage(this.constants.route_subblog, {"pk" : item.pk})}>{item.titulo}</a>}
-								description={"Modificado: " + item.fecha_modificacion + ", por: " + item.usuario}
+								description={"Modificado: " + item.fecha_modificacion.formatDateTime() + ", por: " + item.usuario}
 							/>
 						</List.Item>
 						)}
