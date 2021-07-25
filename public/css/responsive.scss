@@ -1,6 +1,17 @@
 @import "variables";
 
+@media (max-width: 1070px) and (min-width: 992px) {
+	.landing-circle3{
+		right: 30%;
+		top: 75vh;
+	}
+}
+
 @media (max-width: 992px) {
+	.landing-circle3{
+		right: 30%;
+		top: 75vh;
+	}
 	.layout-content{
 		margin-left: 0px;
 	}
@@ -23,6 +34,9 @@
 }
 
 @media (max-width: 767px) {
+	.show-mobile{
+		display: block;
+	}
 	.complete-left-panel{
 		width: 0px;
 		overflow: hidden;

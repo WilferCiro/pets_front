@@ -132,7 +132,7 @@ class Login extends BasePanel{
 							<p>Al registrarse usted acepta nuestra <a href="">política de privacidad de datos</a></p>
 
 							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
-							<a className="login" onClick={(e) => this.onRegisterLogin()}>Iniciar sesión</a>
+							<a className="login show-mobile" onClick={(e) => this.onRegisterLogin()}>Iniciar sesión</a>
 						</div>
 					</div>
 					<div className="form-container sign-in-container">
@@ -158,7 +158,7 @@ class Login extends BasePanel{
 
 							<a onClick={(e) => this.redirectPage(this.constants.route_recover)} className="login">¿Olvidaste tu contraseña?</a>
 							<button className="login-button" onClick={(e) => this.onLogin()}>Iniciar sesión</button>
-							<a className="login" id="signIn" onClick={(e) => this.onRegisterLogin()}>Registrarse</a>
+							<a className="login show-mobile" onClick={(e) => this.onRegisterLogin()}>Registrarse</a>
 						</div>
 					</div>
 

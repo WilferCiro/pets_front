@@ -8,7 +8,6 @@ import BasePanel      from '@/containers/BasePanel';
 // Ant components and icons
 import {
 	Divider,
-	message,
 	notification
 } from 'antd';
 import {
@@ -48,7 +47,6 @@ class Footer extends BasePanel{
 			message: 'Internet',
 			description: 'Vuelves a estar con internet.',
 		});
-		message.success("Vuelves a estar con internet");
 	}
 	offline() {
 		this.setState({

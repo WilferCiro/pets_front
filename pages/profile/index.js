@@ -184,7 +184,7 @@ class ProfileView extends BasePanel{
 					modal={true}
 					modalOnOk={this.editUserPassword}/>
 
-				<Row  gutter={[40, 16]} align="top">
+				<Row gutter={[40, 16]} align="top">
 					<Col xs={24} md={11} lg={8}>
 						<div key={Math.random()} className="carouser-foto-container">
 							{
@@ -200,11 +200,11 @@ class ProfileView extends BasePanel{
 						</div>
 					</Col>
 					<Col xs={24} md={13} lg={16}>
-						<Row  gutter={[40, 16]} align="middle">
-							<Col span={19}>
+						<Row gutter={[40, 16]} align="middle">
+							<Col xs={24} md={19}>
 								<h2 className="mascota-name">Mi perfil · {user.full_name}</h2>
 							</Col>
-							<Col span={5}>
+							<Col xs={24} md={5}>
 								<Space>
 									<Tooltip title="Editar datos de la mascota">
 										<Button shape="circle" type="primary" icon={<EditOutlined />} onClick={this.openFormEdit}></Button>

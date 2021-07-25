@@ -111,6 +111,9 @@ p {
 	left: 0px;
 	z-index: 1000;
 }
+.show-mobile{
+	display: none;
+}
 // generic
 
 // _app.js
@@ -241,7 +244,7 @@ p {
 	height: 150px;
 	border-radius: 100%;
 	right: 55%;
-	top: 66vh;
+	top: 65vh;
 	position: absolute;
 	box-shadow: inset 0px 0px 40px #4F243F;
 }
