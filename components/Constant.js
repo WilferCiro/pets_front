@@ -51,6 +51,8 @@ class Constant{
 		this.route_perdidas            = '/perdidas';
 		this.route_recover             = '/recover'
 		this.route_profile             = '/profile'
+		this.route_cart                = '/cart'
+		this.route_pay                 = '/pay'
 
 
 		/*** IMÁGENES ***/

@@ -2,26 +2,18 @@
 	* Creado por Wilfer Daniel Ciro Maya - 2021
 **/
 
-// React Components
-import React          from 'react';
+// NextJS libraries
+import Image from 'next/image'
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
-class ResultView extends BasePanel{
+// Ant components and icons
+
+class ProductBase extends BasePanel{
 	constructor(props) {
 		super(props);
 
-		// Props
-
-		// States
-
-		// Methods
-
-		// References
-	}
-
-	componentDidMount() {
 	}
 
 	render() {
@@ -32,4 +24,4 @@ class ResultView extends BasePanel{
 	}
 }
 
-export default ResultView;
+export default ProductBase;

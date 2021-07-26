@@ -13,9 +13,9 @@ import {ConfigProvider, Layout, Menu} from 'antd';
 import esEs            from 'antd/lib/locale/es_ES';
 import CustomBreadcrumb from '@/components/CustomBreadcrumb';
 
+//import 'antd/dist/antd.css';
 import '../public/css/index.css';
 import '../public/css/responsive.css';
-import 'antd/dist/antd.css';
 require('format-unicorn');
 Router.events.on('routeChangeStart', (url) => {
 	NProgress.start()

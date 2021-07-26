@@ -63,7 +63,7 @@ class Header extends BasePanel{
 									<Button shape="circle" icon={<BellOutlined />} onClick={(e) => this.openNotifications()} />
 								</Badge>
 								<Badge count={5} style={{ backgroundColor: 'purple' }}>
-									<Button shape="circle" icon={<ShoppingCartOutlined />} />
+									<Button shape="circle" icon={<ShoppingCartOutlined />} onClick={(e) => this.redirectPage(this.constants.route_cart)} />
 								</Badge>
 							</Space>
 							{

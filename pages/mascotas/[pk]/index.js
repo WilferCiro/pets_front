@@ -196,7 +196,7 @@ class MascotasProfileView extends BasePanel{
 
 	async onEditMascota() {
 		let formValues = this.refFormEdit.current.getValues();
-		this.newFotos = formValues["imagenes"]["fotos"];
+		let newFotos = formValues["imagenes"]["fotos"];
 		let body = {
 			"pk" : this.mascota_pk,
 			"nombre" : formValues["nombre"],
@@ -215,51 +215,53 @@ class MascotasProfileView extends BasePanel{
 			isPublic: false
 		});
 
-		this.successEditMascota(data);
+		this.successEditMascota(data, newFotos);
 	}
 
-	async successEditMascota(data) {
+	async successEditMascota(data, newFotos = null) {
 		if(data["code"] === 200) {
 
 			let mascota = this.state.mascota[0];
-			for (let index in mascota["fotos"]){
-				let found = this.newFotos.find(function(post, ind) {
-					if(post.uid.toString() === mascota["fotos"][index]["pk"].toString()){
-						return true;
-					}
-				});
-				if (!found){
-
-					let body = {
-						"pk" : mascota["fotos"][index]["pk"]
-					}
-					let data = await BasePanel.service.apiSend({
-						method: "DELETE",
-						register: "fotomascota",
-						model: "delete",
-						body: body,
-						isPublic: false
+			if(newFotos){
+				for (let index in mascota["fotos"]){
+					let found = newFotos.find(function(post, ind) {
+						if(post.uid.toString() === mascota["fotos"][index]["pk"].toString()){
+							return true;
+						}
 					});
+					if (!found){
+
+						let body = {
+							"pk" : mascota["fotos"][index]["pk"]
+						}
+						let data = await BasePanel.service.apiSend({
+							method: "DELETE",
+							register: "fotomascota",
+							model: "delete",
+							body: body,
+							isPublic: false
+						});
+					}
 				}
-			}
 
-			for(let index in this.newFotos) {
-				if(this.newFotos[index]["uid"].includes("rc-upload-")){
+				for(let index in newFotos) {
+					if(newFotos[index]["uid"].includes("rc-upload-")){
 
-					let body = {
-						"foto" : this.newFotos[index]["originFileObj"],
-						"mascota" : this.mascota_pk
+						let body = {
+							"foto" : newFotos[index]["originFileObj"],
+							"mascota" : this.mascota_pk
+						}
+
+						let data = await BasePanel.service.apiSend({
+							method: "POST",
+							register: "filemascota",
+							model: "crear",
+							body: body,
+							isPublic: false,
+							formData: true
+						});
+
 					}
-
-					let data = await BasePanel.service.apiSend({
-						method: "POST",
-						register: "filemascota",
-						model: "crear",
-						body: body,
-						isPublic: false,
-						formData: true
-					});
-
 				}
 			}
 
@@ -394,6 +396,8 @@ class MascotasProfileView extends BasePanel{
 												layout='responsive'
 												width={200}
 												height={200}
+												placeholder="blur"
+												blurDataURL="data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
 											/>
 										</div>
 									})

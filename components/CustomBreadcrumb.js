@@ -51,7 +51,7 @@ class CustomBreadcrumb extends BasePanel{
 							return <Breadcrumb.Item key={Math.random()}>
 							{
 								item.route ?
-								<a onClick={(e) => this.redirectPage(item.route, item.params)}>{item.label}</a>
+								<a onClick={(e) => this.redirectPage(item.route, item.params || {})}>{item.label}</a>
 								:
 								<React.Fragment>{item.label}</React.Fragment>
 							}
