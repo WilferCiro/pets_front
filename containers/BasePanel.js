@@ -22,6 +22,7 @@ export default class BasePanel extends Component {
 
 	// Global references
 	static refBreadcrumb = new React.createRef();
+	static refButtonCart   = new React.createRef();
 
 	constructor(props) {
 		super(props);
@@ -36,6 +37,17 @@ export default class BasePanel extends Component {
 		this.goHome        = this.goHome.bind(this);
 		this.logout        = this.logout.bind(this);
 		this.setBreadCrumb = this.setBreadCrumb.bind(this);
+		this.updateCart    = this.updateCart.bind(this);
+	}
+
+	updateCart(obj) {
+		if (obj["count"] === 0) {
+			this.store.removeCart(obj["pk"]);
+		}
+		else{
+			this.store.updateCart(obj);
+		}
+		BasePanel.refButtonCart.current.setNro(this.store.getNumCart());
 	}
 
 	setBreadCrumb(data) {

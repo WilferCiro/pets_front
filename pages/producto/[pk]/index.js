@@ -13,6 +13,7 @@ import BasePanel      from '@/containers/BasePanel';
 import ProductBase    from '@/components/ProductBase';
 import ProductCard    from '@/components/ProductCard';
 import NumberSelector from '@/components/NumberSelector';
+import ImageSlider    from '@/components/ImageSlider';
 
 // Ant components and icons
 import {
@@ -23,14 +24,21 @@ import {
 	Tag,
 	Divider,
 	Tabs,
-	Carousel,
 	InputNumber,
 	Input,
-	Badge
+	Badge,
+	Card,
+	Result,
+	Alert,
+	Tooltip
 } from 'antd';
 import {
 	MinusOutlined,
-	PlusOutlined
+	PlusOutlined,
+	FacebookFilled,
+	InstagramFilled,
+	TwitterSquareFilled,
+	WhatsAppOutlined
 } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -40,132 +48,211 @@ class PreviewView extends ProductBase{
 		super(props);
 
 		// Props
+		this.producto = this.props.producto;
 
 		// States
 
 		// Methods
+		this.localUpdateCart = this.localUpdateCart.bind(this);
 
 		// References
 	}
 
 	componentDidMount() {
-		this.setBreadCrumb([{"label" : "Collar ..."}])
+		let dataBread = [];
+		if(this.producto) {
+			dataBread.push({
+				"label" : this.producto["categorias"]["categoria1"]["nombre"],
+				"route" : this.constants.route_tienda
+			});
+			dataBread.push({
+				"label" : this.producto["categorias"]["categoria2"]["nombre"],
+				"route" : this.constants.route_tienda
+			});
+			dataBread.push({
+				"label" : this.producto["categorias"]["categoria3"]["nombre"],
+				"route" : this.constants.route_tienda
+			});
+			this.setBreadCrumb(dataBread);
+		}
+	}
+
+	localUpdateCart(nro) {
+		let data = {
+			count: nro,
+			pk: this.props.productPK
+		}
+
+		this.updateCart(data);
 	}
 
 	render() {
+		let producto = this.props.producto;
+
+		if (!producto) {
+			return (
+				<Result
+					status="warning"
+					title="Este producto no existe."
+					extra={
+						<Button type="primary" key="console" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>
+							Volver a la tienda
+						</Button>
+					}
+				>
+				</Result>
+			)
+		}
+
 		return (
 			<div>
-				<Row gutter={[40, 16]} align="middle">
-					<Col span={11}>
+				<Row gutter={[40, 1]} align="middle">
+					<Col xs={24} md={11}>
+						{
+							(producto.promocion) ?
+							<Badge.Ribbon color="green" text={producto.promocion + "% dcto"}>
+								<ImageSlider fotos={producto["fotos"]} videos={producto["videos"]} />
+							</Badge.Ribbon>
+							:
+							<ImageSlider fotos={producto["fotos"]} videos={producto["videos"]} />
+						}
 
-						<Row gutter={[5, 5]}>
-							<Col span={6}>
-								<div className="preview-image">
-									<Image
-										src={"http://127.0.0.1:8000/media/av/1627174875/WhatsApp_Image_2021-07-17_at_4.14.28_PM.webp"}
-										alt="HOLA MUNDO"
-										layout="responsive"
-										width="200"
-										height="200"
-										/>
-								</div>
-								<div className="preview-image">
-									<Image
-										src={"http://127.0.0.1:8000/media/producto/1627238960/Amarillo-1.webp"}
-										alt="HOLA MUNDO"
-										layout="responsive"
-										width="200"
-										height="200"
-										/>
-								</div>
-								<div className="preview-image">
-									<Image
-										src={"http://127.0.0.1:8000/media/av/1627174875/WhatsApp_Image_2021-07-17_at_4.14.28_PM.webp"}
-										alt="HOLA MUNDO"
-										layout="responsive"
-										width="200"
-										height="200"
-										/>
-								</div>
-							</Col>
-							<Col span={18}>
-								<Badge.Ribbon color="green" text="10% dcto">
-									<Carousel>
-										<div className="preview-image">
-											<Image
-												src={"http://127.0.0.1:8000/media/av/1627174875/WhatsApp_Image_2021-07-17_at_4.14.28_PM.webp"}
-												alt="HOLA MUNDO"
-												layout="responsive"
-												width="200"
-												height="200"
-												/>
-										</div>
-										<div className="preview-image">
-											<Image
-												src={"http://127.0.0.1:8000/media/producto/1627238960/Amarillo-1.webp"}
-												alt="HOLA MUNDO"
-												layout="responsive"
-												width="200"
-												height="200"
-												/>
-										</div>
-									</Carousel>
-								</Badge.Ribbon>
-							</Col>
-						</Row>
 					</Col>
-					<Col span={12}>
-						<h2>Collar metálico para gato</h2>
+					<Col xs={24} md={12}>
+						<h2>{producto.nombre}</h2>
 						<Space align="center" size="large">
-							<Tag color="purple">Nuevo</Tag>
+							<Tag color="purple">{producto.marca}</Tag>
 							<Space align="center">
-								<p className="discount-price">$25.000</p>
-								<p className="real-price">$30.000</p>
+								{
+									(producto.promocion) ?
+										<p className="discount-price">{producto.precio_original.formatPrice()}</p>
+									:
+										null
+								}
+								<p className="real-price">{producto.precio.formatPrice()}</p>
 							</Space>
 						</Space>
 						<br />
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
+						<p>{producto.descripcion}</p>
+
+						<div className="preview-number-selector">
+							{
+								producto.stock === 0 ?
+								<Alert message="Producto agotado" type="info" />
+								:
+								<NumberSelector onUpdate={this.localUpdateCart} defaultValue={this.props.nroCart || 0} />
+							}
+						</div>
+						<Divider />
 						<Space align="center" size="large">
 							<p>SKU: </p>
-							<p>CMPG-1</p>
+							<p>{producto.sku}</p>
+						</Space><br />
+						<Space align="center" size="large">
+							<p>Código: </p>
+							<p>{producto.codigo}</p>
 						</Space>
-
-						<div style={{width: "30%"}}>
-						<NumberSelector />
-						</div>
+						<Divider />
+						<Row>
+							<Col span={16}>
+								Compartir
+							</Col>
+							<Col span={8}>
+								<Tooltip title="Compartir en facebook">
+									<Button type="primary" shape="circle" icon={<FacebookFilled />} />
+								</Tooltip>
+								<Tooltip title="Compartir en instagram">
+									<Button type="primary" shape="circle" icon={<InstagramFilled />} />
+								</Tooltip>
+								<Tooltip title="Compartir en twitter">
+									<Button type="primary" shape="circle" icon={<TwitterSquareFilled />} />
+								</Tooltip>
+								<Tooltip title="Compartir en whatsapp">
+									<Button type="primary" shape="circle" icon={<WhatsAppOutlined />} />
+								</Tooltip>
+							</Col>
+						</Row>
 					</Col>
 				</Row>
-				<Divider />
-				<Tabs defaultActiveKey="1">
+
+				<Tabs style={{marginTop: "40px"}} defaultActiveKey="1">
 					<TabPane tab="Descripción" key="1">
-						Content of Tab Pane 1
+						<p>{producto.especificaciones}</p>
+						{
+							(producto.materiales && producto.materiales.length > 0) ?
+								<p>
+									<span style={{ marginRight: 8 }}>Materiales:</span>
+									{
+										producto.materiales.map((item, index) => {
+											return <Tag key={Math.random()}>{item.nombre}</Tag>
+										})
+									}
+								</p>
+							:
+							null
+						}
 					</TabPane>
-					<TabPane tab="Documentos" key="2">
-						Content of Tab Pane 2
-					</TabPane>
-				</Tabs>
-				<Divider />
 
-				<Row gutter={[40, 16]}>
-					<Col span={6}>
-						<ProductCard />
-					</Col>
-					<Col span={6}>
-						<ProductCard />
-					</Col>
-					<Col span={6}>
-						<ProductCard />
-					</Col>
-					<Col span={6}>
-						<ProductCard />
-					</Col>
-				</Row>
+					{
+						(producto.documentos && producto.documentos.length > 0) ?
+							<TabPane tab="Documentos" key="2">
+								<span style={{ marginRight: 8 }}>Documentos:</span>
+								{
+									producto.documentos.map((item, index) => {
+										return <Tag key={Math.random()}>{item.url}</Tag>
+									})
+								}
+							</TabPane>
+						:
+						null
+					}
+
+
+				</Tabs>
+
+				<Card style={{marginTop: "40px"}} title="Productos relacionados">
+					<Row gutter={[5, 5]}>
+						<Col xs={24} md={6}>
+							<ProductCard />
+						</Col>
+						<Col xs={24} md={6}>
+							<ProductCard />
+						</Col>
+						<Col xs={24} md={6}>
+							<ProductCard />
+						</Col>
+						<Col xs={24} md={6}>
+							<ProductCard />
+						</Col>
+					</Row>
+				</Card>
 			</div>
 		);
 	}
 }
-PreviewView.getInitialProps = async ({query}) => {
-	return {query};
+PreviewView.getInitialProps = async ({query, req, pathname}) => {
+	let productPK = query.pk;
+	let nroCart = BasePanel.store.getNumCart({query, req, pathname}, productPK);
+
+	let producto = {};
+	let [_productos] = await Promise.all([
+		BasePanel.service.apiSend({
+			method: "GET",
+			register: "producto",
+			model: "todo",
+			showLoad: false,
+			body: {
+				"campos" : {
+					"pk" : productPK
+				}
+			}
+		})
+	]);
+	if(_productos["code"] === 200) {
+		producto = _productos["data"][0];
+	}
+	console.log(producto)
+	return {query, nroCart, productPK, producto};
 }
 PreviewView.getPageName = () => {
 	return "Producto";

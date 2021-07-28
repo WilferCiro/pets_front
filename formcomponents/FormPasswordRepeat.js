@@ -12,7 +12,9 @@ import BaseFormComponent   from '@/formcomponents/BaseFormComponent';
 import {
 	Form,
 	Input,
-	Space
+	Space,
+	Col,
+	Row
 } from 'antd';
 import {
 	EyeInvisibleOutlined,
@@ -51,22 +53,24 @@ const PasswordRepeat = ({ value = {}, onChange }) => {
 	};
 
 	return (
-		<div>
-			<Space size={[4, 4]}>
+		<Row gutter={[8, 3]}>
+			<Col xs={24} md={12}>
 				<Input.Password
 					iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
 					onChange={onChangePass1}
 					placeholder={"Contraseña"}
 					style={{width: "100%"}}
 				/>
+			</Col>
+			<Col xs={24} md={12}>
 				<Input.Password
 					iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
 					onChange={onChangePass2}
 					placeholder={"Repita la contraseña"}
 					style={{width: "100%"}}
 				/>
-			</Space>
-		</div>
+			</Col>
+		</Row>
 	);
 };
 

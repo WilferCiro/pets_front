@@ -37,6 +37,9 @@
 	.show-mobile{
 		display: block;
 	}
+	.show-desktop{
+		display: none;
+	}
 	.complete-left-panel{
 		width: 0px;
 		overflow: hidden;
@@ -50,6 +53,13 @@
 		display: grid;
 		grid-template-columns: 0% 100%;
 	}
+
+	// Preview.js
+
+	.preview-number-selector{
+		width: 100%;
+	}
+	// Preview.js
 
 	// Header.js
 	.header-divider{
@@ -125,4 +135,18 @@
 		display: block;
 	}
 	// Footer.js
+
+	// ImageSlider
+	.thumbnail-container{
+		height: 45vh;
+		overflow: auto;
+		border-radius: 5px;
+	}
+	// ImageSlider
+
+	// BreadCrumb
+	.breadcrumb-container{
+		padding: 0px 0px 10px 30px;
+	}
+	// BreadCrumb
 }

@@ -25,6 +25,12 @@ class Store {
 		this.deleteData     = this.deleteData.bind(this);
 		this.checkIsLogged  = this.checkIsLogged.bind(this);
 		this.isLogged       = this.isLogged.bind(this);
+
+		// Cart
+		this.getNumCart     = this.getNumCart.bind(this);
+		this.updateCart     = this.updateCart.bind(this);
+		this.removeCart     = this.removeCart.bind(this);
+		this.getCart        = this.getCart.bind(this);
 	}
 
 
@@ -102,6 +108,62 @@ class Store {
 			return true;
 		}
 		return false;
+	}
+
+	// Cart handler
+	getNumCart(ctx = null, pk = null) {
+		let cart = this.getCart(ctx);
+		if(cart.length === 0) {
+			return 0;
+		}
+		if(pk !== null) {
+			for(let index in cart) {
+				if(cart[index]["pk"] + "" === "" + pk) {
+					return cart[index]["count"];
+				}
+			}
+			return 0;
+		}
+		return cart.length;
+	}
+
+	getCart(ctx = null) {
+		let cart = this.readValue("cart", ctx);
+		if (!cart){
+			return [];
+		}
+		cart = decodeURIComponent(cart);
+		return JSON.parse(cart);
+	}
+
+	removeCart(pk) {
+		let cart = this.getCart();
+		if (cart.length === 1) {
+			cart = [];
+		}
+		for(let index in cart) {
+			if(cart[index]["pk"] === pk) {
+				cart.splice(index, 1);
+				break;
+			}
+		}
+		this.saveData("cart", JSON.stringify(cart));
+	}
+
+	updateCart(obj) {
+		let cart = this.getCart();
+		let updated = false;
+		cart = typeof cart === 'string' || typeof cart === 'number' ? [] : cart;
+		for(let index in cart) {
+			if(cart[index]["pk"] + "" === obj["pk"] + "") {
+				cart[index] = obj;
+				updated = true;
+			}
+		}
+		if(!updated) {
+			cart.push(obj);
+		}
+		this.saveData("cart", JSON.stringify(cart));
 	}
 }
 export default new Store();

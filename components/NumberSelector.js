@@ -25,10 +25,11 @@ class NumberSelector extends BasePanel{
 		super(props);
 
 		// props
-		this.max = this.props.max || 100;
-		this.min = this.props.min || 0;
-		this.defaultValue = this.props.defaultValue || 0;
-
+		this.max             = this.props.max || 100;
+		this.min             = this.props.min || 0;
+		this.defaultValue    = this.props.defaultValue || 0;
+		this.onUpdate        = this.props.onUpdate;
+		this.parameterUpdate = this.props.parameterUpdate;
 		// States
 		this.state = {
 			value : this.defaultValue
@@ -39,22 +40,30 @@ class NumberSelector extends BasePanel{
 		this.plus         = this.plus.bind(this);
 		this.buttonClick  = this.buttonClick.bind(this);
 	}
-	componentDidMount() {
-	}
 
 	minus() {
-		if(this.state.value - 1 >= this.min){
+		let newValue = this.state.value - 1;
+		if(newValue >= this.min){
 			this.setState({
-				value: this.state.value - 1
+				value: newValue
 			});
+
+			if(this.onUpdate) {
+				this.onUpdate(newValue, this.parameterUpdate)
+			}
 		}
 	}
 
 	plus() {
-		if(this.state.value + 1 <= this.max){
+		let newValue = this.state.value + 1;
+		if(newValue <= this.max){
 			this.setState({
-				value: this.state.value + 1
-			})
+				value: newValue
+			});
+
+			if(this.onUpdate) {
+				this.onUpdate(newValue, this.parameterUpdate)
+			}
 		}
 	}
 
@@ -66,15 +75,15 @@ class NumberSelector extends BasePanel{
 
 		if(this.state.value === 0) {
 			return (
-				<Button block type="primary" size="large" onClick={this.buttonClick} icon={<ShoppingCartOutlined />}>Agregar al carrito</Button>
+				<Button block type="primary" onClick={this.buttonClick} icon={<ShoppingCartOutlined />}>Agregar al carrito</Button>
 			)
 		}
 
 		return (
 			<div className="number-selector">
-				<Button onClick={this.minus} type="link" shape="circle" icon={this.state.value === 1 && this.min < 1 ? <DeleteFilled /> : <MinusOutlined />} />
-				<Input value={this.state.value} min={this.min} max={this.max} style={{border: "none", width: "100%", textAlign: "center"}} />
-				<Button onClick={this.plus} type="link" shape="circle" icon={<PlusOutlined />} />
+				<Button onClick={this.minus} size="small" type="link" shape="circle" icon={this.state.value === 1 && this.min < 1 ? <DeleteFilled /> : <MinusOutlined />} />
+				<Input size="small" value={this.state.value} min={this.min} max={this.max} style={{border: "none", width: "100%", textAlign: "center"}} />
+				<Button onClick={this.plus} size="small" type="link" shape="circle" icon={<PlusOutlined />} />
 			</div>
 		);
 	}

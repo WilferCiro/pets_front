@@ -155,7 +155,7 @@ class BaseFormStructure  extends React.Component{
 			"multiimage"      : (item) => <FormMultiImage name={item["id"]} ref={item["id"]} {...item} />,
 		};
 
-		return <Col span={item["size"] * 2}>
+		return <Col xs={24} md={item["size"] * 2}>
 			{allFields[item["type"]](item)}
 		</Col>;
 	}

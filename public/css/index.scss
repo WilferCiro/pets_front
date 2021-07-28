@@ -114,6 +114,9 @@ p {
 .show-mobile{
 	display: none;
 }
+.show-desktop{
+	display: block;
+}
 // generic
 
 // _app.js
@@ -220,9 +223,6 @@ p {
 }
 .landing-circle1{
 	background: $color-1;
-	background-size: 70%;
-	background-repeat: no-repeat;
-	background-position: 0px -10px;
 	width: 40%;
 	height: 60vh;
 	border-radius: 50% 0% 50% 100%;
@@ -230,6 +230,15 @@ p {
 	top: 0px;
 	position: absolute;
 	box-shadow: inset 0px 0px 40px #4F243F;
+	overflow: hidden;
+	display: flex;
+	color: white;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	h2{
+		color: white;
+	}
 }
 .landing-circle2{
 	background: $color-1;
@@ -865,7 +874,13 @@ footer{
 // ProductCard.js
 
 .product-card{
-	width: 100%;
+	width: calc(100% - 20px);
+	padding: 0px 10px 10px 10px;
+	transition: all 0.2s;
+	border-radius: 5px;
+	&:hover{
+		box-shadow: 0px 0px 4px $text-3;
+	}
 }
 .product-card-photo{
 	width: 100%;
@@ -887,8 +902,9 @@ footer{
 }
 .real-price{
 	color: $text-1;
-	font-size: $font-p + 2px;
+	font-size: $font-p + 3px;
 	margin: 0px;
+	color: $color-1;
 }
 // ProductCard.js
 
@@ -897,13 +913,16 @@ footer{
 	border-radius: 30px;
 	overflow: hidden;
 }
+.preview-number-selector{
+	width: 150px;
+}
 // Preview.js
 
 // NumberSelector.js
 .number-selector{
 	border: solid 1px $color-1;
 	width: 100%;
-	border-radius: 20px;
+	border-radius: 10px;
 	padding: 2px 3px;
 	display: flex;
 	align-items: center;
@@ -916,3 +935,48 @@ footer{
 	}
 }
 // NumberSelector.js
+
+// pay.js
+.pay-card{
+	margin-top: 15px;
+}
+// pay.js
+
+// ImageSlider
+.thumbnail-container{
+	height: 62vh;
+	overflow: auto;
+	border-radius: 5px;
+}
+.thumbnail{
+	border-radius: 5px;
+	overflow: hidden;
+	border: solid 1px transparent;
+	transition: all 0.2s;
+	cursor: pointer;
+	&:hover{
+		border: solid 1px $color-1;
+	}
+}
+.slider{
+	position: relative;
+	&:hover{
+		.slider-button {
+			opacity: 1;
+		}
+	}
+	.slider-button {
+		position: absolute;
+		top: 45%;
+		z-index: 1000;
+		opacity: 0.1;
+		transition: all 0.3s;
+	}
+	.slider-left-button {
+		left: 0px;
+	}
+	.slider-right-button {
+		right: 0px;
+	}
+}
+// ImageSlider

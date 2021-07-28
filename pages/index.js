@@ -7,17 +7,22 @@ import React          from 'react';
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
+import VideoHome      from '@/components/VideoHome';
 
 // Ant components and icons
 import {
 	Col,
-	Row
+	Row,
+	Button
 } from 'antd';
 import {QrcodeOutlined} from '@ant-design/icons'
 
 class Home extends BasePanel{
 	constructor(props) {
 		super(props);
+
+		// References
+		this.refVideo = React.createRef();
 
 	}
 
@@ -30,7 +35,11 @@ class Home extends BasePanel{
 		return (
 			<div className="index-page">
 				<section className="landing-section" id="index">
-					<div className="landing-circle1" />
+					<div className="landing-circle1" >
+						<h2>Video</h2>
+						<p>Este video te muestra más</p>
+						<Button onClick={(e) => this.refVideo.current.open()}>Ver</Button>
+					</div>
 					<div className="landing-circle2" />
 					<div className="landing-circle3" />
 					<div className="landing-circle4" />
@@ -41,6 +50,7 @@ class Home extends BasePanel{
 							<a className="inicia-ya">Inicia ya </a>
 						</div>
 					</div>
+					<VideoHome ref={this.refVideo}/>
 				</section>
 
 				<section className="landing-section" id="beneficios">

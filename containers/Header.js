@@ -10,11 +10,11 @@ import BasePanel      from '@/containers/BasePanel';
 import FormSelect     from '@/formcomponents//FormSelect';
 import Notifications  from '@/containers/Notifications';
 import Label          from '@/components/Label';
+import CartButton     from '@/components/CartButton';
 
 // Ant components and icons
 import {
 	BellOutlined,
-	ShoppingCartOutlined,
 	MenuOutlined
 } from '@ant-design/icons';
 import {
@@ -62,9 +62,7 @@ class Header extends BasePanel{
 								<Badge status="primary" dot>
 									<Button shape="circle" icon={<BellOutlined />} onClick={(e) => this.openNotifications()} />
 								</Badge>
-								<Badge count={5} style={{ backgroundColor: 'purple' }}>
-									<Button shape="circle" icon={<ShoppingCartOutlined />} onClick={(e) => this.redirectPage(this.constants.route_cart)} />
-								</Badge>
+								<CartButton nroCart={this.props.nroCart} ref={BasePanel.refButtonCart} />
 							</Space>
 							{
 								(!isLogged)?
@@ -83,7 +81,8 @@ class Header extends BasePanel{
 
 Header.getInitialProps = async ({query, req, pathname}) => {
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
-	return {query, isLogged};
+	let nroCart = BasePanel.store.getNumCart({query, req, pathname});
+	return {query, isLogged, nroCart};
 }
 
 export default Header;

@@ -110,3 +110,8 @@ String.prototype.formatDateTime = function () {
 	let date = new Date(a);
 	return moment(a).format('DD MMMM [de] YYYY, h:mm:ss a');
 };
+
+Number.prototype.formatPrice = function () {
+	let a = this;
+	return a.toLocaleString('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 2})
+};
