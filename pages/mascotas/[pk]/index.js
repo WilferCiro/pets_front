@@ -8,11 +8,12 @@ import React          from 'react';
 import Image from 'next/image'
 
 // Custom classes
-import EditDesaparecidoForm from '@/formclasses/edit_desaparecido';
-import TableMascotasVacunas from '@/tables/MascotasVacunas';
-import AddMascotaForm       from '@/formclasses/add_mascota';
-import ModalMissing         from '@/containers/ModalMissing';
-import BasePanel            from '@/containers/BasePanel';
+import EditDesaparecidoForm      from '@/formclasses/edit_desaparecido';
+import TableMascotasVacunas      from '@/tables/MascotasVacunas';
+import TableMascotasEnfermedades from '@/tables/MascotasEnfermedades';
+import AddMascotaForm            from '@/formclasses/add_mascota';
+import ModalMissing              from '@/containers/ModalMissing';
+import BasePanel                 from '@/containers/BasePanel';
 
 // Third part
 import { QRCode } from 'react-qrcode-logo';
@@ -99,7 +100,8 @@ class MascotasProfileView extends BasePanel{
 			}
 		}
 		let data = {};
-		if(this.isLogged){
+		console.log(this.listMascotasPK);
+		if(this.isLogged && this.listMascotasPK.includes(this.mascota_pk)){
 			this.canEdit = true;
 			data = await BasePanel.service.apiSend({
 				method: "GET",
@@ -119,7 +121,7 @@ class MascotasProfileView extends BasePanel{
 				body: body
 			});
 		}
-
+		console.log(data);
 		if(data["code"] === 200) {
 			this.setState({
 				mascota: data["data"]
@@ -200,10 +202,11 @@ class MascotasProfileView extends BasePanel{
 		let body = {
 			"pk" : this.mascota_pk,
 			"nombre" : formValues["nombre"],
-			"fecha_nacimiento" : formValues["fecha_nacimiento"],
+			"fecha_nacimiento" : formValues["fecha_nacimiento"].format("YYYY-MM-DD"),
 			"tipo" : formValues["tipo"],
 			"raza" : formValues["raza"],
 			"visible" : formValues["visible"],
+			"sexo" : formValues["sexo"],
 			"presentacion" : formValues["presentacion"]
 		}
 
@@ -302,15 +305,15 @@ class MascotasProfileView extends BasePanel{
 
 		mascota = mascota[0];
 		mascotaEdit = Object.assign({}, mascota);
-		mascotaEdit["fecha_nacimiento"] = moment(mascotaEdit["fecha_nacimiento"], "YYYY-MM-DD hh:mm:ss")
+		mascotaEdit["fecha_nacimiento"] = moment(mascotaEdit["fecha_nacimiento"], "YYYY-MM-DD")
 
 		this.isMissing = mascota["desaparecido"];
 
 		dataMascota = [
-			{title: "Fecha de nacimiento", description: mascota["fecha_nacimiento"] ? (mascota["fecha_nacimiento"] + "").formatDateTime() : "No hay fecha de nacimiento"},
+			{title: "Fecha de nacimiento", description: mascota["fecha_nacimiento"] ? (mascota["fecha_nacimiento"] + "").formatDate() : "No hay fecha de nacimiento"},
 			{title: "Identificación", description: mascota["identificacion"]},
 			{title: "Presentación", description: mascota["presentacion"]},
-			{title: "Sexo", description: "Hembra"}
+			{title: "Sexo", description: mascota["sexo_name"]}
 		];
 		dataConacto = [
 			{title: "Nombre Dueño", description: mascota["user__nombre"] ? mascota["user__nombre"] : "Información oculta"},
@@ -503,10 +506,14 @@ class MascotasProfileView extends BasePanel{
 							<TabPane tab="Vacunas" key="3">
 								<TableMascotasVacunas vacunas={mascota["vacunas"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
 							</TabPane>
+
+							<TabPane tab="Enfermedades" key="4">
+								<TableMascotasEnfermedades enfermedades={mascota["enfermedades"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
+							</TabPane>
 							{
 								this.canEdit ?
-									<TabPane tab="Placa" key="4">
-										<QRCode value="Puto el que lo escanee" bgColor={"purple"} fgColor={"white"} qrStyle={"dots"} />
+									<TabPane tab="Placa" key="5">
+										<QRCode size="300" value="Prueba kiwipeluditos con zunga" bgColor={"#555555"} fgColor={"white"} qrStyle={"dots"} />
 									</TabPane>
 								:
 								null
@@ -548,7 +555,8 @@ class MascotasProfileView extends BasePanel{
 MascotasProfileView.getInitialProps = async ({query, ctx, req, pathname}) => {
 	let mascota_pk = query.pk;
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
-	let listMascotasPK = [];
+	let mascotas = BasePanel.store.readValue("mascotas", {query, req, pathname});
+	let listMascotasPK = mascotas.split(",");
 	return {query, mascota_pk, isLogged, listMascotasPK};
 }
 MascotasProfileView.getPageName = () => {

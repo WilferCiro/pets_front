@@ -17,13 +17,28 @@ import {
 	CheckCircleFilled,
 	FileTextFilled,
 	ShopFilled,
-	QuestionCircleFilled
+	QuestionCircleFilled,
+	IdcardOutlined
 } from '@ant-design/icons';
 
 
 class LeftPanel extends BasePanel{
 	constructor(props) {
 		super(props);
+
+		// Props
+		this.aditionalClick = this.props.aditionalClick;
+
+		// Methods
+		this.clickMenu = this.clickMenu.bind(this);
+	}
+
+	clickMenu(route, params = {}) {
+		this.redirectPage(route, params);
+
+		if(this.aditionalClick) {
+			this.aditionalClick();
+		}
 	}
 
 	render() {
@@ -31,12 +46,12 @@ class LeftPanel extends BasePanel{
 		let isLogged = this.props.isLogged ? this.props.isLogged : false;
 		let userData = this.props.userData;
 
-		let userName = isLogged ? <a onClick={(e) => this.redirectPage(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a> : "Kiwi invitado";
+		let userName = isLogged ? <a onClick={(e) => this.clickMenu(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a> : "Kiwi invitado";
 		let nicName  = isLogged ? "user" : "kiwi_invitado";
 		return (
 			<div className="left-panel">
 
-				<div className="logo" onClick={this.goHome}>
+				<div className="logo" onClick={(e) => this.clickMenu(this.constants.route_index)}>
 					<img src={this.constants.img_logo} />
 					Kiwi Peluditos
 				</div>
@@ -73,40 +88,44 @@ class LeftPanel extends BasePanel{
 					<ul className="left-panel-menu">
 						{
 							(isLogged) ?
-							<li className={currentPage.includes("/mascotas") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_mascotas)}>
+							<li className={currentPage.includes("/mascotas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_mascotas)}>
 								<div><IdcardFilled className="icon" /></div>
 								<div>Mis mascotas</div>
-								<div>5</div>
+								<div>{userData ? userData["cantidad_mascotas"] : "-"}</div>
 							</li>
 							:
-							null
+							<li onClick={(e) => this.clickMenu(this.constants.route_login, {"from_mascotas" : true})}>
+								<div><IdcardFilled className="icon" /></div>
+								<div>Mis mascotas</div>
+								<div></div>
+							</li>
 						}
-						<li className={currentPage.includes("/perdidas") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_perdidas)}>
+						<li className={currentPage.includes("/perdidas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_perdidas)}>
 							<div><AlertOutlined className="icon" /></div>
 							<div>Mascotas perdidas</div>
 							<div></div>
 						</li>
-						{/*<li className={currentPage.includes("/vacunas") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_vacunas)}>
+						{/*<li className={currentPage.includes("/vacunas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_vacunas)}>
 							<div><HeartFilled className="icon" /></div>
 							<div>Esquema de vacunas</div>
 							<div></div>
 						</li>
-						<li className={currentPage.includes("/razas") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_razas)}>
+						<li className={currentPage.includes("/razas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_razas)}>
 							<div><CheckCircleFilled className="icon" /></div>
 							<div>Razas</div>
 							<div></div>
 						</li>*/}
-						<li className={currentPage.includes("/blog") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_blog)}>
+						<li className={currentPage.includes("/blog") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_blog)}>
 							<div><FileTextFilled className="icon" /></div>
 							<div>Blog</div>
 							<div></div>
 						</li>
-						<li className={currentPage.includes("/tienda") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_tienda)}>
+						<li className={currentPage.includes("/tienda") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_tienda)}>
 							<div><ShopFilled className="icon" /></div>
 							<div>Tienda</div>
 							<div></div>
 						</li>
-						<li className={currentPage.includes("/ayuda") ? "active" : ""} onClick={(e) => this.redirectPage(this.constants.route_ayuda)}>
+						<li className={currentPage.includes("/ayuda") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_ayuda)}>
 							<div><QuestionCircleFilled className="icon" /></div>
 							<div>Ayuda</div>
 							<div></div>
@@ -124,7 +143,11 @@ class LeftPanel extends BasePanel{
 									<div></div>
 								</li>
 							:
-								null
+								<li onClick={e => this.clickMenu(this.constants.route_login)}>
+									<div><IdcardOutlined className="icon" /></div>
+									<div>Ingresar</div>
+									<div></div>
+								</li>
 						}
 					</ul>
 				</nav>

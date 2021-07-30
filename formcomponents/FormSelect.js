@@ -20,26 +20,45 @@ class FormSelect extends BaseFormComponent{
 
 		// Props
 		this.service = props.service;
+		this.service_index = props.service_index;
+		this.update_select = props.update_select;
 
 		// Methods
-		this.searchService       = this.searchService.bind(this);
+		this.searchService   = this.searchService.bind(this);
+		this.setValueService = this.setValueService.bind(this);
 	}
 
 	componentDidMount() {
-		if (this.service) {
+		if (this.service && !this.service_index) {
 			this.searchService();
 		}
 	}
 
-	async searchService() {
+	onChange(value) {
+		console.log("ONCHANGE", this.update_select);
+		let field = this.form.getField(this.update_select);
+		field.setValueService(value);
+	}
+
+	setValueService(value) {
+		this.searchService(value);
+	}
+
+	async searchService(value = null) {
 		let body = {}
+		if (value) {
+			let bodyCampos = {}
+			bodyCampos[this.service_index] = value;
+			body["campos"] = bodyCampos;
+		}
+		console.log("---", body);
+
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
 			register: this.service,
 			model: "select",
 			body: body
 		});
-
 		if(data["code"] === 200) {
 			let newData = [];
 			for (let index in data["data"]) {
@@ -65,6 +84,7 @@ class FormSelect extends BaseFormComponent{
 				<Select
 					showSearch
 					showArrow
+					onChange={this.onChange}
 					placeholder={this.getPlaceholder()}
 					style={{ width: '100%' }}
 					filterOption={(input, option) =>

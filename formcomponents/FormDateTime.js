@@ -14,10 +14,12 @@ import {
 class FormDateTime extends BaseFormComponent{
 	constructor(props) {
 		super(props);
+
+		this.showTime = this.props.showTime !== null && this.props.showTime !== undefined ? this.props.showTime : true;
 	}
 
 	render() {
-		const dateFormat = 'YYYY-MM-DD hh:mm:ss';
+		const dateFormat = this.props.showTime ? 'YYYY-MM-DD hh:mm:ss' : 'YYYY-MM-DD';
 
 		return (
 			<Form.Item
@@ -28,7 +30,8 @@ class FormDateTime extends BaseFormComponent{
 			>
 				<DatePicker
 					format={dateFormat}
-					showTime
+					size="small"
+					showTime={this.props.showTime}
 					style={{width: "100%"}}
 					placeholder={this.getPlaceholder() + (this.required ? "*" : "")}
 					/>

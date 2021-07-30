@@ -5,6 +5,9 @@
 // React Components
 import React          from 'react';
 
+// NextJS libraries
+import Image from 'next/image'
+
 // Custom classes
 import BasePanel           from '@/containers/BasePanel';
 import MascotaVacunaForm   from '@/formclasses/mascota_vacuna';
@@ -15,7 +18,8 @@ import {
 	Table,
 	Space,
 	Popconfirm,
-	Button
+	Button,
+	Badge,
 } from 'antd';
 import {
 	DeleteOutlined
@@ -44,7 +48,18 @@ class TableCart extends BasePanel{
 		this.columnsCart = [
 			{
 				title: 'Foto',
-				dataIndex: 'foto'
+				dataIndex: 'foto',
+				render: (value, record) => (
+					(value) ?
+						(record["promocion"]) ?
+							<Badge.Ribbon color="green" text={record["promocion"] + "% dcto"}>
+								<Image width="200" height="200" layout="responsive" src={value} alt="foto producto" />
+							</Badge.Ribbon>
+						:
+						<Image width="200" height="200" layout="responsive" src={value} alt="foto producto" />
+					:
+					null
+				),
 			},
 			{
 				title: 'Descripción',
@@ -61,7 +76,7 @@ class TableCart extends BasePanel{
 				title: 'Cantidad',
 				dataIndex: 'count',
 				render: (value, record) => (
-					<div style={{width: "100px"}}><NumberSelector defaultValue={value} min={1} max={100} onUpdate={this.onUpdateCart} parameterUpdate={record} /></div>
+					<div style={{width: "100px"}}><NumberSelector defaultValue={value} min={1} max={record["stock"]} onUpdate={this.onUpdateCart} parameterUpdate={record} /></div>
 				),
 			},
 			{

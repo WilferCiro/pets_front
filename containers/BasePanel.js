@@ -22,7 +22,8 @@ export default class BasePanel extends Component {
 
 	// Global references
 	static refBreadcrumb = new React.createRef();
-	static refButtonCart   = new React.createRef();
+	static refButtonCart = new React.createRef();
+	static refMobileMenu = new React.createRef();
 
 	constructor(props) {
 		super(props);
@@ -31,6 +32,7 @@ export default class BasePanel extends Component {
 		this.constants = Constant;
 		this.URLSave   = null;
 		this.store     = BasePanel.store;
+		this.valorEnvio = 10000;
 
 		// Methods
 		this.redirectPage  = this.redirectPage.bind(this);
@@ -38,6 +40,9 @@ export default class BasePanel extends Component {
 		this.logout        = this.logout.bind(this);
 		this.setBreadCrumb = this.setBreadCrumb.bind(this);
 		this.updateCart    = this.updateCart.bind(this);
+		this.getDataCart   = this.getDataCart.bind(this);
+
+		BasePanel.service.setLogout(this.logout);
 	}
 
 	updateCart(obj) {
@@ -48,6 +53,31 @@ export default class BasePanel extends Component {
 			this.store.updateCart(obj);
 		}
 		BasePanel.refButtonCart.current.setNro(this.store.getNumCart());
+	}
+
+	async getDataCart() {
+		let cart = this.store.getCart();
+		let pks = [];
+		cart.map((item, index) => {
+			pks.push(item["pk"]);
+			return null;
+		});
+
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "producto",
+			model: "carrito",
+			body: {
+				"campos" : {
+					"pk-en" : pks
+				}
+			}
+		});
+
+		if(data["code"] === 200) {
+			return data["data"];
+		}
+		return [];
 	}
 
 	setBreadCrumb(data) {

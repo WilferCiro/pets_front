@@ -21,7 +21,8 @@ import {
 	Button,
 	Affix,
 	Badge,
-	Space
+	Space,
+	PageHeader
 } from 'antd';
 
 class Header extends BasePanel{
@@ -34,47 +35,47 @@ class Header extends BasePanel{
 
 		// Methods
 		this.openNotifications = this.openNotifications.bind(this);
-		this.changeAffixed     = this.changeAffixed.bind(this);
+		this.openMenuMobile    = this.openMenuMobile.bind(this);
 	}
 
 	openNotifications() {
 		this.refNotifications.current.open();
 	}
 
-	changeAffixed(affixed) {
-		this.headerRef.current.className = (affixed) ? "affixed" : "";
+	openMenuMobile() {
+		BasePanel.refMobileMenu.current.open();
 	}
 
 	render() {
 		let isLogged = this.props.isLogged;
 		return (
-			<Affix offsetTop={0} onChange={affixed => this.changeAffixed(affixed)}>
-				<header ref={this.headerRef}>
-					<Notifications ref={this.refNotifications} />
-					<div className="header-divider">
-						<div className="header-title-container">
-							<h2 className="header-page-title">
-								{this.props.pageName}
-							</h2>
-						</div>
-						<div className="header-menu">
-							<Space size={"middle"} align="center">
+			<div>
+				<Affix offsetTop={0}>
+
+					<PageHeader
+						className="site-page-header-responsive affixed"
+						title={this.props.pageName}
+						onBack={this.openMenuMobile}
+						backIcon={<MenuOutlined className="show-tablet icon-menu-header" />}
+						extra={[
+							<Space size={"middle"} align="center" key={Math.random()}>
 								<Badge status="primary" dot>
 									<Button shape="circle" icon={<BellOutlined />} onClick={(e) => this.openNotifications()} />
 								</Badge>
 								<CartButton nroCart={this.props.nroCart} ref={BasePanel.refButtonCart} />
-							</Space>
-							{
-								(!isLogged)?
-								<a onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
+								{(!isLogged)?
+								<a key={Math.random()} onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
 								:
-								null
-							}
+								null}
+							</Space>
 
-						</div>
-					</div>
-				</header>
-			</Affix>
+						]}
+						>
+					</PageHeader>
+
+				</Affix>
+				<Notifications ref={this.refNotifications} />
+			</div>
 		);
 	}
 }

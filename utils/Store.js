@@ -1,5 +1,7 @@
 import Cookie   from 'js-cookie';
 import jwt      from 'jsonwebtoken';
+import CryptoAES from 'crypto-js/aes';
+import CryptoENC from 'crypto-js/enc-utf8';
 
 class Store {
 	static instance = null;
@@ -31,17 +33,30 @@ class Store {
 		this.updateCart     = this.updateCart.bind(this);
 		this.removeCart     = this.removeCart.bind(this);
 		this.getCart        = this.getCart.bind(this);
+		this.encrypt        = this.encrypt.bind(this);
+		this.decrypt        = this.decrypt.bind(this);
 	}
 
+	decrypt(data) {
+		return CryptoAES.decrypt(data.toString(), "CIRO").toString(CryptoENC);
+	}
+	encrypt(data){
+		return CryptoAES.encrypt(data.toString(), "CIRO");
+	}
 
 	readValue(index, ctx = null) {
+		let data = null;
 		if (ctx && ctx.req && ctx.req.headers.cookie) {
-			return this.getDataServer(index, ctx, null);
+			data = this.getDataServer(index, ctx, null);
 		}
-		/*else if(typeof document) {
-			return this.getDataServer(index, null, document);
-		}*/
-		return this.getData(index);
+		else{
+			data = this.getData(index);
+		}
+
+		if(data) {
+			return this.decrypt(data);
+		}
+		return null;
 	}
 
 	getDataServer(index, ctx, document = null) {
@@ -59,7 +74,7 @@ class Store {
 	}
 
 	saveData(index, data) {
-		Cookie.set(index, data, { sameSite: 'strict'});
+		Cookie.set(index, this.encrypt(data), { sameSite: 'strict'});
 	}
 
 	deleteData(index) {
@@ -132,8 +147,13 @@ class Store {
 		if (!cart){
 			return [];
 		}
-		cart = decodeURIComponent(cart);
-		return JSON.parse(cart);
+		cart = cart;
+		let dataReturn = null;
+		try{
+			dataReturn = JSON.parse(cart);
+		}
+		catch (e) {}
+		return dataReturn;
 	}
 
 	removeCart(pk) {
@@ -147,7 +167,12 @@ class Store {
 				break;
 			}
 		}
-		this.saveData("cart", JSON.stringify(cart));
+		let dataSave = [];
+		try{
+			dataSave = JSON.stringify(cart);
+		}
+		catch (e) {}
+		this.saveData("cart", dataSave);
 	}
 
 	updateCart(obj) {
@@ -163,7 +188,12 @@ class Store {
 		if(!updated) {
 			cart.push(obj);
 		}
-		this.saveData("cart", JSON.stringify(cart));
+		let dataSave = [];
+		try{
+			dataSave = JSON.stringify(cart);
+		}
+		catch (e) {}
+		this.saveData("cart", dataSave);
 	}
 }
 export default new Store();

@@ -15,12 +15,18 @@ import {message}  from 'antd';
 
 class Services {
 	static instance;
-	constructor() {
+	constructor(logout) {
 		if (Services.instance){
 			return Services.instance;
 		}
 		Services.instance              = this;
 		this.apiSend                   = this.apiSend.bind(this);
+		this.setLogout        = this.setLogout.bind(this);
+		this.logout = null;
+	}
+
+	setLogout(logout) {
+		this.logout = logout;
 	}
 
 	async apiSend({
@@ -57,7 +63,12 @@ class Services {
 		// FIXME: QUITAR
 
 		if(!isPublic) {
-			settings["headers"]["Authorization"] = "Bearer " + (token ? token : Store.readValue("token", ctx));
+			if(Store.checkIsLogged(token ? token : Store.readValue("token", ctx))) {
+				settings["headers"]["Authorization"] = "Bearer " + (token ? token : Store.readValue("token", ctx));
+			}
+			else{
+				this.logout();
+			}
 		}
 		if(method === 'GET') {
 			url = new URL(url);

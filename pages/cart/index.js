@@ -39,14 +39,14 @@ class CartView extends BasePanel{
 		this.formatCart = this.formatCart.bind(this);
 
 		// References
-		this.refTable         = React.createRef();
-		this.refTotalLabel    = React.createRef();
-		this.refSubTotalLabel = React.createRef();
-		this.refEnvioLabel    = React.createRef();
+		this.refTable           = React.createRef();
+		this.refTotalLabel      = React.createRef();
+		this.refSubTotalLabel   = React.createRef();
+		this.refDescuentosLabel = React.createRef();
+		this.refEnvioLabel      = React.createRef();
 
 		// variables
 		this.dataService = [];
-		this.valorEnvio = 10000;
 	}
 
 	componentDidMount() {
@@ -55,45 +55,36 @@ class CartView extends BasePanel{
 		this.searchCart();
 	}
 
-	searchCart() {
+	async searchCart() {
 		this.refTable.current.setCart(null);
-
-
-		let dataCart = this.store.getCart();
-		this.dataService = [];
-
-		for (let index in dataCart){
-			this.dataService.push({
-				"pk" : dataCart[index]["pk"],
-				"descripcion" : "Producto " + index,
-				"foto" : "Producto " + index,
-				"precio" : 20000
-			});
-		}
-
+		this.dataService = await this.getDataCart();
 		this.formatCart();
-
 	}
 
 	formatCart() {
 		let dataCart = this.store.getCart();
 		let data = [];
 		let subTotal = 0;
+		let descuentos = 0;
 		for (let index in dataCart){
 			for(let index2 in this.dataService) {
-				if(this.dataService[index2]["pk"] === dataCart[index]["pk"]){
+				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + ""){
 					data.push({
 						"pk" : dataCart[index]["pk"],
 						"count" : dataCart[index]["count"],
-						"descripcion" : this.dataService[index2]["descripcion"],
-						"foto" : this.dataService[index2]["foto"],
-						"precio" : this.dataService[index2]["precio"]
+						"descripcion" : this.dataService[index2]["nombre"],
+						"foto" : this.dataService[index2]["fotos"].length > 0 ? this.dataService[index2]["fotos"][0]["foto"] : null,
+						"precio" : this.dataService[index2]["precio"],
+						"promocion" : this.dataService[index2]["promocion"],
+						"stock" : this.dataService[index2]["stock"],
 					});
 					subTotal += this.dataService[index2]["precio"] * dataCart[index]["count"];
+					descuentos += (this.dataService[index2]["precio_original"] - this.dataService[index2]["precio"]) * dataCart[index]["count"];
 				}
 			}
 		}
 
+		this.refDescuentosLabel.current.setText(descuentos.formatPrice());
 		this.refSubTotalLabel.current.setText(subTotal.formatPrice());
 		this.refEnvioLabel.current.setText(this.valorEnvio.formatPrice());
 		this.refTotalLabel.current.setText((subTotal + this.valorEnvio).formatPrice());
@@ -122,6 +113,7 @@ class CartView extends BasePanel{
 					<Col xs={24} md={8}>
 						<Card title="Resumen de orden">
 							<b>Subtotal: </b> <Label ref={this.refSubTotalLabel} /><br />
+							<b>Descuentos: </b> <Label ref={this.refDescuentosLabel} /><br />
 							<b>Envío: </b>  <Label ref={this.refEnvioLabel} /><br />
 							<h2><b>Total: </b> <Label ref={this.refTotalLabel} /><br /></h2>
 							<Button type="primary" block onClick={this.goPay}>

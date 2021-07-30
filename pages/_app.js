@@ -8,6 +8,7 @@ import Header          from '@/containers//Header';
 import Footer          from '@/containers//Footer';
 import BasePanel       from '@/containers//BasePanel';
 import LeftPanel       from '@/containers//LeftPanel';
+import LeftPanelMobile from '@/containers//LeftPanelMobile';
 import { withRouter }  from 'next/router'
 import {ConfigProvider, Layout, Menu} from 'antd';
 import esEs            from 'antd/lib/locale/es_ES';
@@ -52,7 +53,7 @@ class LocalDashboard extends App
 		//console.log(!process.browser, router.route);
 		if(!process.browser){
 			if(!isLogged){
-				if (router.route === "/mascotas"){
+				if (router.route === "/mascotas" || router.route === "/pay"){
 					redirect = false;
 					redirectUser(ctx, "/login");
 				}
@@ -262,6 +263,7 @@ class LocalDashboard extends App
 
 				<ConfigProvider locale={esEs}>
 					<Layout>
+						<LeftPanelMobile {...leftPanelProps} ref={BasePanel.refMobileMenu} />
 						<Sider
 							breakpoint="lg"
 							collapsedWidth="0"
@@ -269,7 +271,7 @@ class LocalDashboard extends App
 							width="255"
 							style={{
 								height: "100vh",
-								position: "fixed",
+								position: "absolute",
 								backgroundColor: "#f0f2f5",
 								border: "none"
 							}}

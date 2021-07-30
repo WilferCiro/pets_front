@@ -98,10 +98,12 @@ class Login extends BasePanel{
 			body: body
 		});
 		if(data["code"] === 200) {
+			console.log("---", data);
 			this.store.setToken(data["data"]["access"]);
 			this.store.saveData("full_name", data["data"]["full_name"]);
 			this.store.saveData("avatar", data["data"]["avatar"]);
-			this.store.saveData("cantidad_mascotas", data["data"]["cantidad_mascotas"]);
+			this.store.saveData("cantidad_mascotas", data["data"]["mascotas"].split(",").length);
+			this.store.saveData("mascotas", data["data"]["mascotas"]);
 			this.store.saveData("cantidad_pedidos", data["data"]["cantidad_pedidos"]);
 			this.goHome();
 		}

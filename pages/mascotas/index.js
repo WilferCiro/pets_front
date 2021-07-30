@@ -89,11 +89,12 @@ class MascotasView extends BasePanel{
 		this.uploaded = 0;
 		let body = {
 			"nombre" : formValues["nombre"],
-			"fecha_nacimiento" : formValues["fecha_nacimiento"],
+			"fecha_nacimiento" : formValues["fecha_nacimiento"].format("YYYY-MM-DD"),
 			"tipo" : formValues["tipo"],
 			"raza" : formValues["raza"],
 			"visible" : formValues["visible"],
-			"presentacion" : formValues["presentacion"]
+			"presentacion" : formValues["presentacion"],
+			"sexo" : formValues["sexo"]
 		}
 
 		let data = await BasePanel.service.apiSend({
@@ -103,7 +104,7 @@ class MascotasView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-
+		console.log(body, data);
 		if(data["code"] === 200) {
 			let pk = data["data"]["pk"];
 			for (let index in this.images) {
