@@ -11,9 +11,7 @@ import Image from 'next/image'
 // Custom classes
 import BasePanel       from '@/containers/BasePanel';
 import ProductCard     from '@/components/ProductCard';
-import PayEmailForm    from '@/formclasses/pay_email';
 import PayDataForm     from '@/formclasses/pay_data';
-import PayRegisterForm from '@/formclasses/pay_register';
 import Label           from '@/components/Label';
 import PayModal        from '@/components/PayModal';
 
@@ -61,6 +59,9 @@ class PayView extends BasePanel{
 		this.refEnvioLabel      = React.createRef();
 		this.refDataUserForm    = React.createRef();
 		this.refPayModal        = React.createRef();
+
+		// Variables
+		this.productos = [];
 	}
 
 	componentDidMount() {
@@ -95,6 +96,7 @@ class PayView extends BasePanel{
 	formatCart() {
 		let dataCart = this.store.getCart();
 		let data = [];
+		this.productos = [];
 		let subTotal = 0;
 		let descuentos = 0;
 		for (let index in dataCart){
@@ -102,6 +104,13 @@ class PayView extends BasePanel{
 				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + ""){
 					subTotal += this.dataService[index2]["precio"] * dataCart[index]["count"];
 					descuentos += (this.dataService[index2]["precio_original"] - this.dataService[index2]["precio"]) * dataCart[index]["count"];
+
+					this.productos.push({
+						"pk" : dataCart[index]["pk"],
+						"cantidad" : dataCart[index]["count"],
+						"nombre" : this.dataService[index2]["nombre"],
+						"precio" : this.dataService[index2]["precio"]
+					})
 				}
 			}
 		}
@@ -124,8 +133,41 @@ class PayView extends BasePanel{
 		}
 	}
 
-	pagar() {
-		this.refPayModal.current.open();
+	async pagar() {
+
+		let productos = this.productos;
+		let dataForm = this.state.dataUser;
+
+		if(productos.length === 0) {
+			message.error("No hay productos para comprar.");
+		}
+		else{
+
+			let body = {
+				"direccion" : dataForm["direccion"],
+				"adicional" : dataForm["adicional"],
+				"first_name" : dataForm["first_name"],
+				"last_name" : dataForm["last_name"],
+				"ciudad" : dataForm["ciudad"],
+				"celular" : dataForm["celular1"],
+				"productos" : productos
+			}
+
+			let data = await BasePanel.service.apiSend({
+				method: "POST",
+				register: "pedido",
+				model: "crear",
+				isPublic: false,
+				body: body
+			});
+			console.log("---", data);
+			if(data["code"] === 200) {
+				this.refPayModal.current.open();
+			}
+			else{
+				message.error("Hubo un erro al realizar el pedido");
+			}
+		}
 	}
 
 	render() {

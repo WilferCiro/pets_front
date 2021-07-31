@@ -217,7 +217,7 @@ class TiendaView extends BasePanel{
 							</Col>
 							<Col xs={24} md={14}>
 								<Search
-									placeholder="Ingrese el texto a buscar"
+									placeholder="¿Qué estás buscando?"
 									defaultValue={this.query}
 									onSearch={this.onSearch}
 									allowClear

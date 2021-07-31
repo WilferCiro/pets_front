@@ -21,7 +21,8 @@ import {
 	Button,
 	Divider,
 	Table,
-	Popconfirm
+	Popconfirm,
+	message
 } from 'antd';
 
 class CartView extends BasePanel{
@@ -93,7 +94,18 @@ class CartView extends BasePanel{
 
 	goPay() {
 		// TODO: validations
-		this.redirectPage(this.constants.route_pay);
+		if(!this.props.isLogged){
+			this.redirectPage(this.constants.route_login, {"from_cart" : true});
+		}
+		else{
+			let valid = this.refTable.current.validate();
+			if(valid) {
+				this.redirectPage(this.constants.route_pay);
+			}
+			else{
+				message.error("Error en las existencias de los productos");
+			}
+		}
 	}
 
 	update() {
@@ -129,7 +141,8 @@ class CartView extends BasePanel{
 
 CartView.getInitialProps = async ({query, req, pathname}) => {
 	//let dataCart = BasePanel.store.getCart({query, req, pathname});
-	return {query};
+	let isLogged = BasePanel.store.isLogged({query, req, pathname});
+	return {query, isLogged};
 }
 CartView.getPageName = () => {
 	return "Carrito de compras";

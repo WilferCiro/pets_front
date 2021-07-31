@@ -16,7 +16,8 @@ class PayDataForm extends BaseFormStructure{
 			{type: "select", container: 2, size: 6, id: "departamento", label: "Departamento", required : true, service: "departamento", update_select : "ciudad"},
 			{type: "select", container: 2, size: 6, id: "ciudad", label: "Ciudad", required : true, service: "ciudad", service_index: "departamento__pk"},
 			{type: "text", container: 3, size: 12, id: "direccion", label: "Dirección", max: 100, required : true},
-			{type: "textarea", container: 4, size: 12, id: "adicional", label: "Observaciones adicionales", placeholder: "Escribenos información que consideres importante para el envío", rows : 2},
+			{type: "cell", container: 4, size: 12, id: "celular1", label: "Celular", required: true},
+			{type: "textarea", container: 5, size: 12, id: "adicional", label: "Observaciones adicionales", placeholder: "Escribenos información que consideres importante para el envío", rows : 2},
 		];
 	}
 }

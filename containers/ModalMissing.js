@@ -72,8 +72,8 @@ class ModalMissing extends BasePanel{
 	onValuesChange() {
 		let values = this.refFormMissing.current.getValues();
 		this.refLabelDescripcion.current.setText(values["descripcion"]);
-		this.refLabelUser.current.setText("wilfer ciro");
-		this.refLabelPhones.current.setText("3173587462 - 3117986061");
+		this.refLabelUser.current.setText(values["nombre"]);
+		this.refLabelPhones.current.setText(values["celulares"]);
 	}
 
 	render() {

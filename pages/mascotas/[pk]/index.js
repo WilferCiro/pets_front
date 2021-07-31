@@ -33,13 +33,18 @@ import {
 	Col,
 	Carousel,
 	Divider,
-	message
+	message,
+	Space
 } from 'antd';
 import {
 	RightOutlined,
 	LeftOutlined,
 	EditOutlined,
-	AlertOutlined
+	AlertOutlined,
+	FacebookFilled,
+	InstagramFilled,
+	TwitterSquareFilled,
+	WhatsAppOutlined
 } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -537,6 +542,35 @@ class MascotasProfileView extends BasePanel{
 											</List.Item>
 											)}
 										/>
+										{
+											this.canEdit?
+												<div>
+													<Divider />
+													<Row align="middle">
+														<Col xs={10} md={14} >
+															Compartir
+														</Col>
+														<Col xs={14} md={10} >
+															<Space>
+																<Tooltip title="Compartir en facebook">
+																	<Button size="large" type="primary" shape="circle" icon={<FacebookFilled />} />
+																</Tooltip>
+																<Tooltip title="Compartir en instagram">
+																	<Button size="large" type="primary" shape="circle" icon={<InstagramFilled />} />
+																</Tooltip>
+																<Tooltip title="Compartir en twitter">
+																	<Button size="large" type="primary" shape="circle" icon={<TwitterSquareFilled />} />
+																</Tooltip>
+																<Tooltip title="Compartir en whatsapp">
+																	<Button size="large" type="primary" shape="circle" icon={<WhatsAppOutlined />} />
+																</Tooltip>
+															</Space>
+														</Col>
+													</Row>
+												</div>
+											:
+											null
+										}
 									</TabPane>
 								:
 								null

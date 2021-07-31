@@ -30,7 +30,8 @@ import {
 	Card,
 	Result,
 	Alert,
-	Tooltip
+	Tooltip,
+	message
 } from 'antd';
 import {
 	MinusOutlined,
@@ -79,12 +80,16 @@ class PreviewView extends ProductBase{
 	}
 
 	localUpdateCart(nro) {
-		let data = {
-			count: nro,
-			pk: this.props.productPK
+		if(parseInt(this.producto.stock) >= parseInt(nro)) {
+			let data = {
+				count: nro,
+				pk: this.props.productPK
+			}
+			this.updateCart(data);
 		}
-
-		this.updateCart(data);
+		else{
+			message.error("Solo hay " + this.producto.stock + " unidades de este producto");
+		}
 	}
 
 	render() {
@@ -141,7 +146,7 @@ class PreviewView extends ProductBase{
 								producto.stock === 0 ?
 								<Alert message="Producto agotado" type="info" />
 								:
-								<NumberSelector onUpdate={this.localUpdateCart} defaultValue={this.props.nroCart || 0} />
+								<NumberSelector onUpdate={this.localUpdateCart} max={producto.stock} defaultValue={this.props.nroCart || 0} />
 							}
 						</div>
 						<Divider />

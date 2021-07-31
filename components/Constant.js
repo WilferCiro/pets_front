@@ -53,6 +53,7 @@ class Constant{
 		this.route_profile             = '/profile'
 		this.route_cart                = '/cart'
 		this.route_pay                 = '/pay'
+		this.route_profile_producto    = '/producto/[pk]'
 
 
 		/*** IMÁGENES ***/

@@ -41,6 +41,10 @@ class Login extends BasePanel{
 		if(this.props.showSignUp) {
 			this.onRegisterLogin();
 		}
+
+		if(this.props.from_cart){
+			message.info("Inicia sesión o regístrate para continuar con la compra");
+		}
 	}
 
 	onRegisterLogin() {
@@ -98,14 +102,18 @@ class Login extends BasePanel{
 			body: body
 		});
 		if(data["code"] === 200) {
-			console.log("---", data);
 			this.store.setToken(data["data"]["access"]);
 			this.store.saveData("full_name", data["data"]["full_name"]);
 			this.store.saveData("avatar", data["data"]["avatar"]);
 			this.store.saveData("cantidad_mascotas", data["data"]["mascotas"].split(",").length);
 			this.store.saveData("mascotas", data["data"]["mascotas"]);
 			this.store.saveData("cantidad_pedidos", data["data"]["cantidad_pedidos"]);
-			this.goHome();
+			if(this.props.from_cart){
+				this.redirectPage(this.constants.route_pay);
+			}
+			else{
+				this.goHome();
+			}
 		}
 		else{
 			message.error("Usuario o contraseña incorrectos");
@@ -193,7 +201,8 @@ class Login extends BasePanel{
 
 Login.getInitialProps = async ({query}) => {
 	let showSignUp = query["signup"] ? query["signup"] : false;
-	return {query, showSignUp};
+	let from_cart = query["from_cart"] ? query["from_cart"] : false;
+	return {query, showSignUp, from_cart};
 }
 
 export default Login;

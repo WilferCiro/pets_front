@@ -9,6 +9,7 @@ import React          from 'react';
 import BasePanel          from '@/containers/BasePanel';
 import EditUserForm       from '@/formclasses/edit_user';
 import EditPasswordForm   from '@/formclasses/edit_password';
+import ModalPedido        from '@/components/ModalPedido';
 
 // Ant components and icons
 import {
@@ -45,16 +46,22 @@ class ProfileView extends BasePanel{
 		this.openFormEditPassword    = this.openFormEditPassword.bind(this);
 		this.editUserData            = this.editUserData.bind(this);
 		this.editUserPassword        = this.editUserPassword.bind(this);
+		this.openPedido              = this.openPedido.bind(this);
 
 		// References
 		this.refFormEditPassword = React.createRef();
 		this.refFormEdit         = React.createRef();
+		this.refModalPedido      = React.createRef();
 	}
 
 	componentDidMount() {
 		this.getUserData();
 
 		this.setBreadCrumb([{"label" : "Mi perfil"}])
+	}
+
+	openPedido(pk) {
+		this.refModalPedido.current.open(pk);
 	}
 
 	async editUserData() {
@@ -142,6 +149,7 @@ class ProfileView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
+		console.log(data);
 		if(data["code"] === 200) {
 			this.setState({
 				user: data["data"][0]
@@ -167,12 +175,20 @@ class ProfileView extends BasePanel{
 			{title: "Teléfono", description: user["telefono"]},
 			{title: "Email", description: user["email"]}
 		];
+		let dataPedidos = [];
+		for (let index in user["pedidos"]) {
+			dataPedidos.push({
+				"title" : <Button type="link" onClick={(e) => this.openPedido(user["pedidos"][index]["pk"])}>{user["pedidos"][index]["total"].formatPrice() + " · Click para ver más "}</Button>,
+				"description" : user["pedidos"][index]["estado_nombre"] + " - Creado: " + user["pedidos"][index]["fecha_creacion"].formatDateTime()
+			})
+		}
+
 		let dataMascota = user["mascotas"];
 
 
 		return (
 			<div className="page-center">
-
+				<ModalPedido ref={this.refModalPedido} />
 				<EditUserForm
 					ref={this.refFormEdit}
 					modal={true}
@@ -239,7 +255,7 @@ class ProfileView extends BasePanel{
 								<List
 									size="small"
 									itemLayout="horizontal"
-									dataSource={dataUser}
+									dataSource={dataPedidos}
 									renderItem={item => (
 									<List.Item>
 										<List.Item.Meta

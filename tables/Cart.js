@@ -41,6 +41,7 @@ class TableCart extends BasePanel{
 		this.setCart        = this.setCart.bind(this);
 		this.onDeleteCart   = this.onDeleteCart.bind(this);
 		this.onUpdateCart   = this.onUpdateCart.bind(this);
+		this.validate       = this.validate.bind(this);
 
 		// References
 
@@ -121,6 +122,17 @@ class TableCart extends BasePanel{
 			});
 		}
 
+	}
+
+	validate() {
+		let cart = this.state.cart;
+		let valid = true;
+		for (let index in cart) {
+			if (cart[index]["count"] > cart[index]["stock"]) {
+				valid = false;
+			}
+		}
+		return valid;
 	}
 
 	setCart(cart) {
