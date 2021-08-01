@@ -13,6 +13,8 @@ class BaseFormComponent extends BasePanel{
 		super(props);
 
 		// Props
+		this.formRef          = props["formRef"];
+		this.getFormField     = props["getFormField"];
 		this.label            = props["label"];
 		this.placeholder      = props["placeholder"];
 		this.id               = props["id"];
@@ -24,7 +26,7 @@ class BaseFormComponent extends BasePanel{
 		this.name             = props["name"];
 		this.inputType        = props["inputType"];
 		this.tooltip          = props["tooltip"];
-		this.onChange         = this.props.onChange;
+		//this.onChange         = this.props.onChange;
 		this.onEnter          = this.props.onEnter;
 
 		// States

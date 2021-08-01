@@ -13,8 +13,8 @@ class AddMascotaForm extends BaseFormStructure{
 		this.fields = [
 			{type: "text", container: 1, size: 12, id: "nombre", label: "Nombre", placeholder: "Nombre de la mascota", required: true, max: 20},
 			{type: "datetime", container: 4, size: 12, id: "fecha_nacimiento", label: "Fecha de nacimiento", showTime: false},
-			{type: "select", container: 4, size: 12, id: "tipo", label: "Tipo de mascota", service: "tipomascota", required : true},
-			{type: "select", container: 4, size: 12, id: "raza", label: "Raza mascota", service: "raza"},
+			{type: "select", container: 4, size: 12, id: "tipo", label: "Tipo de mascota", service: "tipomascota", required : true, update_select : "raza"},
+			{type: "select", container: 4, size: 12, id: "raza", label: "Raza mascota", service: "raza", service_index: "tipo__pk"},
 			{type: "select", container: 4, size: 12, id: "sexo", label: "Sexo mascota", required: true, options: [{"value" : "M", "label" : "Macho"}, {"value" : "H", "label" : "Hembra"}]},
 			{type: "switch", container: 4, size: 12, id: "visible", label: "¿Perfil público?", tooltip: "Selecciona 'No' si deseas que solo tu puedas ver esta mascota."},
 			{type: "textarea", container: 5, size: 12, id: "presentacion", label: "Presentación", placeholder:"Escribe una presentación corta de tu mascota", disabled: true, max: 100, required : true},

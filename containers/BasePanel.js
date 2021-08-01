@@ -15,10 +15,12 @@ import Router, { withRouter } from 'next/router'
 import Constant     from '@/components/Constant';
 import Services     from '@/utils/Services';
 import Store        from '@/utils//Store';
+import User         from '@/utils//User';
 
 export default class BasePanel extends Component {
 	static service         = Services;
 	static store           = Store;
+	static user            = User;
 
 	// Global references
 	static refBreadcrumb = new React.createRef();
@@ -29,9 +31,10 @@ export default class BasePanel extends Component {
 		super(props);
 
 		// Variables
-		this.constants = Constant;
-		this.URLSave   = null;
-		this.store     = BasePanel.store;
+		this.constants  = Constant;
+		this.URLSave    = null;
+		this.store      = BasePanel.store;
+		this.user       = BasePanel.user;
 		this.valorEnvio = 10000;
 
 		// Methods

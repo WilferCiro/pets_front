@@ -39,7 +39,8 @@ import {
 	FacebookFilled,
 	InstagramFilled,
 	TwitterSquareFilled,
-	WhatsAppOutlined
+	WhatsAppOutlined,
+	FileSearchOutlined
 } from '@ant-design/icons';
 
 
@@ -65,15 +66,18 @@ class PreviewView extends ProductBase{
 		if(this.producto) {
 			dataBread.push({
 				"label" : this.producto["categorias"]["categoria1"]["nombre"],
-				"route" : this.constants.route_tienda
+				"route" : this.constants.route_tienda_cat1,
+				"params" : {"categoria1" : this.producto["categorias"]["categoria1"]["pk"] + "-" + this.producto["categorias"]["categoria1"]["nombre"].formatURL()}
 			});
 			dataBread.push({
 				"label" : this.producto["categorias"]["categoria2"]["nombre"],
-				"route" : this.constants.route_tienda
+				"route" : this.constants.route_tienda_cat2,
+				"params" : {"categoria2" : this.producto["categorias"]["categoria2"]["pk"] + "-" + this.producto["categorias"]["categoria2"]["nombre"].formatURL()}
 			});
 			dataBread.push({
 				"label" : this.producto["categorias"]["categoria3"]["nombre"],
-				"route" : this.constants.route_tienda
+				"route" : this.constants.route_tienda_cat3,
+				"params" : {"categoria3" : this.producto["categorias"]["categoria3"]["pk"] + "-" + this.producto["categorias"]["categoria3"]["nombre"].formatURL()}
 			});
 			this.setBreadCrumb(dataBread);
 		}
@@ -181,7 +185,7 @@ class PreviewView extends ProductBase{
 					</Col>
 				</Row>
 
-				<Tabs style={{marginTop: "40px"}} defaultActiveKey="1">
+				<Tabs style={{marginTop: "40px"}} defaultActiveKey="1" type="card">
 					<TabPane tab="Descripción" key="1">
 						<p>{producto.especificaciones}</p>
 						{
@@ -205,7 +209,7 @@ class PreviewView extends ProductBase{
 								<span style={{ marginRight: 8 }}>Documentos:</span>
 								{
 									producto.documentos.map((item, index) => {
-										return <Tag key={Math.random()}>{item.url}</Tag>
+										return <Button href={item.url} target="_blank" icon={<FileSearchOutlined />} key={Math.random()}>{item.descripcion}</Button>
 									})
 								}
 							</TabPane>
@@ -215,29 +219,36 @@ class PreviewView extends ProductBase{
 
 
 				</Tabs>
+				{
+					(producto.relacionados && producto.relacionados.length > 0) ?
+					<div>
+						<Divider />
 
-				<Card style={{marginTop: "40px"}} title="Productos relacionados">
-					<Row gutter={[5, 5]}>
-						<Col xs={24} md={6}>
-							<ProductCard />
-						</Col>
-						<Col xs={24} md={6}>
-							<ProductCard />
-						</Col>
-						<Col xs={24} md={6}>
-							<ProductCard />
-						</Col>
-						<Col xs={24} md={6}>
-							<ProductCard />
-						</Col>
-					</Row>
-				</Card>
+						<Card style={{marginTop: "40px"}} title="Productos relacionados" extra={<a onClick={(e) => this.redirectPage(this.constants.route_tienda_cat2, {"categoria2" : producto["categorias"]["categoria2"]["pk"]})}>Ver más</a>} >
+							<Row gutter={[5, 5]}>
+								{
+									producto.relacionados.map((producto, index) => {
+										return <Col xs={12} md={6} key={Math.random()}>
+											<ProductCard product={producto} />
+										</Col>
+									})
+								}
+							</Row>
+						</Card>
+					</div>
+					:
+					null
+				}
+
 			</div>
 		);
 	}
 }
 PreviewView.getInitialProps = async ({query, req, pathname}) => {
 	let productPK = query.pk;
+	if(productPK && productPK.split("-").length > 0){
+		productPK = productPK.split("-")[0];
+	}
 	let nroCart = BasePanel.store.getNumCart({query, req, pathname}, productPK);
 
 	let producto = {};
@@ -257,7 +268,7 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 	if(_productos["code"] === 200) {
 		producto = _productos["data"][0];
 	}
-	console.log(producto)
+	console.log(producto);
 	return {query, nroCart, productPK, producto};
 }
 PreviewView.getPageName = () => {

@@ -23,8 +23,9 @@ class TableMascotasEnfermedades extends BasePanel{
 		super(props);
 
 		// Props
-		this.canEdit    = this.props.canEdit || false;
-		this.mascota_pk = this.props.mascota_pk;
+		this.canEdit      = this.props.canEdit || false;
+		this.mascota_pk   = this.props.mascota_pk;
+		this.mascota_tipo = this.props.mascota_tipo;
 
 		// States
 		this.state = {
@@ -73,7 +74,10 @@ class TableMascotasEnfermedades extends BasePanel{
 	}
 
 	openFormEnfermedad() {
-		this.refFormEnfermedad.current.open("Agregar enfermedad");
+		let preconditions = {
+			"tipo__pk" : this.mascota_tipo
+		}
+		this.refFormEnfermedad.current.open("Agregar enfermedad", null, preconditions);
 	}
 
 	async onDeleteEnfermedad(pk) {

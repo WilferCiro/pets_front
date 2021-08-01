@@ -19,13 +19,16 @@ class FormSelect extends BaseFormComponent{
 		super(props);
 
 		// Props
-		this.service = props.service;
+		this.service       = props.service;
 		this.service_index = props.service_index;
 		this.update_select = props.update_select;
+		this.preconditions = props.preconditions || {};
 
 		// Methods
 		this.searchService   = this.searchService.bind(this);
 		this.setValueService = this.setValueService.bind(this);
+		this.onChange        = this.onChange.bind(this);
+		this.getValueLabel   = this.getValueLabel.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,25 +36,47 @@ class FormSelect extends BaseFormComponent{
 			this.searchService();
 		}
 	}
-
-	onChange(value) {
-		console.log("ONCHANGE", this.update_select);
-		let field = this.form.getField(this.update_select);
-		field.setValueService(value);
+	componentDidUpdate() {
+		this.preconditions = this.props.preconditions || {};
 	}
 
-	setValueService(value) {
+	getValueLabel(value) {
+		let label = "";
+		this.state.options.map((item, index) => {
+			if(item["value"] === value) {
+				label = item["label"];
+			}
+			return null;
+		});
+
+		return label;
+	}
+
+	onChange(value, initial = false) {
+		if(this.update_select) {
+			let field = this.getFormField(this.update_select);
+			field.setValueService(value, initial);
+		}
+	}
+
+	setValueService(value, initial = false) {
+		if(initial !== true) {
+			let values = [];
+			values[this.getName()] = null;
+			this.formRef.current.setFieldsValue(values);
+		}
 		this.searchService(value);
 	}
 
 	async searchService(value = null) {
 		let body = {}
-		if (value) {
-			let bodyCampos = {}
-			bodyCampos[this.service_index] = value;
+		let bodyCampos = this.preconditions || {};
+		if (value || this.preconditions) {
+			if(value){
+				bodyCampos[this.service_index] = value;
+			}
 			body["campos"] = bodyCampos;
 		}
-		console.log("---", body);
 
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
@@ -59,6 +84,7 @@ class FormSelect extends BaseFormComponent{
 			model: "select",
 			body: body
 		});
+		console.log(body);
 		if(data["code"] === 200) {
 			let newData = [];
 			for (let index in data["data"]) {
@@ -70,6 +96,8 @@ class FormSelect extends BaseFormComponent{
 			this.setState({
 				options: newData
 			})
+
+			this.onChange(this.formRef.current.getFieldValue(this.getName()), true);
 		}
 	}
 

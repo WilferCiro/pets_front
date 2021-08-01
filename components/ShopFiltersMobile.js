@@ -60,7 +60,6 @@ class ShopFiltersMobile extends BasePanel{
 			<Drawer
 				title="Filtros"
 				placement={"left"}
-				closable={false}
 				onClose={this.close}
 				visible={this.state.open}
 				closable={true}

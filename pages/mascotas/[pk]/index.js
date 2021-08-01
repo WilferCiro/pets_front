@@ -469,7 +469,7 @@ class MascotasProfileView extends BasePanel{
 								}
 							</Col>
 						</Row>
-						<p className="mascota-apodo">@{mascota.identificacion}</p>
+						<p className="mascota-apodo">{mascota.tipo_nombre} {mascota.raza_nombre ? ", " + mascota.raza_nombre : ""}</p>
 
 						<Tabs defaultActiveKey="1">
 							<TabPane tab="Datos básicos" key="1">
@@ -509,11 +509,11 @@ class MascotasProfileView extends BasePanel{
 							}
 
 							<TabPane tab="Vacunas" key="3">
-								<TableMascotasVacunas vacunas={mascota["vacunas"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
+								<TableMascotasVacunas mascota_tipo={mascota["tipo"]} vacunas={mascota["vacunas"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
 							</TabPane>
 
 							<TabPane tab="Enfermedades" key="4">
-								<TableMascotasEnfermedades enfermedades={mascota["enfermedades"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
+								<TableMascotasEnfermedades mascota_tipo={mascota["tipo"]} enfermedades={mascota["enfermedades"]} mascota_pk={this.mascota_pk} canEdit={this.canEdit} />
 							</TabPane>
 							{
 								this.canEdit ?

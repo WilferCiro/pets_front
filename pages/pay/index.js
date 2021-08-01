@@ -125,9 +125,16 @@ class PayView extends BasePanel{
 		if(this.state.page === 0) {
 			let valid = await this.refDataUserForm.current.validate();
 			if(valid) {
+				let values = this.refDataUserForm.current.getValues();
+
+				let labelCiudad = this.refDataUserForm.current.getValueLabelSelect(values["ciudad"], "ciudad");
+				let labelDepartamento = this.refDataUserForm.current.getValueLabelSelect(values["departamento"], "departamento");
+				values["ciudad_name"] = labelCiudad;
+				values["departamento_name"] = labelDepartamento;
+
 				this.setState({
 					page: this.state.page + 1,
-					dataUser: this.refDataUserForm.current.getValues()
+					dataUser: values
 				})
 			}
 		}
@@ -163,6 +170,7 @@ class PayView extends BasePanel{
 			console.log("---", data);
 			if(data["code"] === 200) {
 				this.refPayModal.current.open();
+				this.user.updateNroPedidos();
 			}
 			else{
 				message.error("Hubo un erro al realizar el pedido");
@@ -193,7 +201,7 @@ class PayView extends BasePanel{
 									(this.state.dataUser) ?
 										<div>
 											<b>Nombre quien recibe: </b> {this.state.dataUser.first_name} {this.state.dataUser.last_name}<br />
-											<b>Ciudad: </b> {this.state.dataUser.ciudad} - {this.state.dataUser.departamento}<br />
+											<b>Ciudad: </b> {this.state.dataUser.ciudad_name} - {this.state.dataUser.departamento_name}<br />
 											<b>Dirección: </b> {this.state.dataUser.direccion}<br />
 											<b>información adicional: </b> {this.state.dataUser.adicional ? this.state.dataUser.adicional : "No hay información adicional"}<br />
 										</div>

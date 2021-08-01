@@ -35,7 +35,7 @@ class ProductCard extends ProductBase{
 
 		return (
 			<div>
-				<Link href={"/producto/" + this.producto.pk} passHref>
+				<Link href={"/producto/" + this.producto.pk + "-" + this.producto.nombre.formatURL()} passHref>
 					<a>
 						<div className="product-card">
 							{

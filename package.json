@@ -32,5 +32,9 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.46.0",
     "yarn": "^1.22.10"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-next": "^11.0.1"
   }
 }

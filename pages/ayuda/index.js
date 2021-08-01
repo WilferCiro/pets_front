@@ -65,9 +65,9 @@ class AyudaView extends BasePanel{
 					<div className="landing-about-content">
 						<div>
 							<h2 className="landing-h2 landing-title">Ayuda Kiwi Cat</h2>
-							<p>
-								Somos una página sin ánimo de lucro que se preocupa por el bienestar de los kiwi peluditos, el propósito de esta página es tener toda la información sobre nuestras mascoticas recopilada con la que será fácil identificar a los peluditos si se llegan a extraviar. En el futuro esperamos poder generar códigos QR para imprimirlos en una plaquita que los peluditos llevarán, de esta manera cuando alguien se encuentre al peludito en la calle pueda tomarle foto al código y encontrar los datos necesarios para comunicarse contigo y tu peludito vuelva a casa
-							</p>
+							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
+							<p>Nuestro principal objetivo es que puedas tener un espacio propio en nuestra página web totalmente gratis, pues sabemos que por diferentes motivos nuestros peluditos se pierden y no sabemos que hacer. En Kiwi Peluditos, solo con un clic podrás reportar a tu mascota perdida y compartirlo en tus redes sociales. Lo mejor es que no tienes que preocuparte por diseñar un cartel donde probablemente te olvides de alguna información que sea importante, déjanos a nosotros, ¡en Kiwi Peluditos lo hacemos por ti!</p>
+							<p>Nuestro segundo objetivo es generar un código QR único para cada peludito, este código QR dirigirá a la persona que lo escaneé a nuestra página web donde podrá encontrar toda la información de tu peludito, además, esta persona podrá acceder a comunicarse contigo y así ponerse de acuerdo para programar el tan esperado reencuentro con tu peludito.</p>
 						</div>
 					</div>
 				</section>
@@ -76,6 +76,7 @@ class AyudaView extends BasePanel{
 				<section className="landing-section">
 					<div className="help-form">
 						<h4 className="landing-h4 landing-title">Contáctanos</h4>
+						<p>Déjanos un mensaje, sugerencia o duda.</p>
 						<AyudaForm vertical={true} ref={this.refFormMessage} />
 						<Divider />
 						<Button type="primary" onClick={this.sendMessage}>Enviar Mensaje</Button>
@@ -85,7 +86,13 @@ class AyudaView extends BasePanel{
 				<section className="landing-section donation-section" id="donar">
 					<div>
 						<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
-						<p>El único ingreso monetario de la página es a través de la venta de collares para tus mascotas y donaciones de la comunidad. Tu donación es muy importante para la mejora y mantenimiento de la página.</p>
+						<p>En Kiwi Peluditos no solo aquellos que adquieren una plaquita con código QR puede acceder a nuestra página web, puesto que nos preocupamos por el bienestar de todos, Kiwi Peluditos está a disposición de la población colombiana. Para poder sostener nuestra página web, vendemos diferentes productos y servicios, pero a veces no es suficiente y necesitaremos tu ayuda para poder mantener nuestra web al servicio de todos totalmente gratis. Con tu donación podremos:</p>
+						<ul>
+							<li>Actualizar constantemente la página, añadiendo mayores y mejores funciones</li>
+							<li>Brindar a todos nuestros usuarios seguridad, manteniendo la pagina vigilada.</li>
+							<li>Actualización de contenidos constante.</li>
+							<li>Además, podrás contribuir al desarrollo y crecimiento de empresas 100% colombianas.</li>
+						</ul>
 					</div>
 					<div className="donation-list">
 						<div className="donation-item">

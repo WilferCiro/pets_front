@@ -46,7 +46,7 @@ class Home extends BasePanel{
 					<div className="landing-about-content">
 						<div>
 							<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
 							<a className="inicia-ya">Inicia ya </a>
 						</div>
 					</div>
@@ -59,8 +59,14 @@ class Home extends BasePanel{
 							<div className="landing-left-item"><QrcodeOutlined className="landing-icon"/></div>
 						</Col>
 						<Col xs={24} md={10} lg={12}>
-							<h4 className="landing-h4 landing-title">Beneficios de Kiwi Cat</h4>
-							<p>Registra a tus mascotas totalmente gratis, crea y descarga su placa con código QR</p>
+							<h4 className="landing-h4 landing-title">Beneficios de Kiwi Peluditos</h4>
+							<p>¡Kiwi peluditos es el mejor aliado de tu mascota! Registra rápido y fácilmente tu mascota con todos sus datos para generar su código QR. Nuevas principales ventajas son:</p>
+							<ul>
+								<li>Incluir foto, raza, tamaño, color, condiciones especiales y una corta descripción de tu peludito.</li>
+								<li>Carga del carnet de vacunas.</li>
+								<li>Identificación, localización e Información de contacto ante pérdidas de tu mascota</li>
+								<li>Todos los datos son completamente actualizables por si cambias tus datos.</li>
+							</ul>
 						</Col>
 					</Row>
 				</section>
@@ -90,7 +96,13 @@ class Home extends BasePanel{
 				<section className="landing-section donation-section" id="donar">
 					<div>
 						<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
-						<p>El único ingreso monetario de la página es a través de la venta de collares para tus mascotas y donaciones de la comunidad. Tu donación es muy importante para la mejora y mantenimiento de la página.</p>
+						<p>En Kiwi Peluditos no solo aquellos que adquieren una plaquita con código QR puede acceder a nuestra página web, puesto que nos preocupamos por el bienestar de todos, Kiwi Peluditos está a disposición de la población colombiana. Para poder sostener nuestra página web, vendemos diferentes productos y servicios, pero a veces no es suficiente y necesitaremos tu ayuda para poder mantener nuestra web al servicio de todos totalmente gratis. Con tu donación podremos:</p>
+						<ul>
+							<li>Actualizar constantemente la página, añadiendo mayores y mejores funciones</li>
+							<li>Brindar a todos nuestros usuarios seguridad, manteniendo la pagina vigilada.</li>
+							<li>Actualización de contenidos constante.</li>
+							<li>Además, podrás contribuir al desarrollo y crecimiento de empresas 100% colombianas.</li>
+						</ul>
 					</div>
 					<div className="donation-list">
 						<div className="donation-item">

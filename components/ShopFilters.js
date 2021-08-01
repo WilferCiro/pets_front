@@ -231,17 +231,17 @@ class ShopFilters extends BasePanel{
 						<Space direction="vertical">
 							{
 								(categorias1).map((item, index) => {
-									return <a key={Math.random()} onClick={(e) => this.changeCategory("1", item["pk"])}>{item["nombre"]}</a>
+									return <a key={Math.random()} onClick={(e) => this.changeCategory("1", item["pk"] + "-" + item["nombre"].formatURL())}>{item["nombre"]}</a>
 								})
 							}
 							{
 								(categorias2).map((item, index) => {
-									return <a key={Math.random()} onClick={(e) => this.changeCategory("2", item["pk"])}>{item["nombre"]}</a>
+									return <a key={Math.random()} onClick={(e) => this.changeCategory("2", item["pk"] + "-" + item["nombre"].formatURL())}>{item["nombre"]}</a>
 								})
 							}
 							{
 								(categorias3).map((item, index) => {
-									return <a key={Math.random()} onClick={(e) => this.changeCategory("3", item["pk"])}>{item["nombre"]}</a>
+									return <a key={Math.random()} onClick={(e) => this.changeCategory("3", item["pk"] + "-" + item["nombre"].formatURL())}>{item["nombre"]}</a>
 								})
 							}
 						</Space>

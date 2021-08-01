@@ -149,8 +149,9 @@ class ProfileView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-		console.log(data);
 		if(data["code"] === 200) {
+			this.user.setName(data["data"][0]["full_name"]);
+			this.user.setAvatar(data["data"][0]["avatar"]);
 			this.setState({
 				user: data["data"][0]
 			})

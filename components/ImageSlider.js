@@ -16,11 +16,13 @@ import {
 	Row,
 	Col,
 	Carousel,
-	Button
+	Button,
+	Avatar
 } from 'antd';
 import {
 	RightOutlined,
-	LeftOutlined
+	LeftOutlined,
+	VideoCameraFilled
 } from '@ant-design/icons';
 
 class ImageSlider extends BasePanel{
@@ -77,14 +79,8 @@ class ImageSlider extends BasePanel{
 						{
 							(this.videos).map((video, index) => {
 								return (
-									<div key={Math.random()} className="thumbnail" onClick={(e) => this.goToImage(index)}>
-										<Image
-											src={"http://127.0.0.1:8000/media/av/1627174875/WhatsApp_Image_2021-07-17_at_4.14.28_PM.webp"}
-											alt="Video producto"
-											layout="responsive"
-											width="200"
-											height="200"
-											/>
+									<div key={Math.random()} className="thumbnail" onClick={(e) => this.goToImage(this.fotos.length + index)}>
+										<Avatar size={68} icon={<VideoCameraFilled className="icon-big" />} style={{ backgroundColor: 'purple' }} />
 									</div>
 								)
 							})

@@ -23,8 +23,9 @@ class TableMascotasVacunas extends BasePanel{
 		super(props);
 
 		// Props
-		this.canEdit    = this.props.canEdit || false;
-		this.mascota_pk = this.props.mascota_pk;
+		this.canEdit      = this.props.canEdit || false;
+		this.mascota_pk   = this.props.mascota_pk;
+		this.mascota_tipo = this.props.mascota_tipo;
 
 		// States
 		this.state = {
@@ -78,7 +79,10 @@ class TableMascotasVacunas extends BasePanel{
 	}
 
 	openFormVacuna() {
-		this.refFormVacuna.current.open("Agregar vacuna");
+		let preconditions = {
+			"tipo__pk" : this.mascota_tipo
+		}
+		this.refFormVacuna.current.open("Agregar vacuna", null, preconditions);
 	}
 
 	async onDeleteVacuna(pk) {

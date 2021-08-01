@@ -103,11 +103,10 @@ class Login extends BasePanel{
 		});
 		if(data["code"] === 200) {
 			this.store.setToken(data["data"]["access"]);
-			this.store.saveData("full_name", data["data"]["full_name"]);
-			this.store.saveData("avatar", data["data"]["avatar"]);
-			this.store.saveData("cantidad_mascotas", data["data"]["mascotas"].split(",").length);
-			this.store.saveData("mascotas", data["data"]["mascotas"]);
-			this.store.saveData("cantidad_pedidos", data["data"]["cantidad_pedidos"]);
+			this.user.setName(data["data"]["full_name"]);
+			this.user.setAvatar(data["data"]["avatar"]);
+			this.user.setMascotasPk(data["data"]["mascotas"]);
+			this.user.setNroPedidos(data["data"]["cantidad_pedidos"]);
 			if(this.props.from_cart){
 				this.redirectPage(this.constants.route_pay);
 			}

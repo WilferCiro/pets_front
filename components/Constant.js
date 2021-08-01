@@ -45,6 +45,9 @@ class Constant{
 		this.route_subblog             = '/blog/[pk]';
 
 		this.route_tienda              = '/tienda';
+		this.route_tienda_cat1         = '/tienda/1/[categoria1]';
+		this.route_tienda_cat2         = '/tienda/2/[categoria2]';
+		this.route_tienda_cat3         = '/tienda/3/[categoria3]';
 
 		this.route_ayuda               = '/ayuda';
 
@@ -117,7 +120,12 @@ String.prototype.formatDate = function () {
 	let date = new Date(a);
 	return moment(a).format('DD MMMM [de] YYYY');
 };
-
+String.prototype.formatURL  = function (){
+	let name = this;
+	let data = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+	data = data.replace(/\//g, '-');
+	return data.replace(/ /g, "-");
+}
 Number.prototype.formatPrice = function () {
 	let a = this;
 	return a.toLocaleString('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 2})

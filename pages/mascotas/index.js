@@ -107,6 +107,9 @@ class MascotasView extends BasePanel{
 		console.log(body, data);
 		if(data["code"] === 200) {
 			let pk = data["data"]["pk"];
+			
+			this.user.addMascotaPk(pk);
+
 			for (let index in this.images) {
 				let body = {
 					"modelo" : "crear",
