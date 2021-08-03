@@ -16,6 +16,14 @@ class FormDateTime extends BaseFormComponent{
 		super(props);
 
 		this.showTime = this.props.showTime !== null && this.props.showTime !== undefined ? this.props.showTime : true;
+		this.limitToday = this.props.limitToday ? this.props.limitToday : false;
+
+		let today = new Date();
+		let dd = String(today.getDate()).padStart(2, '0');
+		let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		let yyyy = today.getFullYear();
+
+		this.current = yyyy + "-" + mm + '-' + dd;
 	}
 
 	render() {
@@ -34,6 +42,7 @@ class FormDateTime extends BaseFormComponent{
 					showTime={this.props.showTime}
 					style={{width: "100%"}}
 					placeholder={this.getPlaceholder() + (this.required ? "*" : "")}
+					disabledDate={d => !d || (this.limitToday && d.isAfter(this.current)) }
 					/>
 			</Form.Item>
 		);

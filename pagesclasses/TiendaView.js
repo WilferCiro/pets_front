@@ -288,7 +288,6 @@ TiendaView.getInitialProps = async ({query}) => {
 
 	let body = {
 		"pagina" : pagina,
-		"cantidad" : 12,
 		"ordenar_por" : orderBy || "nombre"
 	};
 	if (categoria1){
@@ -306,7 +305,7 @@ TiendaView.getInitialProps = async ({query}) => {
 	if (marcas){
 		body["marcas"] = marcas;
 	}
-	if (query){
+	if (queryS){
 		body["query"] = queryS;
 	}
 	let productos = null;
@@ -321,12 +320,11 @@ TiendaView.getInitialProps = async ({query}) => {
 			body: body
 		})
 	]);
-	if(_productos["code"] === 200) {
+	if(_productos["success"]) {
 		productos = _productos["data"];
 		paginator = _productos["paginator"];
 		filters   = _productos["aditional"];
 	}
-	console.log(filters);
 	return {query, productos, paginator, filters};
 }
 TiendaView.getPageName = () => {

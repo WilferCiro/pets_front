@@ -23,17 +23,17 @@ class ConfirmView extends BasePanel{
 
 	async sendConfirmation() {
 		let body = {
-			"pk" : this.props.user,
 			"codigo_confirmado" : this.props.code
 		}
 		let data = await BasePanel.service.apiSend({
 			method: "PUT",
 			register: "user",
 			model: "confirmar",
-			body: body
+			body: body,
+			aditional: [this.props.user]
 		});
 
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			this.setState({
 				success: true
 			});

@@ -49,7 +49,7 @@ class RecoverView extends BasePanel{
 			model: "recover",
 			body: body
 		});
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			message.info("Se ha enviado un correo electrónico");
 			this.refFormEmail.current.clearValues();
 		}
@@ -71,14 +71,14 @@ class RecoverView extends BasePanel{
 
 		let data = await BasePanel.service.apiSend({
 			method: "PUT",
-			register: "recover",
+			register: "user",
 			model: "recuperar",
 			body: body,
 			isPublic: false,
 			token: this.props.token
 		});
 
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			message.info("Se ha cambiado la contraseña con éxito, por favor inicia sesión");
 			this.redirectPage(this.constants.route_login, {});
 		}

@@ -99,21 +99,15 @@ class MascotasProfileView extends BasePanel{
 	}
 
 	async searchMascota() {
-		let body = {
-			"campos" : {
-				"pk" : this.mascota_pk
-			}
-		}
 		let data = {};
-		console.log(this.listMascotasPK);
 		if(this.isLogged && this.listMascotasPK.includes(this.mascota_pk)){
 			this.canEdit = true;
 			data = await BasePanel.service.apiSend({
 				method: "GET",
 				register: "mascota",
 				model: "todo",
-				isPublic: false,
-				body: body
+				aditional : [this.mascota_pk],
+				isPublic: false
 			});
 		}
 		else{
@@ -122,18 +116,17 @@ class MascotasProfileView extends BasePanel{
 				method: "GET",
 				register: "mascota",
 				model: "todo",
-				isPublic: true,
-				body: body
+				aditional : [this.mascota_pk],
+				isPublic: true
 			});
 		}
-		console.log(data);
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			this.setState({
 				mascota: data["data"]
 			});
-			if(data["data"].length > 0){
+			if(data["data"]){
 				let dataBC = {
-					"label" : data["data"][0].nombre
+					"label" : data["data"].nombre
 				}
 				if (this.breadcrumbData.length === 2){
 					this.breadcrumbData.push(dataBC);
@@ -152,7 +145,7 @@ class MascotasProfileView extends BasePanel{
 	}
 
 	openFormEdit() {
-		let mascota = this.state.mascota[0];
+		let mascota = this.state.mascota;
 		let fotos = [];
 		for (let indexFoto in mascota["fotos"]) {
 			fotos.push({
@@ -182,7 +175,6 @@ class MascotasProfileView extends BasePanel{
 		else{
 			let values = this.refFormDesaparecido.current.getValues();
 			body = {
-				"pk" : this.mascota_pk,
 				"fecha_desaparecido" : values["fecha_desaparecido"],
 				"descripcion_desaparecido" : values["descripcion_desaparecido"],
 				"desaparecido" : true
@@ -194,6 +186,7 @@ class MascotasProfileView extends BasePanel{
 			register: "mascota",
 			model: "modificar_desaparecido",
 			body: body,
+			aditional: [this.mascota_pk],
 			isPublic: false
 		});
 
@@ -205,7 +198,6 @@ class MascotasProfileView extends BasePanel{
 		let formValues = this.refFormEdit.current.getValues();
 		let newFotos = formValues["imagenes"]["fotos"];
 		let body = {
-			"pk" : this.mascota_pk,
 			"nombre" : formValues["nombre"],
 			"fecha_nacimiento" : formValues["fecha_nacimiento"].format("YYYY-MM-DD"),
 			"tipo" : formValues["tipo"],
@@ -220,6 +212,7 @@ class MascotasProfileView extends BasePanel{
 			register: "mascota",
 			model: "modificar",
 			body: body,
+			aditional: [this.mascota_pk],
 			isPublic: false
 		});
 
@@ -227,9 +220,9 @@ class MascotasProfileView extends BasePanel{
 	}
 
 	async successEditMascota(data, newFotos = null) {
-		if(data["code"] === 200) {
+		if(data["success"]) {
 
-			let mascota = this.state.mascota[0];
+			let mascota = this.state.mascota;
 			if(newFotos){
 				for (let index in mascota["fotos"]){
 					let found = newFotos.find(function(post, ind) {
@@ -238,15 +231,11 @@ class MascotasProfileView extends BasePanel{
 						}
 					});
 					if (!found){
-
-						let body = {
-							"pk" : mascota["fotos"][index]["pk"]
-						}
-						let data = await BasePanel.service.apiSend({
+						await BasePanel.service.apiSend({
 							method: "DELETE",
-							register: "fotomascota",
-							model: "delete",
-							body: body,
+							register: "mascota_foto",
+							model: "eliminar",
+							aditional: [mascota["fotos"][index]["pk"]],
 							isPublic: false
 						});
 					}
@@ -260,9 +249,9 @@ class MascotasProfileView extends BasePanel{
 							"mascota" : this.mascota_pk
 						}
 
-						let data = await BasePanel.service.apiSend({
+						await BasePanel.service.apiSend({
 							method: "POST",
-							register: "filemascota",
+							register: "mascota_foto",
 							model: "crear",
 							body: body,
 							isPublic: false,
@@ -298,17 +287,16 @@ class MascotasProfileView extends BasePanel{
 			return (<div>Cargando</div>);
 		}
 
-		if(mascota.length === 0 || (!mascota[0]["visible"] && !mascota[0]["desaparecido"] && !this.canEdit)) {
+		if(!mascota || (!mascota["visible"] && !mascota["desaparecido"] && !this.canEdit)) {
 			return (
 				<Result
 					//icon={<InboxOutlined />}
-					title={(mascota.length === 0) ? "Esta mascota no existe" : "Esta mascota está oculta"}
+					title={(mascota) ? "Esta mascota no existe" : "Esta mascota está oculta"}
 					extra={<Button type="primary">Volver atrás</Button>}
 				/>
 			);
 		}
 
-		mascota = mascota[0];
 		mascotaEdit = Object.assign({}, mascota);
 		mascotaEdit["fecha_nacimiento"] = moment(mascotaEdit["fecha_nacimiento"], "YYYY-MM-DD")
 

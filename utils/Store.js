@@ -74,7 +74,9 @@ class Store {
 	}
 
 	saveData(index, data) {
-		Cookie.set(index, this.encrypt(data), { sameSite: 'strict'});
+		if(data !== null && data !== undefined) {
+			Cookie.set(index, this.encrypt(data), { sameSite: 'strict'});
+		}
 	}
 
 	deleteData(index) {

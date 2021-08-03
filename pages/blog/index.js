@@ -46,8 +46,7 @@ class BlogView extends BasePanel{
 
 	async searchBlogs(page) {
 		let body = {
-			"cantidad" : 10,
-			"pagina" : page
+			"page" : page
 		}
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
@@ -56,7 +55,7 @@ class BlogView extends BasePanel{
 			isPublic: true,
 			body: body
 		});
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			this.setState({
 				blogs: data["data"],
 				paginator: data["paginator"]

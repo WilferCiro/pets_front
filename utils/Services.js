@@ -34,6 +34,7 @@ class Services {
 		register,
 		model,
 		body = {},
+		aditional = [],
 		isPublic = true,
 		showError = false,
 		formData = false,
@@ -44,8 +45,10 @@ class Services {
 		if(showLoad){
 			NProgress.start();
 		}
-		let data = {};
-		let url = (isPublic ? Constant.getPublicEndpoint() : Constant.getPrivateEndpoint()) + register;
+		let dataGet = {};
+		let addURL = aditional.length > 0 ? "/" + aditional.join("/") : "";
+
+		let url = (isPublic ? Constant.getPublicEndpoint() : Constant.getPrivateEndpoint()) + register + "/" + model + addURL;
 		let settings = {
 			method: method,
 			headers: {}
@@ -58,9 +61,6 @@ class Services {
 			}
 		}
 
-		// FIXME: QUITAR
-		body["modelo"] = model;
-		// FIXME: QUITAR
 
 		if(!isPublic) {
 			if(Store.checkIsLogged(token ? token : Store.readValue("token", ctx))) {
@@ -72,7 +72,9 @@ class Services {
 		}
 		if(method === 'GET') {
 			url = new URL(url);
-			url.searchParams.append("body", JSON.stringify(body));
+			for(let attribute in body) {
+				url.searchParams.append(attribute, body[attribute]);
+			}
 		}
 		else if(!formData){
 			settings["body"] = JSON.stringify(body);
@@ -84,6 +86,7 @@ class Services {
 			}
 			settings["body"] = data_;
 		}
+		//console.log(url, settings);
 		const fetchResponse = await fetch(url, settings).catch((error) => {
 			return new Response(
 				JSON.stringify({
@@ -92,9 +95,30 @@ class Services {
 				{ "status" : 400}
 			);
 		});
-		data = await fetchResponse.json();
-		data["code"] = fetchResponse.status;
-		if (data["code"] !== 200 && showError) {
+		try{
+			dataGet = await fetchResponse.json();
+		}
+		catch(e) {
+			//console.log(await fetchResponse.text());
+			console.log("Error->", e);
+		}
+		//console.log(dataGet);
+		let data = {};
+		if ("results" in dataGet){
+			data["paginator"] = {
+				"total" : dataGet["count"]
+			}
+			data["data"] = dataGet["results"];
+		}
+		else{
+			data["data"] = dataGet;
+		}
+		if ("aditional" in dataGet){
+			data["aditional"] = dataGet["aditional"];
+		}
+
+		data["success"] = fetchResponse.status < 300 && fetchResponse.status >= 200 ? true : false;
+		if (!data["success"] && showError) {
 			message.error(data["message"]);
 		}
 		if(showLoad){

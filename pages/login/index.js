@@ -66,11 +66,11 @@ class Login extends BasePanel{
 			let data = await BasePanel.service.apiSend({
 				method: "POST",
 				register: "user",
-				model: "registrarse",
+				model: "registrar",
 				isPublic: true,
 				body: body
 			});
-			if(data["code"] === 200) {
+			if(data["success"]) {
 				message.success("Se ha registrado con éxito, se ha enviado un correo de confirmación.");
 				this.refFormSignup.current.clearValues();
 				this.onRegisterLogin();
@@ -101,7 +101,8 @@ class Login extends BasePanel{
 			isPublic: true,
 			body: body
 		});
-		if(data["code"] === 200) {
+		console.log(data);
+		if(data["success"]) {
 			this.store.setToken(data["data"]["access"]);
 			this.user.setName(data["data"]["full_name"]);
 			this.user.setAvatar(data["data"]["avatar"]);

@@ -81,14 +81,14 @@ class ProfileView extends BasePanel{
 		}
 		let data = await BasePanel.service.apiSend({
 			method: "PUT",
-			register: "fileuser",
+			register: "user",
 			model: "modificar",
 			isPublic: false,
 			body: body,
 			formData: true
 		});
 
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			this.getUserData();
 			message.success("Se han editados sus datos exitosamente");
 		}
@@ -126,12 +126,12 @@ class ProfileView extends BasePanel{
 		let data = await BasePanel.service.apiSend({
 			method: "PUT",
 			register: "user",
-			model: "password",
+			model: "modificar_password",
 			isPublic: false,
 			body: body
 		});
 
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			message.success("Se ha editado su contraseña exitosamente");
 		}
 		else{
@@ -149,11 +149,11 @@ class ProfileView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-		if(data["code"] === 200) {
-			this.user.setName(data["data"][0]["full_name"]);
-			this.user.setAvatar(data["data"][0]["avatar"]);
+		if(data["success"]) {
+			this.user.setName(data["data"]["full_name"]);
+			this.user.setAvatar(data["data"]["avatar"]);
 			this.setState({
-				user: data["data"][0]
+				user: data["data"]
 			})
 		}
 		else{

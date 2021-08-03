@@ -54,22 +54,17 @@ class ModalPedido extends BasePanel{
 
 	async open(pk) {
 
-		let body = {
-			"campos" : {
-				"pk" : pk
-			}
-		}
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
 			register: "pedido",
 			model: "todo",
 			isPublic: false,
-			body: body
+			aditional: [pk]
 		});
 		console.log(data);
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			this.setState({
-				data: data["data"][0],
+				data: data["data"],
 				open: true
 			})
 		}

@@ -76,12 +76,15 @@ class PayView extends BasePanel{
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
 			register: "user",
-			model: "pay",
+			model: "datos_pago",
 			isPublic: false,
 			body: body
 		});
-		if(data["code"] === 200) {
-			this.refDataUserForm.current.setValues(data["data"][0]);
+		if(data["success"]) {
+			let preconditions = {
+				"departamento" : data["data"]["departamento"]
+			}
+			this.refDataUserForm.current.setValues(data["data"], preconditions);
 		}
 		else{
 			message.error("Hubo un erro al cargar los datos del usuario");
@@ -168,7 +171,7 @@ class PayView extends BasePanel{
 				body: body
 			});
 			console.log("---", data);
-			if(data["code"] === 200) {
+			if(data["success"]) {
 				this.refPayModal.current.open();
 				this.user.updateNroPedidos();
 			}

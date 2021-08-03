@@ -46,7 +46,7 @@ class AyudaView extends BasePanel{
 				body: body
 			});
 
-			if(data["code"] === 200) {
+			if(data["success"]) {
 				message.success("Se ha enviado el mensaje con éxito");
 				this.refFormMessage.current.clearValues();
 			}

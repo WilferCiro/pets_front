@@ -66,7 +66,7 @@ class PerdidasView extends BasePanel{
 			model: "perdidas",
 			body: body
 		});
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			this.setState({
 				mascotas: data["data"],
 				paginator: data["paginator"]

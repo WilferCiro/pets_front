@@ -80,21 +80,17 @@ class TableMascotasVacunas extends BasePanel{
 
 	openFormVacuna() {
 		let preconditions = {
-			"tipo__pk" : this.mascota_tipo
+			"tipo" : this.mascota_tipo
 		}
 		this.refFormVacuna.current.open("Agregar vacuna", null, preconditions);
 	}
 
 	async onDeleteVacuna(pk) {
-		let body = {
-			"pk" : pk
-		}
-
 		let data = await BasePanel.service.apiSend({
 			method: "DELETE",
-			register: "vacuna",
+			register: "mascota_vacuna",
 			model: "eliminar",
-			body: body,
+			aditional: [pk],
 			isPublic: false
 		});
 
@@ -111,7 +107,7 @@ class TableMascotasVacunas extends BasePanel{
 
 		let data = await BasePanel.service.apiSend({
 			method: "POST",
-			register: "vacuna",
+			register: "mascota_vacuna",
 			model: "crear",
 			body: body,
 			isPublic: false
@@ -120,30 +116,26 @@ class TableMascotasVacunas extends BasePanel{
 		this.successUpdateVacunas(data);
 	}
 	async successUpdateVacunas(data) {
-		if(data["code"] === 200) {
+		console.log(data);
+		if(data["success"]) {
 			message.success("Operación realizada con éxito");
 			this.refFormVacuna.current.clearValues();
-			let body = {
-				"campos" : {
-					"mascota" : this.mascota_pk,
-				}
-			}
 			let dataGet = await BasePanel.service.apiSend({
 				method: "GET",
-				register: "vacuna",
+				register: "mascota_vacuna",
 				model: "todo",
-				body: body,
+				aditional: [this.mascota_pk],
 				isPublic: false
 			});
 
-			if(dataGet["code"] === 200) {
+			if(dataGet["success"]) {
 				this.setState({
 					vacunas : dataGet["data"]
 				})
 			}
 		}
 		else{
-			message.error("Error al agregar la vacuna");
+			message.warning("Revisa tus datos, esta vacuna puede estar asignada actualmente");
 		}
 	}
 

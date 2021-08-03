@@ -71,13 +71,11 @@ export default class BasePanel extends Component {
 			register: "producto",
 			model: "carrito",
 			body: {
-				"campos" : {
-					"pk-en" : pks
-				}
+				"pks" : pks.join(",")
 			}
 		});
-
-		if(data["code"] === 200) {
+		console.log(data);
+		if(data["success"]) {
 			return data["data"];
 		}
 		return [];

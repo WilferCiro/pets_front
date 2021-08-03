@@ -57,9 +57,7 @@ class MascotasView extends BasePanel{
 
 	async searchMascotas(page) {
 		let body = {
-			"cantidad" : this.pageSize,
-			"pagina" : page,
-			"ordenar_por" : "-pk"
+			"pagina" : page
 		}
 
 		let data = await BasePanel.service.apiSend({
@@ -69,8 +67,8 @@ class MascotasView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-
-		if(data["code"] === 200) {
+		console.log(data);
+		if(data["success"]) {
 			this.setState({
 				mascotas: data["data"],
 				paginator: data["paginator"]
@@ -104,21 +102,19 @@ class MascotasView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-		console.log(body, data);
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			let pk = data["data"]["pk"];
-			
+
 			this.user.addMascotaPk(pk);
 
 			for (let index in this.images) {
 				let body = {
-					"modelo" : "crear",
 					"foto" : this.images[index]["originFileObj"],
 					"mascota" : pk
 				}
 				let dataImg = await BasePanel.service.apiSend({
 					method: "POST",
-					register: "filemascota",
+					register: "mascota_foto",
 					model: "crear",
 					isPublic: false,
 					body: body,

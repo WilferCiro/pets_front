@@ -56,22 +56,18 @@ class BlogProfileView extends BasePanel{
 }
 
 BlogProfileView.getInitialProps = async ({query, req, pathname}) => {
-	let blog = null;
+	let blog = query.pk || 1;
 	let [_blogs] = await Promise.all([
 		BasePanel.service.apiSend({
 			method: "GET",
 			register: "blog",
 			model: "todo",
 			showLoad: false,
-			body: {
-				"campos" : {
-					"pk" : 1
-				}
-			}
+			aditional: [blog]
 		})
 	]);
-	if(_blogs["code"] === 200) {
-		blog = _blogs["data"][0];
+	if(_blogs["success"]) {
+		blog = _blogs["data"];
 		blog["fecha_modificacion"] = blog["fecha_modificacion"].formatDateTime();
 	}
 	return {query, blog};

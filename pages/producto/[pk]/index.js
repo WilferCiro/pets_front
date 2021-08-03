@@ -99,6 +99,7 @@ class PreviewView extends ProductBase{
 	render() {
 		let producto = this.props.producto;
 
+
 		if (!producto) {
 			return (
 				<Result
@@ -139,7 +140,7 @@ class PreviewView extends ProductBase{
 									:
 										null
 								}
-								<p className="real-price">{producto.precio.formatPrice()}</p>
+								<p className="real-price">{producto.precio ? producto.precio.formatPrice() : ""}</p>
 							</Space>
 						</Space>
 						<br />
@@ -251,24 +252,19 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 	}
 	let nroCart = BasePanel.store.getNumCart({query, req, pathname}, productPK);
 
-	let producto = {};
+	let producto = null;
 	let [_productos] = await Promise.all([
 		BasePanel.service.apiSend({
 			method: "GET",
 			register: "producto",
 			model: "todo",
 			showLoad: false,
-			body: {
-				"campos" : {
-					"pk" : productPK
-				}
-			}
+			aditional : [productPK]
 		})
 	]);
-	if(_productos["code"] === 200) {
-		producto = _productos["data"][0];
+	if(_productos["success"]) {
+		producto = _productos["data"];
 	}
-	console.log(producto);
 	return {query, nroCart, productPK, producto};
 }
 PreviewView.getPageName = () => {

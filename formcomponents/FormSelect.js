@@ -32,7 +32,7 @@ class FormSelect extends BaseFormComponent{
 	}
 
 	componentDidMount() {
-		if (this.service && !this.service_index) {
+		if (this.service && (this.service_index === null || this.service_index === undefined)) {
 			this.searchService();
 		}
 	}
@@ -65,17 +65,17 @@ class FormSelect extends BaseFormComponent{
 			values[this.getName()] = null;
 			this.formRef.current.setFieldsValue(values);
 		}
-		this.searchService(value);
+		if (value){
+			this.searchService(value);
+		}
 	}
 
 	async searchService(value = null) {
-		let body = {}
-		let bodyCampos = this.preconditions || {};
+		let body = this.preconditions || {};
 		if (value || this.preconditions) {
 			if(value){
-				bodyCampos[this.service_index] = value;
+				body[this.service_index] = value;
 			}
-			body["campos"] = bodyCampos;
 		}
 
 		let data = await BasePanel.service.apiSend({
@@ -84,8 +84,7 @@ class FormSelect extends BaseFormComponent{
 			model: "select",
 			body: body
 		});
-		console.log(body);
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			let newData = [];
 			for (let index in data["data"]) {
 				newData.push({

@@ -74,7 +74,7 @@ class CartView extends BasePanel{
 						"pk" : dataCart[index]["pk"],
 						"count" : dataCart[index]["count"],
 						"descripcion" : this.dataService[index2]["nombre"],
-						"foto" : this.dataService[index2]["fotos"].length > 0 ? this.dataService[index2]["fotos"][0]["foto"] : null,
+						"foto" : this.dataService[index2]["foto"].length > 0 ? this.dataService[index2]["foto"][0]["foto"] : null,
 						"precio" : this.dataService[index2]["precio"],
 						"promocion" : this.dataService[index2]["promocion"],
 						"stock" : this.dataService[index2]["stock"],

@@ -75,21 +75,18 @@ class TableMascotasEnfermedades extends BasePanel{
 
 	openFormEnfermedad() {
 		let preconditions = {
-			"tipo__pk" : this.mascota_tipo
+			"tipo" : this.mascota_tipo
 		}
 		this.refFormEnfermedad.current.open("Agregar enfermedad", null, preconditions);
 	}
 
 	async onDeleteEnfermedad(pk) {
-		let body = {
-			"pk" : pk
-		}
 
 		let data = await BasePanel.service.apiSend({
 			method: "DELETE",
-			register: "enfermedad",
-			model: "todo",
-			body: body,
+			register: "mascota_enfermedad",
+			model: "eliminar",
+			aditional: [pk],
 			isPublic: false
 		});
 		this.successUpdateEnfermedades(data);
@@ -104,7 +101,7 @@ class TableMascotasEnfermedades extends BasePanel{
 		}
 		let data = await BasePanel.service.apiSend({
 			method: "POST",
-			register: "enfermedad",
+			register: "mascota_enfermedad",
 			model: "crear",
 			body: body,
 			isPublic: false
@@ -114,24 +111,20 @@ class TableMascotasEnfermedades extends BasePanel{
 
 	}
 	async successUpdateEnfermedades(data) {
-		if(data["code"] === 200) {
+		if(data["success"]) {
 			message.success("Operación realizada con éxito");
-			this.refFormEnfermedad.current.clearValues();
-			let body = {
-				"campos" : {
-					"mascota" : this.mascota_pk,
-				}
+			if(this.refFormEnfermedad.current) {
+				this.refFormEnfermedad.current.clearValues();
 			}
-
 			let dataGet = await BasePanel.service.apiSend({
 				method: "GET",
-				register: "enfermedad",
+				register: "mascota_enfermedad",
 				model: "todo",
-				body: body,
+				aditional: [this.mascota_pk],
 				isPublic: false
 			});
 
-			if(dataGet["code"] === 200) {
+			if(dataGet["success"]) {
 				this.setState({
 					enfermedades : dataGet["data"]
 				})
@@ -139,7 +132,7 @@ class TableMascotasEnfermedades extends BasePanel{
 
 		}
 		else{
-			message.error("Error al agregar la enfermedad");
+			message.warning("Revisa tus datos, esta enfermedad puede estar asignada actualmente");
 		}
 	}
 

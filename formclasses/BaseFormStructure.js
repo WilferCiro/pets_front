@@ -138,7 +138,9 @@ class BaseFormStructure  extends React.Component{
 	}
 
 	clearValues() {
-		this.formRef.current.resetFields();
+		if(this.formRef.current) {
+			this.formRef.current.resetFields();
+		}
 	}
 
 	async validate() {
@@ -149,8 +151,13 @@ class BaseFormStructure  extends React.Component{
 		return this.formRef.current.getFieldsValue();
 	}
 
-	setValues(values) {
+	setValues(values, preconditions = null) {
 		this.formRef.current.setFieldsValue(values);
+		if(preconditions) {
+			this.setState({
+				preconditions : preconditions
+			})
+		}
 	}
 
 	getFieldRender(item) {
