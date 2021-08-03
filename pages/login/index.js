@@ -56,10 +56,10 @@ class Login extends BasePanel{
 		if(valid) {
 			let values = this.refFormSignup.current.getValues();
 			let body = {
-				"email" : values["email"].split(),
-				"password" : values["password"]["password1"].split(),
-				"first_name" : values["nombres"].split(),
-				"last_name" : values["apellidos"].split(),
+				"email" : values["email"].trim(),
+				"password" : values["password"]["password1"].trim(),
+				"first_name" : values["nombres"].trim(),
+				"last_name" : values["apellidos"].trim(),
 				"acepta_condicion" : true
 			}
 
@@ -70,13 +70,21 @@ class Login extends BasePanel{
 				isPublic: true,
 				body: body
 			});
+			console.log(data);
 			if(data["success"]) {
 				message.success("Se ha registrado con éxito, se ha enviado un correo de confirmación.");
 				this.refFormSignup.current.clearValues();
 				this.onRegisterLogin();
 			}
 			else{
-				message.error("Hubo un error, por favor pruebelo de nuevo");
+				let mensaje = "";
+				for(let index in data["data"]){
+					mensaje += index + ": " + data["data"][index][0]
+				}
+				if(mensaje === "") {
+					mensaje = "Hubo un error, por favor pruebelo de nuevo";
+				}
+				message.error(mensaje);
 			}
 
 		}
@@ -91,8 +99,8 @@ class Login extends BasePanel{
 		let values = this.refFormLogin.current.getValues();
 
 		let body = {
-			"username" : values["username"],
-			"password" : values["password"]
+			"username" : values["username"].trim(),
+			"password" : values["password"].trim()
 		};
 		let data = await BasePanel.service.apiSend({
 			method: "POST",
@@ -101,7 +109,6 @@ class Login extends BasePanel{
 			isPublic: true,
 			body: body
 		});
-		console.log(data);
 		if(data["success"]) {
 			this.store.setToken(data["data"]["access"]);
 			this.user.setName(data["data"]["full_name"]);
