@@ -30,6 +30,7 @@ class CatSpeak extends BasePanel{
 			<div className="cat-speak">
 				<Tooltip zIndex={2} color="purple" visible={true} placement="left" title={this.text}  okText="Yes" cancelText={null}>
 					<Image
+						alt="Gato Kiwi"
 						src={this.constants.img_index_video}
 						width={260}
 						height={260}
