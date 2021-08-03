@@ -101,7 +101,7 @@ class BlogView extends BasePanel{
 				<Result
 					icon={<InboxOutlined />}
 					title="No hay blogs"
-					extra={<Button type="primary">Registrar</Button>}
+					extra={<Button type="primary" onClick={this.goHome}>Volver al inicio</Button>}
 				/>
 			);
 		}

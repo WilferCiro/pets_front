@@ -135,11 +135,22 @@ class MascotasView extends BasePanel{
 
 		if(this.state.mascotas.length === 0) {
 			return (
-				<Result
-					icon={<InboxOutlined />}
-					title="No has inscrito tus mascotas, inscríbelas totalmente gratis y obtén su código QR para su propio collar"
-					extra={<Button type="primary">Registrar</Button>}
-				/>
+				<div>				
+					<AddMascotaForm
+						modal={true}
+						vertical={false}
+						ref={this.refFormAdd}
+						modalOnOk={this.onAddMascota}
+						initialValues={{
+							"visible" : true
+						}}
+						/>
+					<Result
+						icon={<InboxOutlined />}
+						title="No has inscrito tus mascotas, inscríbelas totalmente gratis y obtén su código QR para su propio collar"
+						extra={<Button type="primary" onClick={this.addMascota}>Registrar nueva</Button>}
+					/>
+				</div>
 			);
 		}
 
