@@ -9,7 +9,7 @@ dist/
 build/
 out/
 
-components/ConstantServer.js
+#components/ConstantServer.js
 
 .node_modules/
 .dist/
