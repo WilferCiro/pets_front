@@ -31,6 +31,14 @@ class ImageSlider extends BasePanel{
 
 		// Props
 		this.fotos  = this.props.fotos;
+
+		if (this.fotos.length === 0) {
+			this.fotos = [{
+				"foto" : this.constants.img_producto,
+				"descripcion" : "Foto del producto"
+			}];
+		}
+
 		this.videos = this.props.videos;
 
 		// References
@@ -80,7 +88,7 @@ class ImageSlider extends BasePanel{
 							(this.videos).map((video, index) => {
 								return (
 									<div key={Math.random()} className="thumbnail" onClick={(e) => this.goToImage(this.fotos.length + index)}>
-										<Avatar size={68} icon={<VideoCameraFilled className="icon-big" />} style={{ backgroundColor: 'purple' }} />
+										<Avatar size={68} icon={<VideoCameraFilled className="icon-big" />} style={{ backgroundColor: '#BFB5E6' }} />
 									</div>
 								)
 							})

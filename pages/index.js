@@ -5,9 +5,13 @@
 // React Components
 import React          from 'react';
 
+// NextJS libraries
+import Image from 'next/image'
+
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 import VideoHome      from '@/components/VideoHome';
+import CatSpeak       from '@/components/CatSpeak';
 
 // Ant components and icons
 import {
@@ -35,10 +39,8 @@ class Home extends BasePanel{
 		return (
 			<div className="index-page">
 				<section className="landing-section" id="index">
-					<div className="landing-circle1" >
-						<h2>Video</h2>
-						<p>Este video te muestra más</p>
-						<Button onClick={(e) => this.refVideo.current.open()}>Ver</Button>
+					<div className="landing-circle1" onClick={(e) => this.refVideo.current.open()}>
+						<CatSpeak text="Dame click para conocer más sobre nosotros con un video" />
 					</div>
 					<div className="landing-circle2" />
 					<div className="landing-circle3" />
@@ -60,7 +62,7 @@ class Home extends BasePanel{
 						</Col>
 						<Col xs={24} md={10} lg={12}>
 							<h4 className="landing-h4 landing-title">Beneficios de Kiwi Peluditos</h4>
-							<p>¡Kiwi peluditos es el mejor aliado de tu mascota! Registra rápido y fácilmente tu mascota con todos sus datos para generar su código QR. Nuevas principales ventajas son:</p>
+							<p>¡Kiwi peluditos es el mejor aliado de tu mascota! Registra fácilmente tus mascotas con todos sus datos para generar su código QR, puedes tener:</p>
 							<ul>
 								<li>Incluir foto, raza, tamaño, color, condiciones especiales y una corta descripción de tu peludito.</li>
 								<li>Carga del carnet de vacunas.</li>

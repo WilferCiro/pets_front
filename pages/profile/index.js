@@ -179,7 +179,7 @@ class ProfileView extends BasePanel{
 		let dataPedidos = [];
 		for (let index in user["pedidos"]) {
 			dataPedidos.push({
-				"title" : <Button type="link" onClick={(e) => this.openPedido(user["pedidos"][index]["pk"])}>{user["pedidos"][index]["total"].formatPrice() + " · Click para ver más "}</Button>,
+				"title" : <a onClick={(e) => this.openPedido(user["pedidos"][index]["pk"])}>{user["pedidos"][index]["total"].formatPrice() + " · Click para ver más "}</a>,
 				"description" : user["pedidos"][index]["estado_nombre"] + " - Creado: " + user["pedidos"][index]["fecha_creacion"].formatDateTime()
 			})
 		}

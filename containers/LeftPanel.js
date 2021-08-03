@@ -5,6 +5,9 @@
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
+// NextJS libraries
+import Image from 'next/image'
+
 // Ant components and icons
 import {
 	Avatar
@@ -52,14 +55,13 @@ class LeftPanel extends BasePanel{
 			<div className="left-panel">
 
 				<div className="logo" onClick={(e) => this.clickMenu(this.constants.route_index)}>
-					<img src={this.constants.img_logo} />
-					Kiwi Peluditos
+					<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} />
 				</div>
 
 				<div className="avatar-user">
 					<Avatar
 						size={90}
-						src={userData && userData["avatar"] !== "" && userData["avatar"] !== null ? userData["avatar"] : this.constants.img_logo}
+						src={userData && userData["avatar"] !== "" && userData["avatar"] !== null ? userData["avatar"] : this.constants.img_user}
 					/>
 				</div>
 				<h4 className="nav-username">

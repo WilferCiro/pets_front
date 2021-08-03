@@ -72,6 +72,10 @@ class Constant{
 
 		this.img_producto_empty             = "/images/general/product_empty.png";
 
+		this.img_index_video        = "/images/index/video.png";
+		this.img_producto           = "/images/general/producto.jpg";
+		this.img_user               = "/images/general/user.jpg";
+
 	}
 
 	formatString(s) {

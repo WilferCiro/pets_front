@@ -51,15 +51,12 @@ class TableCart extends BasePanel{
 				title: 'Foto',
 				dataIndex: 'foto',
 				render: (value, record) => (
-					(value) ?
-						(record["promocion"]) ?
-							<Badge.Ribbon color="green" text={record["promocion"] + "% dcto"}>
-								<Image width="200" height="200" layout="responsive" src={value} alt="foto producto" />
-							</Badge.Ribbon>
-						:
-						<Image width="200" height="200" layout="responsive" src={value} alt="foto producto" />
+					(record["promocion"]) ?
+						<Badge.Ribbon color="green" text={record["promocion"] + "% dcto"}>
+							<Image width="200" height="200" layout="responsive" src={value && value.length >= 0 ? value["foto"] : this.constants.img_producto} alt="foto producto" />
+						</Badge.Ribbon>
 					:
-					null
+					<Image width="200" height="200" layout="responsive" src={value && value.length >= 0 ? value["foto"] : this.constants.img_producto} alt="foto producto" />
 				),
 			},
 			{

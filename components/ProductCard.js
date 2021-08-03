@@ -43,7 +43,7 @@ class ProductCard extends ProductBase{
 								<Badge.Ribbon text={this.producto.promocion + "% dcto"}>
 									<div className="product-card-photo">
 										<Image
-											src={this.producto.foto[0] ? this.producto.foto[0].foto : "http://127.0.0.1:8000/media/producto/1627238960/Amarillo-1.webp"}
+											src={this.producto.foto[0] ? this.producto.foto[0].foto : this.constants.img_producto}
 											alt={"Foto del artículo"}
 											layout="responsive"
 											width="200"
@@ -54,7 +54,7 @@ class ProductCard extends ProductBase{
 								:
 								<div className="product-card-photo">
 									<Image
-										src={this.producto.foto[0] ? this.producto.foto[0].foto : "http://127.0.0.1:8000/media/producto/1627238960/Amarillo-1.webp"}
+										src={this.producto.foto[0] ? this.producto.foto[0].foto : this.constants.img_producto}
 										alt={"Foto del artículo"}
 										layout="responsive"
 										width="200"

@@ -33,8 +33,7 @@ export function redirectUser(ctx, location) {
 	res.end();
 }
 
-class LocalDashboard extends App
-{
+class LocalDashboard extends App{
 	static async getInitialProps({Component,router, ctx, asPath, req}) {
 
 		let isServer = !!req;
