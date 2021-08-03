@@ -56,10 +56,10 @@ class Login extends BasePanel{
 		if(valid) {
 			let values = this.refFormSignup.current.getValues();
 			let body = {
-				"email" : values["email"],
-				"password" : values["password"]["password1"],
-				"first_name" : values["nombres"],
-				"last_name" : values["apellidos"],
+				"email" : values["email"].split(),
+				"password" : values["password"]["password1"].split(),
+				"first_name" : values["nombres"].split(),
+				"last_name" : values["apellidos"].split(),
 				"acepta_condicion" : true
 			}
 
