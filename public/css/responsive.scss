@@ -37,9 +37,32 @@
 	.show-tablet{
 		display: block;
 	}
+
+	.perdido-cartel-qr{
+		display: none;
+	}
+	.perdido-cartel{
+		padding: 10px 0px;
+	}
+	.perdido-cartel-footer{
+		width: 100%;
+	}
 }
 
 @media (max-width: 767px) {
+	.ant-page-header-heading-title{
+		text-overflow: ellipsis;
+	}
+	.header-noLogin{
+		.ant-page-header-heading-left{
+			width: 55%;
+		}
+	}
+	.cookies{
+		bottom: 0px;
+		left: 0px;
+		width: 100%;
+	}
 	.show-mobile{
 		display: block;
 	}

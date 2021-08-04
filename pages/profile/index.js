@@ -71,7 +71,8 @@ class ProfileView extends BasePanel{
 			"last_name" : formValues["last_name"],
 			"celular1" : formValues["celular1"],
 			"celular2" : formValues["celular2"],
-			"telefono" : formValues["telefono"]
+			"telefono" : formValues["telefono"],
+			"direccion" : formValues["direccion"]
 		}
 		if(formValues["avatar"]["fotos"].length > 0 && formValues["avatar"]["fotos"][0]["uid"].includes("rc-upload")) {
 			body["avatar"] = formValues["avatar"]["fotos"].length > 0 ? formValues["avatar"]["fotos"][0]["originFileObj"] : null;
@@ -170,11 +171,15 @@ class ProfileView extends BasePanel{
 			return (<div>Cargando</div>);
 		}
 
+		user["celular1"] = user["celular1"] === "null" ? "" : user["celular1"];
+		user["celular2"] = user["celular2"] === "null" ? "" : user["celular2"];
+
 		let dataUser = [
 			{title: "Celular 1", description: user["celular1"]},
 			{title: "Celular 2", description: user["celular2"]},
 			{title: "Teléfono", description: user["telefono"]},
-			{title: "Email", description: user["email"]}
+			{title: "Email", description: user["email"]},
+			{title: "Dirección", description: user["direccion"]},
 		];
 		let dataPedidos = [];
 		for (let index in user["pedidos"]) {
@@ -235,7 +240,7 @@ class ProfileView extends BasePanel{
 
 						<p className="mascota-apodo">{user.email}</p>
 
-						<Tabs defaultActiveKey="1">
+						<Tabs defaultActiveKey="3">
 
 							<TabPane tab="Mis mascotas" key="1">
 								<List

@@ -14,6 +14,7 @@ class Constant{
 	static URL_login = ConstantServer["URL_login"];
 	static URL_recover = ConstantServer["URL_recover"];
 	static Name_webpage = "Kiwi Peluditos";
+	static URL_FRONT    = ConstantServer["URL_FRONT"];
 
 	// Dev
 	//static URL_server = "http://127.0.0.1:8000";
@@ -61,7 +62,6 @@ class Constant{
 
 		/*** IMÁGENES ***/
 		this.img_logo                       = "/images/general/logo.png";
-		this.img_no_mascota                 = "/images/general/logo.png";
 		this.img_lupa_white                 = "/images/icons/lupa-white.svg";
 		this.img_box_black                  = "/images/icons/box-black.svg";
 		this.img_shop_black                 = "/images/icons/shop-black.svg";
@@ -75,6 +75,12 @@ class Constant{
 		this.img_index_video        = "/images/index/video.png";
 		this.img_producto           = "/images/general/producto.jpg";
 		this.img_user               = "/images/general/user.jpg";
+		this.img_no_mascota         = "/images/general/user.jpg";
+
+
+		/// Documentos legales
+		this.cookies_document     = "https://ant.design/components/button/#API";
+		this.registrar_document   = "https://ant.design/components/button/#API";
 
 	}
 
@@ -101,6 +107,9 @@ class Constant{
 	}
 	getRecoverEndPoint() {
 		return Constant.URL_server + Constant.URL_recover;
+	}
+	getUrlFront() {
+		return Constant.URL_FRONT;
 	}
 
 	get_key() {

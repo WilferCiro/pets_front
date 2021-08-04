@@ -26,7 +26,8 @@ import {
 	message
 } from 'antd';
 import {
-	CreditCardOutlined
+	CreditCardOutlined,
+	EditFilled
 } from '@ant-design/icons';
 
 
@@ -48,6 +49,7 @@ class PayView extends BasePanel{
 
 		// Methods
 		this.nextPage   = this.nextPage.bind(this);
+		this.prevPage   = this.prevPage.bind(this);
 		this.searchUser = this.searchUser.bind(this);
 		this.searchCart = this.searchCart.bind(this);
 		this.pagar      = this.pagar.bind(this);
@@ -102,6 +104,7 @@ class PayView extends BasePanel{
 		this.productos = [];
 		let subTotal = 0;
 		let descuentos = 0;
+		let valorEnvio = this.valorEnvio;
 		for (let index in dataCart){
 			for(let index2 in this.dataService) {
 				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + ""){
@@ -118,10 +121,20 @@ class PayView extends BasePanel{
 			}
 		}
 
+		if (dataCart.length === 0) {
+			valorEnvio = 0;
+			this.redirectPage(this.constants.route_cart);
+		}
 		this.refDescuentosLabel.current.setText(descuentos.formatPrice());
 		this.refSubTotalLabel.current.setText(subTotal.formatPrice());
-		this.refEnvioLabel.current.setText(this.valorEnvio.formatPrice());
-		this.refTotalLabel.current.setText((subTotal + this.valorEnvio).formatPrice());
+		this.refEnvioLabel.current.setText(valorEnvio.formatPrice());
+		this.refTotalLabel.current.setText((subTotal + valorEnvio).formatPrice());
+	}
+
+	prevPage(){
+		this.setState({
+			page: this.state.page - 1
+		})
 	}
 
 	async nextPage() {
@@ -207,6 +220,8 @@ class PayView extends BasePanel{
 											<b>Ciudad: </b> {this.state.dataUser.ciudad_name} - {this.state.dataUser.departamento_name}<br />
 											<b>Dirección: </b> {this.state.dataUser.direccion}<br />
 											<b>información adicional: </b> {this.state.dataUser.adicional ? this.state.dataUser.adicional : "No hay información adicional"}<br />
+											<Divider />
+											<Button type="primary" onClick={this.prevPage} icon={<EditFilled />}>Editar datos</Button>
 										</div>
 									:
 									null

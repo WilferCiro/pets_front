@@ -10,7 +10,9 @@ import Image from 'next/image'
 
 // Ant components and icons
 import {
-	Avatar
+	Avatar,
+	Tooltip,
+	Button
 } from 'antd';
 import {
 	AlertOutlined,
@@ -21,7 +23,8 @@ import {
 	FileTextFilled,
 	ShopFilled,
 	QuestionCircleFilled,
-	IdcardOutlined
+	IdcardOutlined,
+	EditFilled
 } from '@ant-design/icons';
 
 
@@ -49,8 +52,8 @@ class LeftPanel extends BasePanel{
 		let isLogged = this.props.isLogged ? this.props.isLogged : false;
 		let userData = this.props.userData;
 
-		let userName = isLogged ? <a onClick={(e) => this.clickMenu(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a> : "Kiwi invitado";
-		let nicName  = isLogged ? "user" : "kiwi_invitado";
+		let userName = isLogged ? <Tooltip title="Ver mi perfil"><a onClick={(e) => this.clickMenu(this.constants.route_profile)}>{userData ? userData["full_name"] : ""}</a></Tooltip> : "Kiwi invitado";
+		let nicName  = isLogged ? <Tooltip title="Ver mi perfil"><Button onClick={(e) => this.clickMenu(this.constants.route_profile)} type="link" icon={<EditFilled />}>mi perfil</Button></Tooltip> : "";
 		return (
 			<div className="left-panel">
 
@@ -67,7 +70,7 @@ class LeftPanel extends BasePanel{
 				<h4 className="nav-username">
 					{userName}
 				</h4>
-				<h5 className="nav-nick">@{nicName}</h5>
+				<h5 className="nav-nick">{nicName}</h5>
 
 				{
 					isLogged ?

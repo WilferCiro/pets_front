@@ -2,13 +2,17 @@
 	* Creado por Wilfer Daniel Ciro Maya - 2021
 **/
 
+// React Components
+import React          from 'react';
+
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
 // Ant components and icons
 import {
 	Divider,
-	notification
+	notification,
+	Button
 } from 'antd';
 import {
 	FacebookFilled,
@@ -28,14 +32,23 @@ class Footer extends BasePanel{
 		}
 
 		// Methods
-		this.online  = this.online.bind(this);
-		this.offline = this.offline.bind(this);
+		this.online        = this.online.bind(this);
+		this.offline       = this.offline.bind(this);
+		this.acceptCookies = this.acceptCookies.bind(this);
+
+		// Refs
+		this.refCookiesModal = React.createRef();
 	}
 
 	componentDidMount() {
 		let isOnline = navigator.onLine;
 		window.addEventListener('online', () => this.online());
 		window.addEventListener('offline', () => this.offline());
+
+		let acceptedCookies = this.store.getAcceptCookies();
+		if(!acceptedCookies) {
+			this.refCookiesModal.current.classList.remove("cookies-hide");
+		}
 	}
 
 	online() {
@@ -59,9 +72,19 @@ class Footer extends BasePanel{
 		});
 	}
 
+	acceptCookies() {
+		this.store.acceptCookies();
+		this.refCookiesModal.current.classList.add("cookies-hide");
+	}
+
 	render() {
 		return (
 			<footer>
+				<div className="cookies cookies-hide" ref={this.refCookiesModal}>
+					<p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario a través de su navegación. Si continúas navegando aceptas su uso. <a href={this.constants.cookies_document} target={"blank"}>Política de cookies</a></p>
+					<Button type="primary" onClick={this.acceptCookies} block>Entendido</Button>
+				</div>
+
 				<Divider />
 				<div className="footer-separator">
 					<div>

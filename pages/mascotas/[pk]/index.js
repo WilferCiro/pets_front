@@ -100,7 +100,23 @@ class MascotasProfileView extends BasePanel{
 
 	async searchMascota() {
 		let data = {};
-		if(this.isLogged && this.listMascotasPK.includes(this.mascota_pk)){
+		let listPks = []
+
+		if(this.isLogged){
+
+			data = await BasePanel.service.apiSend({
+				method: "GET",
+				register: "user",
+				model: "lista_pkmascotas",
+				isPublic: false
+			});
+
+			if(data["success"]){
+				listPks = data["data"]["mascotas"];
+			}
+		}
+
+		if(this.isLogged && listPks.includes(this.mascota_pk)) {
 			this.canEdit = true;
 			data = await BasePanel.service.apiSend({
 				method: "GET",
@@ -287,12 +303,17 @@ class MascotasProfileView extends BasePanel{
 			return (<div>Cargando</div>);
 		}
 
-		if(!mascota || (!mascota["visible"] && !mascota["desaparecido"] && !this.canEdit)) {
+		if(!mascota["visible"] && !mascota["desaparecido"] && !this.canEdit) {
+			let title = !this.isLogged ? "Esta mascota está oculta, ¿es tuya? Inicia sesión" : "Esta mascota está oculta";
+			let button = !this.isLogged ?
+				<Button type="primary" onClick={e => this.redirectPage(this.constants.route_login, {"mascota" : this.mascota_pk})}>Iniciar sesión</Button>
+				:
+				<Button type="primary" onClick={e => this.redirectPage(this.constants.route_mascotas)}>Volver a las mascotas</Button>
 			return (
 				<Result
 					//icon={<InboxOutlined />}
-					title={(mascota) ? "Esta mascota no existe" : "Esta mascota está oculta"}
-					extra={<Button type="primary">Volver atrás</Button>}
+					title={title}
+					extra={button}
 				/>
 			);
 		}
@@ -323,7 +344,7 @@ class MascotasProfileView extends BasePanel{
 			dataMissing.push({title: "Acciones", description: <Button type="primary" onClick={this.openMissingModal}>Generar cartel</Button>});
 		}
 
-
+		let urlMascota = this.constants.getUrlFront() + this.constants.route_profile_mascotas.replace("[pk]", mascota["pk"] + "?fromQR=true")
 		return (
 			<div>
 				{
@@ -491,6 +512,15 @@ class MascotasProfileView extends BasePanel{
 											</List.Item>
 											)}
 										/>
+										<Divider />
+											{
+												this.canEdit ?
+													<Tooltip title="Editar datos de la mascota">
+														<Button type="primary" icon={<EditOutlined />} onClick={(e) => this.redirectPage(this.constants.route_profile)}> Editar datos de contacto</Button>
+													</Tooltip>
+												:
+												null
+											}
 									</TabPane>
 								:
 								null
@@ -506,7 +536,7 @@ class MascotasProfileView extends BasePanel{
 							{
 								this.canEdit ?
 									<TabPane tab="Placa" key="5">
-										<QRCode size="300" value="Prueba kiwipeluditos con zunga" bgColor={"#555555"} fgColor={"white"} qrStyle={"dots"} />
+										<QRCode size="300" value={urlMascota} bgColor={"#555555"} fgColor={"white"} qrStyle={"dots"} />
 									</TabPane>
 								:
 								null
@@ -533,12 +563,11 @@ class MascotasProfileView extends BasePanel{
 										{
 											this.canEdit?
 												<div>
-													<Divider />
 													<Row align="middle">
-														<Col xs={10} md={14} >
-															Compartir
+														<Col xs={10} md={12} >
+															Compartir desaparición
 														</Col>
-														<Col xs={14} md={10} >
+														<Col xs={14} md={12} >
 															<Space>
 																<Tooltip title="Compartir en facebook">
 																	<Button size="large" type="primary" shape="circle" icon={<FacebookFilled />} />

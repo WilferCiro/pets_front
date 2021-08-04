@@ -64,7 +64,7 @@ class MascotaCard extends BasePanel{
 					<Meta
 						title={<div>
 								<a onClick={(e) => this.redirectPage(this.constants.route_profile_mascotas, {"pk" : mascota.pk})}>
-									{mascota.nombre} - @{mascota.identificacion}
+									{mascota.nombre} - {mascota.tipo_nombre}
 								</a>
 							</div>
 						}

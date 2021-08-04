@@ -4,7 +4,8 @@ const ConstantServer = {
 	URL_login         : '/api/login/',
 	URL_server        : 'https://kiwipeluditosapi.herokuapp.com',
 	//URL_server        : 'http://127.0.0.1:8000',
-	URL_recover       : '/api/public/recover/'
+	URL_recover       : '/api/public/recover/',
+	URL_FRONT         : 'https://kiwipeluditos.herokuapp.com'
 };
 
 export default ConstantServer;

@@ -28,15 +28,17 @@ class CatSpeak extends BasePanel{
 	render() {
 		return (
 			<div className="cat-speak">
-				<Tooltip zIndex={2} color="purple" visible={true} placement="left" title={this.text}  okText="Yes" cancelText={null}>
-					<Image
-						priority={true}
-						alt="Gato Kiwi"
-						src={this.constants.img_index_video}
-						width={260}
-						height={260}
-						layout="fixed" />
-				</Tooltip>
+				{/*<Tooltip zIndex={2} color="purple" visible={true} placement="left" title={this.text}  okText="Yes" cancelText={null}>*/}
+					<div>
+						<Image
+							priority={true}
+							alt="Gato Kiwi"
+							src={this.constants.img_index_video}
+							width={260}
+							height={260}
+							layout="fixed" />
+					</div>
+				{/*</Tooltip>*/}
 			</div>
 		);
 	}

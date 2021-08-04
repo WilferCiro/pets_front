@@ -38,7 +38,7 @@ class PerdidasView extends BasePanel{
 		}
 
 		// Variables
-		this.pageSize = 9;
+		this.pageSize = 12;
 
 		// Methods
 		this.searchMascotas        = this.searchMascotas.bind(this);
@@ -56,7 +56,7 @@ class PerdidasView extends BasePanel{
 	async searchMascotas(page) {
 		let body = {
 			"cantidad" : this.pageSize,
-			"pagina" : page,
+			"page" : page,
 			"modelo" : "perdidas",
 			"ordenar_por" : "-pk"
 		}

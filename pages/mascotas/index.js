@@ -39,7 +39,7 @@ class MascotasView extends BasePanel{
 		}
 
 		//Variables
-		this.pageSize = 9;
+		this.pageSize = 12;
 
 		// Methods
 		this.searchMascotas        = this.searchMascotas.bind(this);
@@ -57,7 +57,7 @@ class MascotasView extends BasePanel{
 
 	async searchMascotas(page) {
 		let body = {
-			"pagina" : page
+			"page" : page
 		}
 
 		let data = await BasePanel.service.apiSend({
@@ -135,7 +135,7 @@ class MascotasView extends BasePanel{
 
 		if(this.state.mascotas.length === 0) {
 			return (
-				<div>				
+				<div>
 					<AddMascotaForm
 						modal={true}
 						vertical={false}

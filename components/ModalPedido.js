@@ -116,12 +116,15 @@ class ModalPedido extends BasePanel{
 										En preparación
 									</Timeline.Item>
 									<Timeline.Item color={data["estado"] >= 2 ? "green" : "gray"}>
-										Paquete despachado
+										Paquete en fabricación
 									</Timeline.Item>
 									<Timeline.Item color={data["estado"] >= 3 ? "green" : "gray"}>
-										Paquete en camino
+										Paquete despachado
 									</Timeline.Item>
 									<Timeline.Item color={data["estado"] >= 4 ? "green" : "gray"}>
+										Paquete en camino
+									</Timeline.Item>
+									<Timeline.Item color={data["estado"] >= 5 ? "green" : "gray"}>
 										Paquete entregado
 									</Timeline.Item>
 								</Timeline>

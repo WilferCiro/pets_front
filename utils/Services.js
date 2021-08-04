@@ -119,7 +119,23 @@ class Services {
 
 		data["success"] = fetchResponse.status < 300 && fetchResponse.status >= 200 ? true : false;
 		if (!data["success"] && showError) {
-			message.error(data["message"]);
+			let mensaje = "";
+			for(let index in data["data"]){
+				mensaje += index + ": ";
+				if (typeof data["data"][index] === 'list' || typeof data["data"][index] === 'object'){
+					for (let index2 in data["data"][index]){
+						mensaje += "" + data["data"][index][index2].toString()
+					}
+				}
+				else{
+					mensaje += "" + data["data"][index].toString()
+				}
+			}
+			if(mensaje !== "") {
+				message.error(mensaje);
+			}
+
+
 		}
 		if(showLoad){
 			NProgress.done();

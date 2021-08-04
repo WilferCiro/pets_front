@@ -35,6 +35,10 @@ class Store {
 		this.getCart        = this.getCart.bind(this);
 		this.encrypt        = this.encrypt.bind(this);
 		this.decrypt        = this.decrypt.bind(this);
+
+		// Cookies
+		this.acceptCookies    = this.acceptCookies.bind(this);
+		this.getAcceptCookies = this.getAcceptCookies.bind(this);
 	}
 
 	decrypt(data) {
@@ -196,6 +200,17 @@ class Store {
 		}
 		catch (e) {}
 		this.saveData("cart", dataSave);
+	}
+
+	// Cookies
+	acceptCookies() {
+		this.saveData("cookies", true);
+	}
+	getAcceptCookies(ctx = null) {
+		if (this.getData("cookies", ctx)) {
+			return true;
+		}
+		return false;
 	}
 }
 export default new Store();

@@ -12,6 +12,7 @@ import Image from 'next/image'
 import BasePanel      from '@/containers/BasePanel';
 import TableCart      from '@/tables/Cart';
 import Label          from '@/components/Label';
+import ButtonCustom   from '@/components/ButtonCustom';
 
 // Ant components and icons
 import {
@@ -45,6 +46,7 @@ class CartView extends BasePanel{
 		this.refSubTotalLabel   = React.createRef();
 		this.refDescuentosLabel = React.createRef();
 		this.refEnvioLabel      = React.createRef();
+		this.refButtonPay       = React.createRef();
 
 		// variables
 		this.dataService = [];
@@ -67,6 +69,7 @@ class CartView extends BasePanel{
 		let data = [];
 		let subTotal = 0;
 		let descuentos = 0;
+		let valorEnvio = this.valorEnvio;
 		for (let index in dataCart){
 			for(let index2 in this.dataService) {
 				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + ""){
@@ -85,10 +88,17 @@ class CartView extends BasePanel{
 			}
 		}
 
+		if (dataCart.length === 0) {
+			valorEnvio = 0;
+			this.refButtonPay.current.setDisabled(true);
+		}
+		else{
+			this.refButtonPay.current.setDisabled(false);
+		}
 		this.refDescuentosLabel.current.setText(descuentos.formatPrice());
 		this.refSubTotalLabel.current.setText(subTotal.formatPrice());
-		this.refEnvioLabel.current.setText(this.valorEnvio.formatPrice());
-		this.refTotalLabel.current.setText((subTotal + this.valorEnvio).formatPrice());
+		this.refEnvioLabel.current.setText(valorEnvio.formatPrice());
+		this.refTotalLabel.current.setText((subTotal + valorEnvio).formatPrice());
 		this.refTable.current.setCart(data);
 	}
 
@@ -128,9 +138,7 @@ class CartView extends BasePanel{
 							<b>Descuentos: </b> <Label ref={this.refDescuentosLabel} /><br />
 							<b>Envío: </b>  <Label ref={this.refEnvioLabel} /><br />
 							<h2><b>Total: </b> <Label ref={this.refTotalLabel} /><br /></h2>
-							<Button type="primary" block onClick={this.goPay}>
-								Ir a pasarela de pago
-							</Button>
+							<ButtonCustom onClick={this.goPay} text="Ir a pasarela de pago" ref={this.refButtonPay} disabled={true} />
 						</Card>
 					</Col>
 				</Row>

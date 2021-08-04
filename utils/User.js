@@ -26,7 +26,7 @@ class User {
 	}
 
 	setMascotasPk(data){
-		Store.saveData("cantidad_mascotas", data.split(",").length);
+		Store.saveData("cantidad_mascotas", data === "" || data === " " ? 0 : data.split(",").length);
 		Store.saveData("mascotas", data);
 	}
 	getMascotasPk(ctx=null) {

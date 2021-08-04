@@ -56,7 +56,7 @@ class Login extends BasePanel{
 		if(valid) {
 			let values = this.refFormSignup.current.getValues();
 			let body = {
-				"email" : values["email"].trim(),
+				"email" : values["email"].trim().toLowerCase(),
 				"password" : values["password"]["password1"].trim(),
 				"first_name" : values["nombres"].trim(),
 				"last_name" : values["apellidos"].trim(),
@@ -68,23 +68,13 @@ class Login extends BasePanel{
 				register: "user",
 				model: "registrar",
 				isPublic: true,
-				body: body
+				body: body,
+				showError: true
 			});
-			console.log(data);
 			if(data["success"]) {
 				message.success("Se ha registrado con éxito, se ha enviado un correo de confirmación.");
 				this.refFormSignup.current.clearValues();
 				this.onRegisterLogin();
-			}
-			else{
-				let mensaje = "";
-				for(let index in data["data"]){
-					mensaje += index + ": " + data["data"][index][0]
-				}
-				if(mensaje === "") {
-					mensaje = "Hubo un error, por favor pruebelo de nuevo";
-				}
-				message.error(mensaje);
 			}
 
 		}
@@ -99,7 +89,7 @@ class Login extends BasePanel{
 		let values = this.refFormLogin.current.getValues();
 
 		let body = {
-			"username" : values["username"].trim(),
+			"username" : values["username"].trim().toLowerCase(),
 			"password" : values["password"].trim()
 		};
 		let data = await BasePanel.service.apiSend({
@@ -118,8 +108,12 @@ class Login extends BasePanel{
 			if(this.props.from_cart){
 				this.redirectPage(this.constants.route_pay);
 			}
+			if(this.props.mascota){
+				this.redirectPage(this.constants.route_profile_mascotas, {pk: this.props.mascota});
+			}
 			else{
-				this.goHome();
+				message.success("Sesión iniciada con éxito, redireccionado...");
+				this.redirectPage(this.constants.route_profile);
 			}
 		}
 		else{
@@ -146,7 +140,7 @@ class Login extends BasePanel{
 								ref={this.refFormSignup}
 								id="signup"
 							/>
-							<p>Al registrarse usted acepta nuestra <a href="">política de privacidad de datos</a></p>
+							<p>Al registrarse usted acepta nuestra <a target="blank" href={this.constants.registrar_document}>política de privacidad de datos</a></p>
 
 							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
 							<a className="login show-mobile" onClick={(e) => this.onRegisterLogin()}>Iniciar sesión</a>
@@ -209,7 +203,8 @@ class Login extends BasePanel{
 Login.getInitialProps = async ({query}) => {
 	let showSignUp = query["signup"] ? query["signup"] : false;
 	let from_cart = query["from_cart"] ? query["from_cart"] : false;
-	return {query, showSignUp, from_cart};
+	let mascota = query["mascota"] ? query["mascota"] : false;
+	return {query, showSignUp, from_cart, mascota};
 }
 
 export default Login;

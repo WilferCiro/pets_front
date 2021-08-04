@@ -11,8 +11,8 @@ class LoginForm  extends BaseFormStructure{
 
 		// Variables
 		this.fields = [
-			{type: "text", container: 1, size: 12, id: "username", placeholder: "Nombre de usuario", required: true, max: 20},
-			{type: "password", container: 2, size: 12, id: "password", placeholder: "Contraseña", required: true, max: 20}
+			{type: "text", container: 1, size: 12, id: "username", placeholder: "Correo electrónico", required: true, max: 50},
+			{type: "password", container: 2, size: 12, id: "password", placeholder: "Contraseña", required: true, max: 40}
 		];
 	}
 }

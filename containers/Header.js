@@ -53,15 +53,15 @@ class Header extends BasePanel{
 				<Affix offsetTop={0}>
 
 					<PageHeader
-						className="site-page-header-responsive affixed"
+						className={(isLogged) ? "site-page-header-responsive affixed" :  "site-page-header-responsive affixed header-noLogin"}
 						title={this.props.pageName}
 						onBack={this.openMenuMobile}
 						backIcon={<MenuOutlined className="show-tablet icon-menu-header" />}
 						extra={[
-							<Space size={"middle"} align="center" key={Math.random()}>
-								<Badge status="primary" dot>
+							<Space align="center" key={Math.random()}>
+								{/*<Badge status="primary" dot>*/}
 									<Button shape="circle" icon={<BellOutlined />} onClick={(e) => this.openNotifications()} />
-								</Badge>
+								{/*</Badge>*/}
 								<CartButton nroCart={this.props.nroCart} ref={BasePanel.refButtonCart} />
 								{(!isLogged)?
 								<a key={Math.random()} onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
@@ -87,3 +87,7 @@ Header.getInitialProps = async ({query, req, pathname}) => {
 }
 
 export default Header;
+
+/*
+
+*/
