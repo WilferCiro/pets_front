@@ -147,6 +147,17 @@ class PerdidasView extends BasePanel{
 		);
 	}
 }
+
+
+PerdidasView.getInitialProps = async ({query, req, pathname}) => {
+	query["head"] = {
+		"title" : "Mascotas desaparecidas",
+		"description" : "No hay nada más triste que perder a un ser querido, encuentra nuestros peluditos desaparecidos y ayudanos a encontrarlos.",
+		"keywords" : "kiwipeluditos, mascota, desaparecido, perdido, peludito"
+	};
+	return {query};
+}
+
 PerdidasView.getPageName = () => {
 	return "Mascotas Perdidas";
 }

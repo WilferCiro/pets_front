@@ -115,7 +115,8 @@ class PayView extends BasePanel{
 						"pk" : dataCart[index]["pk"],
 						"cantidad" : dataCart[index]["count"],
 						"nombre" : this.dataService[index2]["nombre"],
-						"precio" : this.dataService[index2]["precio"]
+						"precio" : this.dataService[index2]["precio"],
+						"adicional" : dataCart[index]["code"]
 					})
 				}
 			}
@@ -183,10 +184,10 @@ class PayView extends BasePanel{
 				isPublic: false,
 				body: body
 			});
-			console.log("---", data);
 			if(data["success"]) {
 				this.refPayModal.current.open();
 				this.user.updateNroPedidos();
+				this.finalBuy(data["data"]);
 			}
 			else{
 				message.error("Hubo un erro al realizar el pedido");
@@ -197,6 +198,7 @@ class PayView extends BasePanel{
 	render() {
 		return (
 			<div>
+				<form id="form-pay"></form>
 				<Row gutter={[40, 16]}>
 					<Col xs={24} md={16}>
 						<Steps current={this.state.page} responsive={true}>

@@ -23,7 +23,8 @@ import {
 	Divider,
 	Table,
 	Popconfirm,
-	message
+	message,
+	Alert
 } from 'antd';
 
 class CartView extends BasePanel{
@@ -72,15 +73,45 @@ class CartView extends BasePanel{
 		let valorEnvio = this.valorEnvio;
 		for (let index in dataCart){
 			for(let index2 in this.dataService) {
-				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + ""){
+				let aditional = "";
+				let cartCodeArray = [];
+
+				if(dataCart[index]["code"]){
+					let opciones = this.dataService[index2]["opciones"];
+					let newCode = "";
+
+					let cartCode = dataCart[index]["code"].split(",");
+					for (let i in cartCode){
+						if (cartCode[i]) {
+							cartCodeArray.push(cartCode[i])
+						}
+					}
+					for(let i in opciones) {
+						let item = opciones[i]["tipo"] + ":" + opciones[i]["pk"];
+						let inArray = cartCodeArray.indexOf(item);
+						if(inArray > -1) {
+							cartCodeArray.splice(inArray, 1);
+							aditional +=  "<br />" + opciones[i]["tipo_nombre"] + ": " + opciones[i]["nombre"];
+						}
+					}
+					if(cartCodeArray.length === 1) {
+						if(cartCodeArray[0].includes("mascota:")) {
+							aditional +=  "<br />" + "Mascota: " + cartCodeArray[0].split("_")[1];
+						}
+						cartCodeArray = [];
+					}
+				}
+
+				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + "" && cartCodeArray.length === 0){
 					data.push({
 						"pk" : dataCart[index]["pk"],
 						"count" : dataCart[index]["count"],
-						"descripcion" : this.dataService[index2]["nombre"],
+						"descripcion" : this.dataService[index2]["nombre"] + " " + aditional,
 						"foto" : this.dataService[index2]["foto"].length > 0 ? this.dataService[index2]["foto"][0]["foto"] : null,
 						"precio" : this.dataService[index2]["precio"],
 						"promocion" : this.dataService[index2]["promocion"],
 						"stock" : this.dataService[index2]["stock"],
+						"code" : dataCart[index]["code"]
 					});
 					subTotal += this.dataService[index2]["precio"] * dataCart[index]["count"];
 					descuentos += (this.dataService[index2]["precio_original"] - this.dataService[index2]["precio"]) * dataCart[index]["count"];
@@ -131,6 +162,11 @@ class CartView extends BasePanel{
 						<div style={{width: "100%", overflow: "auto"}}>
 							<TableCart update={this.update} ref={this.refTable} />
 						</div>
+						{/*
+							<Divider />
+							<Alert message="Puedes aplicar a un descuento de 3% redimiendo tus puntos en la pasarela de pago." type="success" showIcon />
+						*/}
+
 					</Col>
 					<Col xs={24} md={8}>
 						<Card title="Resumen de orden">

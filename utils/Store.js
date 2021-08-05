@@ -132,14 +132,14 @@ class Store {
 	}
 
 	// Cart handler
-	getNumCart(ctx = null, pk = null) {
+	getNumCart(ctx = null, pk = null, code = null) {
 		let cart = this.getCart(ctx);
 		if(cart.length === 0) {
 			return 0;
 		}
 		if(pk !== null) {
 			for(let index in cart) {
-				if(cart[index]["pk"] + "" === "" + pk) {
+				if(cart[index]["pk"] + "" === "" + pk && cart[index]["code"] + "" === "" + code) {
 					return cart[index]["count"];
 				}
 			}
@@ -162,13 +162,13 @@ class Store {
 		return dataReturn;
 	}
 
-	removeCart(pk) {
+	removeCart(pk, code) {
 		let cart = this.getCart();
 		if (cart.length === 1) {
 			cart = [];
 		}
 		for(let index in cart) {
-			if(cart[index]["pk"] === pk) {
+			if(cart[index]["pk"] === pk && cart[index]["code"] === code) {
 				cart.splice(index, 1);
 				break;
 			}
@@ -186,7 +186,7 @@ class Store {
 		let updated = false;
 		cart = typeof cart === 'string' || typeof cart === 'number' ? [] : cart;
 		for(let index in cart) {
-			if(cart[index]["pk"] + "" === obj["pk"] + "") {
+			if(cart[index]["pk"] + "" === obj["pk"] + "" && cart[index]["code"] + "" === obj["code"] + "") {
 				cart[index] = obj;
 				updated = true;
 			}

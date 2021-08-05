@@ -111,6 +111,9 @@ class Login extends BasePanel{
 			if(this.props.mascota){
 				this.redirectPage(this.constants.route_profile_mascotas, {pk: this.props.mascota});
 			}
+			if(this.props.producto){
+				this.redirectPage(this.constants.route_profile_producto, {pk: this.props.producto});
+			}
 			else{
 				message.success("Sesión iniciada con éxito, redireccionado...");
 				this.redirectPage(this.constants.route_profile);
@@ -140,7 +143,7 @@ class Login extends BasePanel{
 								ref={this.refFormSignup}
 								id="signup"
 							/>
-							<p>Al registrarse usted acepta nuestra <a target="blank" href={this.constants.registrar_document}>política de privacidad de datos</a></p>
+							<p>Al registrarse usted acepta nuestra <a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>política de privacidad de datos</a></p>
 
 							<button className="login-button" onClick={(e) => this.onSignUp()}>Registrarse</button>
 							<a className="login show-mobile" onClick={(e) => this.onRegisterLogin()}>Iniciar sesión</a>
@@ -204,7 +207,15 @@ Login.getInitialProps = async ({query}) => {
 	let showSignUp = query["signup"] ? query["signup"] : false;
 	let from_cart = query["from_cart"] ? query["from_cart"] : false;
 	let mascota = query["mascota"] ? query["mascota"] : false;
-	return {query, showSignUp, from_cart, mascota};
+	let producto = query["producto"] ? query["producto"] : false;
+
+	query["head"] = {
+		"title" : "Iniciar sesión",
+		"description" : "Regístrate y empieza esta gran aventura llamada KiwiPeluditos.",
+		"keywords" : "kiwipeluditos, mascota, iniciar sesión, registrarse, tienda, peludito"
+	};
+
+	return {query, showSignUp, from_cart, mascota, producto};
 }
 
 export default Login;

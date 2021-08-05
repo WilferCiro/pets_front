@@ -120,6 +120,11 @@ p {
 .show-desktop{
 	display: block;
 }
+.texto-page-justify{
+	p{
+		text-align: justify;
+	}
+}
 // generic
 
 // _app.js
@@ -937,3 +942,7 @@ footer{
 	}
 }
 // ImageSlider
+
+#form-pay{
+	display: none !important;
+}

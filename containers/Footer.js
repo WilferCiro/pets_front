@@ -12,7 +12,8 @@ import BasePanel      from '@/containers/BasePanel';
 import {
 	Divider,
 	notification,
-	Button
+	Button,
+	Space
 } from 'antd';
 import {
 	FacebookFilled,
@@ -81,7 +82,7 @@ class Footer extends BasePanel{
 		return (
 			<footer>
 				<div className="cookies cookies-hide" ref={this.refCookiesModal}>
-					<p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario a través de su navegación. Si continúas navegando aceptas su uso. <a href={this.constants.cookies_document} target={"blank"}>Política de cookies</a></p>
+					<p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario a través de su navegación. Si continúas navegando aceptas su uso. <a onClick={(e) => this.redirectPage(this.constants.route_cookies)}>Política de cookies</a></p>
 					<Button type="primary" onClick={this.acceptCookies} block>Entendido</Button>
 				</div>
 
@@ -100,6 +101,11 @@ class Footer extends BasePanel{
 						<a target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
 					</div>
 				</div>
+				<Divider />
+				<Space direction="vertical">
+					<a onClick={(e) => this.redirectPage(this.constants.route_cookies)}>Cookies en KiwiPeluditos</a>
+					<a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>Aviso Legal y Política de Privacidad</a>
+				</Space>
 			</footer>
 		);
 	}

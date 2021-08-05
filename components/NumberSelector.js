@@ -11,7 +11,8 @@ import BasePanel      from '@/containers/BasePanel';
 // Ant components and icons
 import {
 	Input,
-	Button
+	Button,
+	message
 } from 'antd';
 import {
 	MinusOutlined,
@@ -25,20 +26,31 @@ class NumberSelector extends BasePanel{
 		super(props);
 
 		// props
-		this.max             = this.props.max || 100;
 		this.min             = this.props.min || 0;
 		this.defaultValue    = this.props.defaultValue || 0;
 		this.onUpdate        = this.props.onUpdate;
 		this.parameterUpdate = this.props.parameterUpdate;
+		this.showMax         = this.props.showMax || false;
 		// States
 		this.state = {
-			value : this.defaultValue
+			value : this.defaultValue,
+			disabled: this.props.disabled || false,
+			max: this.props.max || 100
 		}
 
 		// Methods
 		this.minus        = this.minus.bind(this);
 		this.plus         = this.plus.bind(this);
 		this.buttonClick  = this.buttonClick.bind(this);
+		this.setValue     = this.setValue.bind(this);
+	}
+
+	setValue(value, disabled, max = null) {
+		this.setState({
+			value: value,
+			disabled: disabled,
+			max: max || 100
+		})
 	}
 
 	minus() {
@@ -56,7 +68,7 @@ class NumberSelector extends BasePanel{
 
 	plus() {
 		let newValue = this.state.value + 1;
-		if(newValue <= this.max){
+		if(newValue <= this.state.max){
 			this.setState({
 				value: newValue
 			});
@@ -64,6 +76,8 @@ class NumberSelector extends BasePanel{
 			if(this.onUpdate) {
 				this.onUpdate(newValue, this.parameterUpdate)
 			}
+		}else{
+			message.error("Solo hay " + this.state.max + " unidades de este producto");
 		}
 	}
 
@@ -75,15 +89,31 @@ class NumberSelector extends BasePanel{
 
 		if(this.state.value === 0) {
 			return (
-				<Button block type="primary" onClick={this.buttonClick} icon={<ShoppingCartOutlined />}>Agregar al carrito</Button>
+				<div>
+					<Button disabled={this.state.disabled} block type="primary" onClick={this.buttonClick} icon={<ShoppingCartOutlined />}>Agregar al carrito</Button>
+					{
+						this.showMax ?
+						<p>{this.state.max} Unidades</p>
+						:
+						null
+					}
+				</div>
 			)
 		}
 
 		return (
-			<div className="number-selector">
-				<Button onClick={this.minus} size="small" type="link" shape="circle" icon={this.state.value === 1 && this.min < 1 ? <DeleteFilled /> : <MinusOutlined />} />
-				<Input size="small" value={this.state.value} min={this.min} max={this.max} style={{border: "none", width: "100%", textAlign: "center"}} />
-				<Button onClick={this.plus} size="small" type="link" shape="circle" icon={<PlusOutlined />} />
+			<div>
+				<div className="number-selector">
+					<Button disabled={this.state.disabled} onClick={this.minus} size="small" type="link" shape="circle" icon={this.state.value === 1 && this.min < 1 ? <DeleteFilled /> : <MinusOutlined />} />
+					<Input disabled={this.state.disabled} size="small" value={this.state.value} min={this.min} max={this.state.max} style={{border: "none", width: "100%", textAlign: "center"}} />
+					<Button disabled={this.state.disabled} onClick={this.plus} size="small" type="link" shape="circle" icon={<PlusOutlined />} />
+				</div>
+				{
+					this.showMax ?
+					<p>{this.state.max} Unidades</p>
+					:
+					null
+				}
 			</div>
 		);
 	}

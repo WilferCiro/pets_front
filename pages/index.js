@@ -28,10 +28,22 @@ class Home extends BasePanel{
 		// References
 		this.refVideo = React.createRef();
 
+		// Methods
+		this.iniciaYa = this.iniciaYa.bind(this);
+
 	}
 
 	componentDidMount() {
 		this.setBreadCrumb([]);
+	}
+
+	iniciaYa() {
+		if(this.props.isLogged) {
+			this.redirectPage(this.constants.route_mascotas);
+		}
+		else{
+			this.redirectPage(this.constants.route_login);
+		}
 	}
 
 	render() {
@@ -49,7 +61,7 @@ class Home extends BasePanel{
 						<div>
 							<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
 							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
-							<a className="inicia-ya">Inicia ya </a>
+							<a className="inicia-ya" onClick={this.iniciaYa}>Inicia ya </a>
 						</div>
 					</div>
 					<VideoHome ref={this.refVideo}/>
@@ -124,8 +136,13 @@ class Home extends BasePanel{
 }
 
 Home.getInitialProps = async ({query, req, pathname}) => {
-	console.log(pathname);
-	return {query};
+	query["head"] = {
+		"title" : "Inicio",
+		"description" : "Bienvenido a esta gran aventura llamada KiwiPeluditos, explora y descubre los productos y servicios que tenemos para ti.",
+		"keywords" : "kiwipeluditos, mascota, mensaje, tienda, peludito, inicio"
+	};
+	let isLogged = BasePanel.store.isLogged({query, req, pathname});
+	return {query, isLogged};
 }
 Home.getPageName = () => {
 	return "Inicio";

@@ -68,7 +68,46 @@ BlogProfileView.getInitialProps = async ({query, req, pathname}) => {
 	]);
 	if(_blogs["success"]) {
 		blog = _blogs["data"];
+
+
+		query["head"] = {
+			"title" : blog["titulo"],
+			"image" : blog["portada"],
+			"description" : blog["descripcion"],
+			"keywords" : blog["palabras_clave"]
+		};
+
+		query["structuredData"] = {
+			"@context": "https://schema.org",
+			"@type": "NewsArticle",
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": Constant.getUrlFront() + "" + Constant.route_blog
+			},
+			"headline": blog["titulo"],
+			"image": [
+				blog["portada"]
+			],
+			"datePublished": blog["fecha_modificacion"],
+			"dateModified": blog["fecha_modificacion"],
+			"author": {
+				"@type": "Person",
+				"name": blog["usuario"]
+			},
+			"publisher": {
+				"@type": "Organization",
+				"name": "KiwiPeluditos",
+				"logo": {
+					"@type": "ImageObject",
+					"url": "/images/favicon.png"
+				}
+			}
+		}
+
 		blog["fecha_modificacion"] = blog["fecha_modificacion"].formatDateTime();
+
+		console.log(query);
+
 	}
 	return {query, blog};
 }

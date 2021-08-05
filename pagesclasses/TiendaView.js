@@ -325,6 +325,13 @@ TiendaView.getInitialProps = async ({query}) => {
 		paginator = _productos["paginator"];
 		filters   = _productos["aditional"];
 	}
+
+	query["head"] = {
+		"title" : "Tienda",
+		"description" : "Bienvenido a la tienda oficial de kiwipeluditos, donde podrás encontrar todos los productos que tu peludito necesita.",
+		"keywords" : "Tienda kiwipeluditos, mascota, peludito, collar, camiseta, mugs"
+	};
+
 	return {query, productos, paginator, filters};
 }
 TiendaView.getPageName = () => {

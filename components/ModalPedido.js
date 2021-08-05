@@ -113,10 +113,20 @@ class ModalPedido extends BasePanel{
 							<Card style={{marginTop: "10px"}} title="Estado del envío">
 								<Timeline>
 									<Timeline.Item color={data["estado"] >= 1 ? "green" : "gray"}>
-										En preparación
+										En espera de aprobación de pago
 									</Timeline.Item>
+
+									{
+										data["cancelado"] === true ? 
+											<Timeline.Item color={"red"}>
+												Pago rechazado
+											</Timeline.Item>
+										:
+										null
+									}
+
 									<Timeline.Item color={data["estado"] >= 2 ? "green" : "gray"}>
-										Paquete en fabricación
+										En preparación / fabricación
 									</Timeline.Item>
 									<Timeline.Item color={data["estado"] >= 3 ? "green" : "gray"}>
 										Paquete despachado

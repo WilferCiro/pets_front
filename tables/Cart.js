@@ -52,16 +52,19 @@ class TableCart extends BasePanel{
 				dataIndex: 'foto',
 				render: (value, record) => (
 					(record["promocion"]) ?
-						<Badge.Ribbon color="green" text={record["promocion"] + "% dcto"}>
-							<Image width="200" height="200" layout="responsive" src={value && value.length >= 0 ? value["foto"] : this.constants.img_producto} alt="foto producto" />
+						<Badge.Ribbon color="green" text={record["promocion"] + "%"}>
+							<Image width="200" height="200" layout="responsive" src={value ? value : this.constants.img_producto} alt="foto producto" />
 						</Badge.Ribbon>
 					:
-					<Image width="200" height="200" layout="responsive" src={value && value.length >= 0 ? value["foto"] : this.constants.img_producto} alt="foto producto" />
+					<Image width="200" height="200" layout="responsive" src={value ? value : this.constants.img_producto} alt="foto producto" />
 				),
 			},
 			{
 				title: 'Descripción',
-				dataIndex: 'descripcion'
+				dataIndex: 'descripcion',
+				render: (value, record) => (
+					<span  dangerouslySetInnerHTML={{__html: value }} />
+				),
 			},
 			{
 				title: 'Precio',
@@ -86,13 +89,13 @@ class TableCart extends BasePanel{
 			},
 			{
 				title: '',
-				dataIndex: 'pk',
+				dataIndex: 'code',
 				render: (pk, record) => (
 					<Popconfirm
 						title="¿Está seguro de eliminar este producto?"
 						okText="Si, eliminar"
 						cancelText="No"
-						onConfirm={(e) => this.onDeleteCart(pk)}
+						onConfirm={(e) => this.onDeleteCart(record["pk"], record["code"])}
 						>
 							<Button type="danger" icon={<DeleteOutlined />}></Button>
 					</Popconfirm>
@@ -100,24 +103,6 @@ class TableCart extends BasePanel{
 
 			},
 		];
-
-		if(this.canEdit) {
-			this.columnsVacunas.push({
-				title: 'Acciones',
-				render: (text, record) => (
-					<Space size="middle">
-						<Popconfirm
-							title="¿Está seguro que desea eliminar esta vacuna?"
-							onConfirm={(e) => this.onDeleteVacuna(record["pk"])}
-							okText="Si"
-							cancelText="No"
-							>
-							<a>Eliminar</a>
-						</Popconfirm>
-					</Space>
-				),
-			});
-		}
 
 	}
 
@@ -138,8 +123,8 @@ class TableCart extends BasePanel{
 		})
 	}
 
-	onDeleteCart(pk) {
-		this.updateCart({"pk" : pk, "count" : 0});
+	onDeleteCart(pk, code) {
+		this.updateCart({"pk" : pk, "count" : 0, "code" : code});
 		if(this.update) {
 			this.update();
 		}
@@ -163,7 +148,7 @@ class TableCart extends BasePanel{
 		}
 		return (
 			<div>
-				<Table pagination={false} dataSource={this.state.cart} columns={this.columnsCart} size="small" rowKey="pk" />
+				<Table pagination={false} dataSource={this.state.cart} columns={this.columnsCart} size="small" rowKey="code" />
 			</div>
 		);
 	}

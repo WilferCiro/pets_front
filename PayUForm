@@ -1,0 +1,19 @@
+<form method="post" action={this.constants.getPayuUrl()}>
+	<input name="merchantId"      type="hidden"  value={data["merchantId"]} > {/* 945015 */}
+	<input name="accountId"       type="hidden"  value={data["accountId"]} >  {/* 945015 */}
+	<input name="description"     type="hidden"  value={data["description"]} >  {/* Venta de kiwipeluditos */}
+	<input name="referenceCode"   type="hidden"  value={data["referenceCode"]} > {/* KiwiPeluditos-000010000*/}
+	<input name="amount"          type="hidden"  value={data["amount"]} > {/* total de la venta */}
+	<input name="tax"             type="hidden"  value={data["tax"]} > {/* Enviar 0 */}
+	<input name="taxReturnBase"   type="hidden"  value={data["taxReturnBase"]} > {/* Enviar 0 */}
+	<input name="currency"        type="hidden"  value={data["currency"]} > {/* Currency -> COP */}
+	<input name="signature"       type="hidden"  value={data["signature"]} > {/* ApiKey~merchantId~referenceCode~amount~currency */}
+	<input name="test"            type="hidden"  value={"0"} > {/*  */}
+	<input name="buyerEmail"      type="hidden"  value={data["buyerEmail"]} > {/* Email de comprador */}
+	<input name="shippingAddress" type="hidden"  value={data["shippingAddress"]} > {/* Ciudadela mz 20 casa 28 */}
+	<input name="shippingCity"    type="hidden"  value={data["shippingCity"]} > {/* BOGOTA */}
+	<input name="shippingCountry" type="hidden"  value={data["shippingCountry"]} > {/* CO */}
+	{/*<input name="responseUrl"     type="hidden"  value={data["responseUrl"]} >
+	<input name="confirmationUrl"    type="hidden"  value={data["confirmationUrl"]} >*/}
+	<input name="Submit"        type="submit"  value="Enviar" >
+</form>

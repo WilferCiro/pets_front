@@ -14,6 +14,19 @@ import ProductBase    from '@/components/ProductBase';
 import ProductCard    from '@/components/ProductCard';
 import NumberSelector from '@/components/NumberSelector';
 import ImageSlider    from '@/components/ImageSlider';
+import Constant       from '@/components/Constant';
+
+// React-shared
+import {
+	FacebookShareButton,
+	FacebookIcon,
+	TwitterShareButton,
+	TwitterIcon,
+	WhatsappShareButton,
+	WhatsappIcon,
+	TelegramShareButton,
+	TelegramIcon
+} from "react-share";
 
 // Ant components and icons
 import {
@@ -31,15 +44,12 @@ import {
 	Result,
 	Alert,
 	Tooltip,
-	message
+	message,
+	Radio
 } from 'antd';
 import {
 	MinusOutlined,
 	PlusOutlined,
-	FacebookFilled,
-	InstagramFilled,
-	TwitterSquareFilled,
-	WhatsAppOutlined,
 	FileSearchOutlined
 } from '@ant-design/icons';
 
@@ -52,13 +62,26 @@ class PreviewView extends ProductBase{
 
 		// Props
 		this.producto = this.props.producto;
+		let opciones = this.producto["opciones"];
+
+		this.options = {}
+
+		for (let index in opciones) {
+			this.options[opciones[index]["tipo"]] = null;
+		}
+
+		this.stock = this.producto.stock;
 
 		// States
 
 		// Methods
-		this.localUpdateCart = this.localUpdateCart.bind(this);
+		this.localUpdateCart  = this.localUpdateCart.bind(this);
+		this.changeOption     = this.changeOption.bind(this);
+		this.isEnabledAddCart = this.isEnabledAddCart.bind(this);
+		this.getCode          = this.getCode.bind(this);
 
 		// References
+		this.refNroSelector = React.createRef();
 	}
 
 	componentDidMount() {
@@ -84,16 +107,74 @@ class PreviewView extends ProductBase{
 	}
 
 	localUpdateCart(nro) {
-		if(parseInt(this.producto.stock) >= parseInt(nro)) {
+		if(parseInt(this.stock) >= parseInt(nro)) {
 			let data = {
 				count: nro,
-				pk: this.props.productPK
+				pk: this.props.productPK,
+				code: this.getCode()
 			}
 			this.updateCart(data);
 		}
 		else{
-			message.error("Solo hay " + this.producto.stock + " unidades de este producto");
+			message.error("Solo hay " + this.stock + " unidades de este producto");
 		}
+	}
+
+	isEnabledAddCart() {
+		let valid = true;
+		for (let index in this.options) {
+			if (this.options[index] == null) {
+				valid = false;
+			}
+		}
+		return valid;
+	}
+
+	getCode() {
+		let code = [];
+		for (let index in this.options) {
+			if (this.options[index] != null) {
+				code.push(index + ":" + this.options[index].split("-")[0]);
+			}
+		}
+		return code.join(",");
+	}
+
+
+	changeOption(value, type) {
+		//console.log(value.target.value, type);
+		this.options[type] = value.target.value;
+
+		let valid = true;
+		let stock = 100000;
+
+		let code = [];
+		for (let index in this.options) {
+			if (this.options[index] == null) {
+				valid = false;
+			}
+			else{
+				code.push(index + ":" + this.options[index].split("-")[0]);
+				stock = parseInt(this.options[index].split("-")[1]) < stock ? parseInt(this.options[index].split("-")[1]) : stock;
+			}
+		}
+		code = code.join(",");
+		//console.log(this.options);
+		if(this.refNroSelector.current) {
+			let nroCart = BasePanel.store.getNumCart(null, this.producto.pk, code);
+
+			this.stock = stock;
+
+			if (valid) {
+				this.refNroSelector.current.setValue(nroCart, false, stock)
+			}
+			else{
+				this.refNroSelector.current.setValue(0, true, stock)
+			}
+		}
+
+		//console.log(valid, code.join(","));
+
 	}
 
 	render() {
@@ -114,10 +195,31 @@ class PreviewView extends ProductBase{
 				</Result>
 			)
 		}
+		let productURL = this.constants.getUrlFront() + this.constants.route_profile_producto.replace("[pk]", producto["pk"] + "-" + producto["nombre"].formatURL());
+
+		let opciones = producto["opciones"];
+		let radioOptions = {};
+		for(let index in opciones) {
+			if (radioOptions[opciones[index]["tipo"]] === undefined) {
+				radioOptions[opciones[index]["tipo"]] = {"nombre" : opciones[index]["tipo_nombre"], "options" : []};
+			}
+			if(opciones[index]["tipo"] === "mascota"){
+				radioOptions[opciones[index]["tipo"]]["options"].push({
+					label: opciones[index]["nombre"],
+					value: opciones[index]["pk"] + "_" + opciones[index]["nombre"] + "-" + opciones[index]["stock"],
+				})
+			}
+			else{
+				radioOptions[opciones[index]["tipo"]]["options"].push({
+					label: opciones[index]["nombre"],
+					value: opciones[index]["pk"] + "-" + opciones[index]["stock"],
+				})
+			}
+		}
 
 		return (
 			<div>
-				<Row gutter={[40, 1]} align="middle">
+				<Row gutter={[40, 1]} align="top">
 					<Col xs={24} md={11}>
 						{
 							(producto.promocion) ?
@@ -146,40 +248,83 @@ class PreviewView extends ProductBase{
 						<br />
 						<p>{producto.descripcion}</p>
 
-						<div className="preview-number-selector">
+						<Space direction="vertical">
+							{
+								Object.keys(radioOptions).map((key, index) => {
+									return <Row gutter={[3, 1]} align="middle" key={Math.random()}>
+										<Col xs={24} md={5}>
+											<b>{radioOptions[key]["nombre"]}</b>
+										</Col>
+										<Col  xs={24} md={19}>
+											<Radio.Group
+												onChange={(e) => this.changeOption(e, key)}
+												options={radioOptions[key]["options"]}
+												optionType="button"
+											/>
+										</Col>
+									</Row>
+								})
+							}
 							{
 								producto.stock === 0 ?
-								<Alert message="Producto agotado" type="info" />
+								<Alert message="Producto agotado" type="error" />
 								:
-								<NumberSelector onUpdate={this.localUpdateCart} max={producto.stock} defaultValue={this.props.nroCart || 0} />
+
+								((this.props.isLogged && producto.seleccion_mascota) || !producto.seleccion_mascota) ?
+									<div className="preview-number-selector">
+										<NumberSelector showMax={false} disabled={!this.isEnabledAddCart()} ref={this.refNroSelector} onUpdate={this.localUpdateCart} max={this.stock} defaultValue={this.props.nroCart || 0} />
+									</div>
+								:
+								<div>
+									<Alert
+										message="Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, por ello es necesario iniciar sesión"
+										type="error"
+										action={
+											<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_login, {"producto" : producto.pk})}>Iniciar sesión</Button>
+										} />
+
+								</div>
 							}
-						</div>
-						<Divider />
-						<Space align="center" size="large">
-							<p>SKU: </p>
-							<p>{producto.sku}</p>
-						</Space><br />
-						<Space align="center" size="large">
-							<p>Código: </p>
-							<p>{producto.codigo}</p>
 						</Space>
+
+
 						<Divider />
 						<Row>
-							<Col span={16}>
+							<Col xs={10} md={12} >
 								Compartir
 							</Col>
-							<Col span={8}>
+							<Col xs={14} md={12} >
 								<Tooltip title="Compartir en facebook">
-									<Button type="primary" shape="circle" icon={<FacebookFilled />} />
+									<FacebookShareButton
+										url={productURL}
+										quote={"Mira este espectacular producto que encontré en el mundo de Kiwipeluditos."}
+										>
+										<FacebookIcon size={32} round />
+									</FacebookShareButton>
 								</Tooltip>
-								<Tooltip title="Compartir en instagram">
-									<Button type="primary" shape="circle" icon={<InstagramFilled />} />
+								<Tooltip title="Compartir en telegram">
+									<TelegramShareButton
+										url={productURL}
+										title={"Mira este espectacular producto que encontré en el mundo de Kiwipeluditos."}
+										>
+										<TelegramIcon size={32} round />
+									</TelegramShareButton>
 								</Tooltip>
 								<Tooltip title="Compartir en twitter">
-									<Button type="primary" shape="circle" icon={<TwitterSquareFilled />} />
+									<TwitterShareButton
+										url={productURL}
+										title={"Mira este espectacular producto que encontré en el mundo de Kiwipeluditos."}
+										>
+										<TwitterIcon size={32} round />
+									</TwitterShareButton>
 								</Tooltip>
 								<Tooltip title="Compartir en whatsapp">
-									<Button type="primary" shape="circle" icon={<WhatsAppOutlined />} />
+									<WhatsappShareButton
+										url={productURL}
+										title={"Mira este espectacular producto que encontré en el mundo de Kiwipeluditos."}
+										>
+										<WhatsappIcon size={32} round />
+									</WhatsappShareButton>
 								</Tooltip>
 							</Col>
 						</Row>
@@ -202,6 +347,23 @@ class PreviewView extends ProductBase{
 							:
 							null
 						}
+
+						<Row gutter={[3, 1]} align="middle" key={Math.random()}>
+							<Col xs={24} md={5}>
+								<b>SKU</b>
+							</Col>
+							<Col  xs={24} md={19}>
+								{producto.sku}
+							</Col>
+						</Row>
+						<Row gutter={[3, 1]} align="middle" key={Math.random()}>
+							<Col xs={24} md={5}>
+								<b>Código</b>
+							</Col>
+							<Col  xs={24} md={19}>
+								{producto.codigo}
+							</Col>
+						</Row>
 					</TabPane>
 
 					{
@@ -247,6 +409,7 @@ class PreviewView extends ProductBase{
 }
 PreviewView.getInitialProps = async ({query, req, pathname}) => {
 	let productPK = query.pk;
+	let isLogged = BasePanel.store.isLogged({query, req, pathname});
 	if(productPK && productPK.split("-").length > 0){
 		productPK = productPK.split("-")[0];
 	}
@@ -264,8 +427,60 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 	]);
 	if(_productos["success"]) {
 		producto = _productos["data"];
+
+		if (producto["seleccion_mascota"] === true && isLogged) {
+			let data = await BasePanel.service.apiSend({
+				method: "GET",
+				register: "mascota",
+				model: "card",
+				isPublic: false,
+				body: {},
+				showLoad: false,
+				ctx: {query, req, pathname}
+			});
+			if(data["success"]) {
+				let mascotas = data["data"];
+				for (let index in mascotas){
+					let name = mascotas[index]["nombre"] + "";
+					producto["opciones"].push({
+						"pk" : mascotas[index]["pk"],
+						"tipo" : "mascota",
+						"tipo_nombre" : "Mascota",
+						"nombre" : (name).replace(/-/g, ' ').replace(/_/g, ' '),
+						"stock" : producto["stock"]
+					});
+				}
+			}
+		}
+
+		query["head"] = {
+			"title" : producto["nombre"],
+			"description" : producto["descripcion"],
+			"image" : producto["fotos"].length > 0 ? producto["fotos"][0]["foto"] : null,
+			"keywords" : producto["palabras_clave"] || "kiwipeluditos, producto, " + producto["nombre"]
+		};
+		let structuredData = {
+			"@context":"https://schema.org/",
+			"@type":"Product",
+			"name": producto["nombre"],
+			"brand": {
+				"name" : producto["marca"],
+				"url" : Constant.getUrlFront() + Constant.route_tienda + "?marcas=" + producto["marca_pk"]
+			},
+			"image": producto["fotos"].length > 0 ? producto["fotos"][0]["foto"] : null,
+			"description": producto["descripcion"],
+			"sku" : producto["sku"],
+			"offers": {
+				"@type": "Offer",
+				"priceCurrency": "COP",
+				"price": producto["precio"],
+				"availability": "http://schema.org/InStock"
+			}
+		};
+
+		query["structuredData"] = structuredData;
 	}
-	return {query, nroCart, productPK, producto};
+	return {query, nroCart, productPK, producto, isLogged};
 }
 PreviewView.getPageName = () => {
 	return "Producto";

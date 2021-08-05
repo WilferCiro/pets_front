@@ -147,6 +147,11 @@ class BlogView extends BasePanel{
 }
 
 BlogView.getInitialProps = async ({query}) => {
+	query["head"] = {
+		"title" : "Blog",
+		"description" : "Bienvenido a nuestro blog, descubre información sobre tu peludito.",
+		"keywords" : "kiwipeluditos, mascota, tienda, peludito, blog, información"
+	};
 	return {query};
 }
 BlogView.getPageName = () => {

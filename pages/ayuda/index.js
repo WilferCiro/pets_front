@@ -112,7 +112,11 @@ class AyudaView extends BasePanel{
 }
 
 AyudaView.getInitialProps = async ({query}) => {
-
+	query["head"] = {
+		"title" : "Ayuda",
+		"description" : "¿Tienes dudas, inquietudes o sugerencias? envíanos un mensaje y ayudanos a crecer.",
+		"keywords" : "kiwipeluditos, mascota, mensaje, ayuda, tienda, peludito"
+	};
 	return {query};
 }
 

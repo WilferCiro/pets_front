@@ -19,6 +19,18 @@ import BasePanel                 from '@/containers/BasePanel';
 import { QRCode } from 'react-qrcode-logo';
 import moment from 'moment';
 
+// React-shared
+import {
+	FacebookShareButton,
+	FacebookIcon,
+	TwitterShareButton,
+	TwitterIcon,
+	WhatsappShareButton,
+	WhatsappIcon,
+	TelegramShareButton,
+	TelegramIcon
+} from "react-share";
+
 // Ant components and icons
 import {
 	Popconfirm,
@@ -40,11 +52,7 @@ import {
 	RightOutlined,
 	LeftOutlined,
 	EditOutlined,
-	AlertOutlined,
-	FacebookFilled,
-	InstagramFilled,
-	TwitterSquareFilled,
-	WhatsAppOutlined
+	AlertOutlined
 } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -56,7 +64,6 @@ class MascotasProfileView extends BasePanel{
 		// Props
 		this.mascota_pk     = this.props.mascota_pk;
 		this.isLogged       = this.props.isLogged;
-		this.listMascotasPK = this.props.listMascotasPK;
 
 		// States
 		this.state = {
@@ -345,6 +352,8 @@ class MascotasProfileView extends BasePanel{
 		}
 
 		let urlMascota = this.constants.getUrlFront() + this.constants.route_profile_mascotas.replace("[pk]", mascota["pk"] + "?fromQR=true")
+		let mascotaURLShare = this.constants.getUrlFront() + this.constants.route_profile_mascotas.replace("[pk]", mascota["pk"] + "-" + mascota["nombre"].formatURL());
+		let mascotaShareText = "Mi mascota " + mascota["nombre"] + " está desaparecida, aquí te comparto su perfil en KiwiPeluditos";
 		return (
 			<div>
 				{
@@ -570,16 +579,36 @@ class MascotasProfileView extends BasePanel{
 														<Col xs={14} md={12} >
 															<Space>
 																<Tooltip title="Compartir en facebook">
-																	<Button size="large" type="primary" shape="circle" icon={<FacebookFilled />} />
+																	<FacebookShareButton
+																		url={mascotaURLShare}
+																		quote={mascotaShareText}
+																		>
+																		<FacebookIcon size={32} round />
+																	</FacebookShareButton>
 																</Tooltip>
-																<Tooltip title="Compartir en instagram">
-																	<Button size="large" type="primary" shape="circle" icon={<InstagramFilled />} />
+																<Tooltip title="Compartir en telegram">
+																	<TelegramShareButton
+																		url={mascotaURLShare}
+																		title={mascotaShareText}
+																		>
+																		<TelegramIcon size={32} round />
+																	</TelegramShareButton>
 																</Tooltip>
 																<Tooltip title="Compartir en twitter">
-																	<Button size="large" type="primary" shape="circle" icon={<TwitterSquareFilled />} />
+																	<TwitterShareButton
+																		url={mascotaURLShare}
+																		title={mascotaShareText}
+																		>
+																		<TwitterIcon size={32} round />
+																	</TwitterShareButton>
 																</Tooltip>
 																<Tooltip title="Compartir en whatsapp">
-																	<Button size="large" type="primary" shape="circle" icon={<WhatsAppOutlined />} />
+																	<WhatsappShareButton
+																		url={mascotaURLShare}
+																		title={mascotaShareText}
+																		>
+																		<WhatsappIcon size={32} round />
+																	</WhatsappShareButton>
 																</Tooltip>
 															</Space>
 														</Col>
@@ -606,9 +635,7 @@ class MascotasProfileView extends BasePanel{
 MascotasProfileView.getInitialProps = async ({query, ctx, req, pathname}) => {
 	let mascota_pk = query.pk;
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
-	let mascotas = BasePanel.store.readValue("mascotas", {query, req, pathname});
-	let listMascotasPK = mascotas.split(",");
-	return {query, mascota_pk, isLogged, listMascotasPK};
+	return {query, mascota_pk, isLogged};
 }
 MascotasProfileView.getPageName = () => {
 	return "Perfil de mascota";

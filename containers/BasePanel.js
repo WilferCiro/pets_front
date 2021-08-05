@@ -45,12 +45,14 @@ export default class BasePanel extends Component {
 		this.updateCart    = this.updateCart.bind(this);
 		this.getDataCart   = this.getDataCart.bind(this);
 
+		this.finalBuy      = this.finalBuy.bind(this);
+
 		BasePanel.service.setLogout(this.logout);
 	}
 
 	updateCart(obj) {
 		if (obj["count"] === 0) {
-			this.store.removeCart(obj["pk"]);
+			this.store.removeCart(obj["pk"], obj["code"]);
 		}
 		else{
 			this.store.updateCart(obj);
@@ -102,6 +104,29 @@ export default class BasePanel extends Component {
 
 	goHome() {
 		this.redirectPage(this.constants.route_index);
+	}
+
+
+	finalBuy(data) {
+
+		let form = document.getElementById("form-pay");
+		form.setAttribute("method", "post");
+		form.setAttribute("action", this.constants.getPayuUrl());
+		for (let key in data) {
+			let input = document.createElement("input");
+			input.setAttribute("id", key);
+			input.setAttribute("type", "hidden");
+			input.setAttribute("name", key);
+			input.setAttribute("value", data[key]);
+			form.appendChild(input);
+		}
+		let button = document.createElement("input");
+		button.setAttribute("type", "submit");
+		button.setAttribute("value", "Enviar");
+		form.appendChild(button);
+		//ShoppingCart.deleteCart();
+		button.click();
+
 	}
 
 }

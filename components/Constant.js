@@ -8,13 +8,13 @@ moment.locale('es');
 class Constant{
 	static instance = null;
 	// general
-	static URL_webpage = "https://kiwipyme.herokuapp.com";
 	static URL_public = ConstantServer["URL_public"];
 	static URL_private = ConstantServer["URL_private"];
 	static URL_login = ConstantServer["URL_login"];
 	static URL_recover = ConstantServer["URL_recover"];
 	static Name_webpage = "Kiwi Peluditos";
 	static URL_FRONT    = ConstantServer["URL_FRONT"];
+	static URL_PAYU     = ConstantServer["URL_PAYU"];
 
 	// Dev
 	//static URL_server = "http://127.0.0.1:8000";
@@ -52,11 +52,13 @@ class Constant{
 
 		this.route_ayuda               = '/ayuda';
 
-		this.route_perdidas            = '/perdidas';
+		this.route_perdidas            = '/desaparecidas';
 		this.route_recover             = '/recover'
 		this.route_profile             = '/profile'
 		this.route_cart                = '/cart'
 		this.route_pay                 = '/pay'
+		this.route_cookies             = '/cookies'
+		this.route_condiciones         = '/condiciones'
 		this.route_profile_producto    = '/producto/[pk]'
 
 
@@ -79,7 +81,6 @@ class Constant{
 
 
 		/// Documentos legales
-		this.cookies_document     = "https://ant.design/components/button/#API";
 		this.registrar_document   = "https://ant.design/components/button/#API";
 
 	}
@@ -114,6 +115,10 @@ class Constant{
 
 	get_key() {
 		return "123";
+	}
+
+	getPayuUrl() {
+		return Constant.URL_PAYU;
 	}
 
 

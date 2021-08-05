@@ -109,11 +109,11 @@ class LocalDashboard extends App{
 
 	render(){
 		let {Component, pageProps, leftPanelProps, headerProps} = this.props;
-		let urlPage = Constant.URL_webpage;
+		let urlPage = Constant.getUrlFront();
 		let nombrePage = Constant.getWebName();
-		let defaultDescription = nombrePage + " Dashboard.";
-		let imageBlog = urlPage + "/images/index/pic01.jpg";
-		let lemaPage = "Inicio";
+		let defaultDescription = "Bienvenidos a esta gran aventura llamada KiwiPeluditos";
+		let imageDefault = "/images/favicon.png";
+		let lemaPage = "kiwipeluditos";
 
 		const structuredData = {
 			"@context": "https://schema.org",
@@ -164,7 +164,6 @@ class LocalDashboard extends App{
 			<div className="site">
 				<Head>
 
-					<title>{nombrePage + " :: " + lemaPage}</title>
 
 					{/* Site data */}
 					<meta charSet="UTF-8" />
@@ -243,20 +242,26 @@ class LocalDashboard extends App{
 							</React.Fragment>
 					}
 					{
-						(pageProps.query !== undefined && pageProps.query.head !== undefined && pageProps.query.head.image !== undefined) ?
+						(pageProps.query !== undefined && pageProps.query.head !== undefined && pageProps.query.head.image) ?
 							<React.Fragment>
 								<meta property="twitter:image:src" content={pageProps.query.head.image} />
 								<meta property="og:image" content={pageProps.query.head.image} />
 							</React.Fragment>
 						:
 							<React.Fragment>
-								<meta property="twitter:image:src" content={imageBlog}/>
-								<meta property="og:image" content={imageBlog}/>
+								<meta property="twitter:image:src" content={imageDefault}/>
+								<meta property="og:image" content={imageDefault}/>
 							</React.Fragment>
 					}
 
 					{/* Social Media data */}
 					<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+					{
+						(pageProps.query && pageProps.query.structuredData) ?
+							<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageProps.query.structuredData) }} />
+						:
+						null
+					}
 
 				</Head>
 
