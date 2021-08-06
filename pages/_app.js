@@ -13,6 +13,7 @@ import { withRouter }  from 'next/router'
 import {ConfigProvider, Layout, Menu} from 'antd';
 import esEs            from 'antd/lib/locale/es_ES';
 import CustomBreadcrumb from '@/components/CustomBreadcrumb';
+import Script from 'next/script'
 
 //import 'antd/dist/antd.css';
 import '../public/css/index.css';
@@ -164,7 +165,7 @@ class LocalDashboard extends App{
 			<div className="site">
 				<Head>
 
-					<script type="text/javascript" src="/seo.js"/>
+					<Script type="text/javascript" src="/seo.js"/>
 
 					{/* Site data */}
 					<meta charSet="UTF-8" />

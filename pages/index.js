@@ -90,7 +90,7 @@ class Home extends BasePanel{
 									<Col xs={24} md={11}>
 										<div>
 											<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
-											<p>Somos una organización que se preocupa por el <TextLoop children={["bienestar", "tranquilidad", "serenidad", "bienestar"]} interval={1500}  springConfig={{ stiffness: 180, damping: 8 }} /> de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
+											<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
 											<Divider />
 											<Space>
 												<Button type="primary" shape="round" onClick={this.iniciaYa}>Inicia ya </Button>
@@ -215,3 +215,7 @@ Home.getPageName = () => {
 	return "Inicio";
 }
 export default Home;
+
+/*
+	
+*/
