@@ -113,7 +113,7 @@ class LocalDashboard extends App{
 		let urlPage = Constant.getUrlFront();
 		let nombrePage = Constant.getWebName();
 		let defaultDescription = "Bienvenidos a esta gran aventura llamada KiwiPeluditos";
-		let imageDefault = "/images/favicon.png";
+		let imageDefault = "/favicon.png";
 		let lemaPage = "kiwipeluditos";
 
 		const structuredData = {
