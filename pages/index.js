@@ -13,13 +13,25 @@ import BasePanel      from '@/containers/BasePanel';
 import VideoHome      from '@/components/VideoHome';
 import CatSpeak       from '@/components/CatSpeak';
 
+// Third part
+import TextLoop from "react-text-loop";
+
+
 // Ant components and icons
 import {
 	Col,
 	Row,
-	Button
+	Button,
+	Carousel,
+	Divider,
+	Space
 } from 'antd';
 import {QrcodeOutlined} from '@ant-design/icons'
+import {
+	RightOutlined,
+	LeftOutlined,
+	VideoCameraFilled
+} from '@ant-design/icons';
 
 class Home extends BasePanel{
 	constructor(props) {
@@ -27,9 +39,12 @@ class Home extends BasePanel{
 
 		// References
 		this.refVideo = React.createRef();
+		this.refCarousel = React.createRef();
 
 		// Methods
 		this.iniciaYa = this.iniciaYa.bind(this);
+		this.prevPage = this.prevPage.bind(this);
+		this.nextPage = this.nextPage.bind(this);
 
 	}
 
@@ -46,90 +61,142 @@ class Home extends BasePanel{
 		}
 	}
 
+	prevPage() {
+		this.refCarousel.current.prev();
+	}
+
+	nextPage() {
+		this.refCarousel.current.next();
+	}
+
 	render() {
 
 		return (
 			<div className="index-page">
-				<section className="landing-section" id="index">
-					<div className="landing-circle1" onClick={(e) => this.refVideo.current.open()}>
-						<CatSpeak text="Dame click para conocer más sobre nosotros con un video" />
-					</div>
-					<div className="landing-circle2" />
-					<div className="landing-circle3" />
-					<div className="landing-circle4" />
-					<div className="landing-about-content">
-						<div>
-							<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
-							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
-							<a className="inicia-ya" onClick={this.iniciaYa}>Inicia ya </a>
-						</div>
-					</div>
-					<VideoHome ref={this.refVideo}/>
-				</section>
 
-				<section className="landing-section" id="beneficios">
-					<Row gutter={[40, 16]} align="middle">
-						<Col xs={24} md={14} lg={12}>
-							<div className="landing-left-item"><QrcodeOutlined className="landing-icon"/></div>
-						</Col>
-						<Col xs={24} md={10} lg={12}>
-							<h4 className="landing-h4 landing-title">Beneficios de Kiwi Peluditos</h4>
-							<p>¡Kiwi peluditos es el mejor aliado de tu mascota! Registra fácilmente tus mascotas con todos sus datos para generar su código QR, puedes tener:</p>
-							<ul>
-								<li>Incluir foto, raza, tamaño, color, condiciones especiales y una corta descripción de tu peludito.</li>
-								<li>Carga del carnet de vacunas.</li>
-								<li>Identificación, localización e Información de contacto ante pérdidas de tu mascota</li>
-								<li>Todos los datos son completamente actualizables por si cambias tus datos.</li>
-							</ul>
-						</Col>
-					</Row>
-				</section>
-
-				<Row align="middle" className="landing-section">
-					<Col span={1} />
-					<Col span={22}>
-						<h4 className="landing-h4 landing-title">¿Deseas comprar una placa?</h4>
-						<p>Diseña la plaquita de tu mascota y envíanola automáticamente, nosotros te hacemos llegar tu placa.</p>
-						<Row gutter={[5, 5]} align="middle">
-							<Col xs={12} md={6}>
-								<div className="buy-section-item">Código único</div>
-							</Col>
-							<Col xs={12} md={6}>
-								<div className="buy-section-item">Variados diseños</div>
-							</Col>
-							<Col xs={12} md={6}>
-								<div className="buy-section-item">Calidad única</div>
-							</Col>
-							<Col xs={12} md={6}>
-								<div className="buy-section-item">Diferentes tamaños</div>
-							</Col>
-						</Row>
-					</Col>
-				</Row>
-
-				<section className="landing-section donation-section" id="donar">
-					<div>
-						<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
-						<p>En Kiwi Peluditos no solo aquellos que adquieren una plaquita con código QR puede acceder a nuestra página web, puesto que nos preocupamos por el bienestar de todos, Kiwi Peluditos está a disposición de la población colombiana. Para poder sostener nuestra página web, vendemos diferentes productos y servicios, pero a veces no es suficiente y necesitaremos tu ayuda para poder mantener nuestra web al servicio de todos totalmente gratis. Con tu donación podremos:</p>
-						<ul>
-							<li>Actualizar constantemente la página, añadiendo mayores y mejores funciones</li>
-							<li>Brindar a todos nuestros usuarios seguridad, manteniendo la pagina vigilada.</li>
-							<li>Actualización de contenidos constante.</li>
-							<li>Además, podrás contribuir al desarrollo y crecimiento de empresas 100% colombianas.</li>
-						</ul>
+				<VideoHome ref={this.refVideo}/>
+				<div className="slider">
+					<div className="slider-left-button slider-button2">
+						<Button type="primary" size={"large"} icon={<LeftOutlined />} onClick={this.prevPage}/>
 					</div>
-					<div className="donation-list">
-						<div className="donation-item">
-							<b>Daviplata:</b> 3173587462
-						</div>
-						<div className="donation-item">
-							<b>Nequi:</b> 3173587462
-						</div>
-						<div className="donation-item">
-							<b>Buy me a coffee:</b> aquí
-						</div>
+					<div className="slider-right-button slider-button2">
+						<Button type="primary" size={"large"} icon={<RightOutlined />} onClick={this.nextPage} />
 					</div>
-				</section>
+
+					<div className="slider-index-internal">
+						<Carousel effect="fade" ref={this.refCarousel}>
+							<div className="index-section">
+								<Row gutter={[10, 16]} align="middle">
+									<Col xs={24} md={11}>
+										<div>
+											<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
+											<p>Somos una organización que se preocupa por el <TextLoop children={["bienestar", "tranquilidad", "serenidad", "bienestar"]} interval={1500}  springConfig={{ stiffness: 180, damping: 8 }} /> de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
+											<Divider />
+											<Space>
+												<Button type="primary" shape="round" onClick={this.iniciaYa}>Inicia ya </Button>
+												<Button shape="round" onClick={(e) => this.refVideo.current.open()}>Conoce más sobre nosotros </Button>
+											</Space>
+										</div>
+									</Col>
+									<Col xs={24} md={13}>
+										<div className="index-section-inner">
+											<div className="section1-huella">
+												<Image
+													src={this.constants.img_huella}
+													alt="imagen de huella"
+													width={200}
+													height={200}
+													layout="responsive"
+													priority={true}
+													/>
+											</div>
+										</div>
+									</Col>
+								</Row>
+							</div>
+							<div className="index-section">
+								<Row gutter={[10, 16]} align="middle" className="index-section-inner">
+									<Col xs={24} md={11}>
+										<div className="section2-huella">
+											<Image
+												src={this.constants.img_huella_qr}
+												alt="imagen de huella"
+												width={200}
+												height={200}
+												layout="responsive"
+												priority={true}
+												/>
+										</div>
+									</Col>
+									<Col xs={24} md={13}>
+										<h4 className="landing-h4 landing-title">Beneficios de Kiwi Peluditos</h4>
+										<p>¡Kiwi Peluditos es el mejor aliado de tu mascota!, en nuestra página puedes:</p>
+										<ul>
+											<li>Registrar los datos de tu Peludito en un perfil único.</li>
+											<li>Generar un código QR con el perfil de tu mascota.</li>
+											<li>Tener control de sus vacunas y enfermedades, y además encontrar información sobre el tema.</li>
+											<li>Adquirir productos para ti y tu Peludito.</li>
+										</ul>
+									</Col>
+								</Row>
+							</div>
+							<div className="index-section">
+								<Row gutter={[10, 16]} align="middle" className="index-section-inner">
+									<Col xs={24} md={13}>
+										<h4 className="landing-h4 landing-title">Conoce nuestra tienda</h4>
+										<p>Kiwi Peluditos tiene como propósito identificar a tu mascota para que puedas reencontrarte con ella en caso de pérdida. En Kiwi Peluditos puedes generar y descargar el código QR. Además, puedes comprar collares personalizados en nuestra tienda Online.</p>
+										<p>¡Gracias por apoyar a Kiwi Peluditos con tu compra!.</p>
+										<Divider />
+										<Button type="primary" shape="round" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>Visitar tienda </Button>
+
+
+									</Col>
+									<Col xs={24} md={11}>
+										<div className="section2-huella">
+											<Image
+												src={this.constants.img_huella_shop}
+												alt="imagen de huella"
+												width={200}
+												height={200}
+												layout="responsive"
+												priority={true}
+												/>
+										</div>
+									</Col>
+								</Row>
+							</div>
+							<div className="index-section">
+								<Row gutter={[10, 16]} align="middle" className="index-section-inner">
+									<Col xs={24} md={13}>
+										<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
+										<p><b>¡Los servicios Kiwi Peluditos son completamente gratuitos!</b> Para seguir ayudando a mas Peluditos, contamos con nuestra tienda online y con tu colaboración. Gracias a tus donaciones podemos:</p>
+										<ul>
+											<li>Actualizar la aplicación, añadiendo mayores y mejores funciones.</li>
+											<li>Brindar seguridad a todos nuestros/as usuarios/as.</li>
+											<li>Subir contenido a nuestro Blog.</li>
+											<li>Además, podrás contribuir al desarrollo y crecimiento de empresas 100% Colombianas.</li>
+										</ul>
+									</Col>
+									<Col xs={24} md={11}>
+										<div className="donation-list">
+											<div className="donation-item">
+												<b>Daviplata:</b> 3173587462
+											</div>
+											<div className="donation-item">
+												<b>Nequi:</b> 3173587462
+											</div>
+											<div className="donation-item">
+												<b>Buy me a coffee:</b> aquí
+											</div>
+										</div>
+									</Col>
+								</Row>
+							</div>
+						</Carousel>
+					</div>
+				</div>
+
+
 			</div>
 		);
 	}
@@ -138,8 +205,8 @@ class Home extends BasePanel{
 Home.getInitialProps = async ({query, req, pathname}) => {
 	query["head"] = {
 		"title" : "Inicio",
-		"description" : "Bienvenido a esta gran aventura llamada KiwiPeluditos, explora y descubre los productos y servicios que tenemos para ti.",
-		"keywords" : "kiwipeluditos, mascota, mensaje, tienda, peludito, inicio"
+		"description" : "Bienvenido a esta gran aventura llamada Kiwi Peluditos, explora y descubre los productos y servicios que tenemos para ti.",
+		"keywords" : "kiwi peluditos, mascota, mensaje, tienda, peludito, inicio"
 	};
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
 	return {query, isLogged};

@@ -14,6 +14,7 @@ import ProductCard     from '@/components/ProductCard';
 import PayDataForm     from '@/formclasses/pay_data';
 import Label           from '@/components/Label';
 import PayModal        from '@/components/PayModal';
+import DiscountAlert   from '@/components/DiscountAlert';
 
 // Ant components and icons
 import {
@@ -23,7 +24,8 @@ import {
 	Button,
 	Card,
 	Divider,
-	message
+	message,
+	Alert
 } from 'antd';
 import {
 	CreditCardOutlined,
@@ -48,29 +50,55 @@ class PayView extends BasePanel{
 		}
 
 		// Methods
-		this.nextPage   = this.nextPage.bind(this);
-		this.prevPage   = this.prevPage.bind(this);
-		this.searchUser = this.searchUser.bind(this);
-		this.searchCart = this.searchCart.bind(this);
-		this.pagar      = this.pagar.bind(this);
+		this.nextPage      = this.nextPage.bind(this);
+		this.prevPage      = this.prevPage.bind(this);
+		this.searchUser    = this.searchUser.bind(this);
+		this.searchCart    = this.searchCart.bind(this);
+		this.pagar         = this.pagar.bind(this);
+		this.initialGET    = this.initialGET.bind(this);
+		this.applyDiscount = this.applyDiscount.bind(this);
 
 		// References
-		this.refTotalLabel      = React.createRef();
-		this.refSubTotalLabel   = React.createRef();
-		this.refDescuentosLabel = React.createRef();
-		this.refEnvioLabel      = React.createRef();
-		this.refDataUserForm    = React.createRef();
-		this.refPayModal        = React.createRef();
+		this.refTotalLabel            = React.createRef();
+		this.refSubTotalLabel         = React.createRef();
+		this.refDescuentosLabel       = React.createRef();
+		this.refDescuentosPuntosLabel = React.createRef();
+		this.refEnvioLabel            = React.createRef();
+		this.refDataUserForm          = React.createRef();
+		this.refPayModal              = React.createRef();
+		this.refDiscountAlert         = React.createRef();
 
 		// Variables
 		this.productos = [];
+		this.discountPointPercent = 0;
 	}
 
 	componentDidMount() {
 		this.setBreadCrumb([{"label" : "Carrito de compras", "route" : this.constants.route_cart}, {"label" : "Pago de pedido"}])
 
-		this.searchCart();
-		this.searchUser();
+		let dataCart = this.store.getCart();
+		if (dataCart === null || dataCart === undefined || dataCart.length === 0) {
+			this.redirectPage(this.constants.route_cart);
+		}
+		else{
+			this.initialGET();
+		}
+	}
+
+	async initialGET() {
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "pedido",
+			model: "valor_envio"
+		});
+		if(data["success"]) {
+			this.valorEnvio = data["data"]["valor"];
+			await this.searchUser();
+			await this.searchCart();
+		}
+		else{
+			message.error("Hubo un error al consultar los datos, por favor intente de nuevo más tarde");
+		}
 	}
 
 	async searchUser() {
@@ -87,6 +115,14 @@ class PayView extends BasePanel{
 				"departamento" : data["data"]["departamento"]
 			}
 			this.refDataUserForm.current.setValues(data["data"], preconditions);
+
+			if(this.props.query["points"] && data["data"]["puntos_porcentaje"] > 0){
+				this.discountPointPercent = data["data"]["puntos_porcentaje"];
+			}
+			else if(data["data"]["puntos_porcentaje"] > 0) {
+				this.refDiscountAlert.current.setDiscount(data["data"]["puntos_porcentaje"]);
+			}
+
 		}
 		else{
 			message.error("Hubo un erro al cargar los datos del usuario");
@@ -95,6 +131,11 @@ class PayView extends BasePanel{
 
 	async searchCart() {
 		this.dataService = await this.getDataCart();
+		this.formatCart();
+	}
+
+	applyDiscount(percent) {
+		this.discountPointPercent = percent;
 		this.formatCart();
 	}
 
@@ -121,11 +162,14 @@ class PayView extends BasePanel{
 				}
 			}
 		}
+		let valorDescuentoPuntos = (subTotal * this.discountPointPercent / 100);
+		subTotal = subTotal - valorDescuentoPuntos;
 
 		if (dataCart.length === 0) {
 			valorEnvio = 0;
 			this.redirectPage(this.constants.route_cart);
 		}
+		this.refDescuentosPuntosLabel.current.setText(valorDescuentoPuntos.formatPrice());
 		this.refDescuentosLabel.current.setText(descuentos.formatPrice());
 		this.refSubTotalLabel.current.setText(subTotal.formatPrice());
 		this.refEnvioLabel.current.setText(valorEnvio.formatPrice());
@@ -174,7 +218,8 @@ class PayView extends BasePanel{
 				"last_name" : dataForm["last_name"],
 				"ciudad" : dataForm["ciudad"],
 				"celular" : dataForm["celular1"],
-				"productos" : productos
+				"productos" : productos,
+				"descontar_puntos" : this.discountPointPercent > 0 ? true : false
 			}
 
 			let data = await BasePanel.service.apiSend({
@@ -200,7 +245,53 @@ class PayView extends BasePanel{
 			<div>
 				<form id="form-pay"></form>
 				<Row gutter={[40, 16]}>
+					<Col xs={24} md={8}>
+						<Card title="Resumen de orden">
+							<Row>
+								<Col span={15}>
+									<b>Subtotal: </b>
+								</Col>
+								<Col span={9}>
+									<p className="right-text"><Label ref={this.refSubTotalLabel} /></p>
+								</Col>
+								<Col span={15}>
+									<b>Descuentos: </b>
+								</Col>
+								<Col span={9}>
+									<p className="right-text"><Label ref={this.refDescuentosLabel} /></p>
+								</Col>
+								<Col span={15}>
+									<b>Descuentos por puntos: </b>
+								</Col>
+								<Col span={9}>
+									<p className="right-text"><Label ref={this.refDescuentosPuntosLabel} /></p>
+								</Col>
+								<Col span={15}>
+									<b>Envío: </b>
+								</Col>
+								<Col span={9}>
+									<p className="right-text"><Label ref={this.refEnvioLabel} /></p>
+								</Col>
+								<Col span={15}>
+									<h2><b>Total: </b></h2>
+								</Col>
+								<Col span={9}>
+									<h3 className="right-text"><Label ref={this.refTotalLabel} /></h3>
+								</Col>
+							</Row>
+							<Divider />
+							<Alert
+								message="Esta es una compra segura"
+								type="success"
+								/>
+						</Card>
+
+					</Col>
 					<Col xs={24} md={16}>
+
+						<PayModal ref={this.refPayModal} />
+						<DiscountAlert onApply={this.applyDiscount} ref={this.refDiscountAlert} />
+
 						<Steps current={this.state.page} responsive={true}>
 							<Step title={"Datos de envío"} />
 							<Step title={"Resúmen"} />
@@ -218,16 +309,40 @@ class PayView extends BasePanel{
 								{
 									(this.state.dataUser) ?
 										<div>
-											<b>Nombre quien recibe: </b> {this.state.dataUser.first_name} {this.state.dataUser.last_name}<br />
-											<b>Ciudad: </b> {this.state.dataUser.ciudad_name} - {this.state.dataUser.departamento_name}<br />
-											<b>Dirección: </b> {this.state.dataUser.direccion}<br />
-											<b>información adicional: </b> {this.state.dataUser.adicional ? this.state.dataUser.adicional : "No hay información adicional"}<br />
+											<Row>
+												<Col xs={24} md={8}>
+													<b>Nombre quien recibe: </b>
+												</Col>
+												<Col xs={24} md={16}>
+													{this.state.dataUser.first_name} {this.state.dataUser.last_name}
+												</Col>
+												<Col xs={24} md={8}>
+													<b>Ciudad: </b>
+												</Col>
+												<Col xs={24} md={16}>
+													{this.state.dataUser.ciudad_name} - {this.state.dataUser.departamento_name}
+												</Col>
+												<Col xs={24} md={8}>
+													<b>Dirección: </b>
+												</Col>
+												<Col xs={24} md={16}>
+													{this.state.dataUser.direccion}
+												</Col>
+												<Col xs={24} md={8}>
+													<b>información adicional: </b>
+												</Col>
+												<Col xs={24} md={16}>
+													{this.state.dataUser.adicional ? this.state.dataUser.adicional : "No hay información adicional"}
+												</Col>
+											</Row>
 											<Divider />
 											<Button type="primary" onClick={this.prevPage} icon={<EditFilled />}>Editar datos</Button>
 										</div>
 									:
 									null
 								}
+
+
 							</Card>
 
 							<Divider />
@@ -241,19 +356,8 @@ class PayView extends BasePanel{
 					</Col>
 
 
-					<Col xs={24} md={8}>
-						<Card title="Resumen de orden">
-							<b>Subtotal: </b> <Label ref={this.refSubTotalLabel} /><br />
-							<b>Descuentos: </b> <Label ref={this.refDescuentosLabel} /><br />
-							<b>Envío: </b>  <Label ref={this.refEnvioLabel} /><br />
-							<h2><b>Total: </b> <Label ref={this.refTotalLabel} /><br /></h2>
-						</Card>
-
-					</Col>
 
 				</Row>
-
-				<PayModal ref={this.refPayModal} />
 
 			</div>
 		);

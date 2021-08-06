@@ -155,10 +155,28 @@ p {
 
 // Home.js
 
-.landing-section{
-	min-height: calc(100vh - #{$header-height});
+.index-section{
 	width: 100%;
-	display: block;
+	height: 86vh;
+}
+.slider-index-internal{
+	width: 90%;
+	margin: auto;
+}
+.index-section-inner{
+	height: 86vh;
+}
+.section1-huella{
+	width: 80%;
+	margin: auto;
+}
+.section2-huella{
+	transform: rotate(20deg);
+	width: 80%;
+	margin: auto;
+}
+.ant-carousel .slick-dots li button {
+	background: $color-1 !important;
 }
 .landing-title{
 	color: $color-1;
@@ -170,47 +188,9 @@ p {
 .landing-h4{
 	font-size: 40px !important;
 }
-.landing-left-item{
-	width: 80%;
-	margin: auto;
-	height: 80vh;
-	background: linear-gradient(to right, $color-1, rgba(0, 0, 0, 0));
-	border-radius: 40% 50% 100% 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.landing-icon{
-	color: white !important;
-	font-size: 150px;
-}
-.landing-about-content{
-	z-index: 2;
-	div{
-		margin-top: 20vh;
-		width: 50%;
-		p{
-			color: $text-1;
-		}
-	}
-}
 
-.buy-section-item{
-	background: linear-gradient($color-1, #4F243F);
-	width: 100%;
-	height: 26vh;
-	border-radius: 30% 10% 20% 10%;
-	margin: 0px 15px;
-	cursor: pointer;
-	color: white;
-}
-
-.donation-section{
-	display: flex;
-	align-items: center;
-}
 .donation-list{
-	width: 100%;
+	width: 80%;
 	margin-left: 30px;
 }
 .donation-item{
@@ -222,68 +202,10 @@ p {
 	border-radius: 10px;
 	margin-bottom: 15px;
 }
+.swipe-index{
+	display: none;
+}
 
-.inicia-ya{
-	background: $color-1;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 50px;
-	&:hover{
-		color: white;
-		opacity: 0.7;
-	}
-}
-.landing-circle1{
-	background: $color-1;
-	width: 40%;
-	height: 60vh;
-	border-radius: 50% 0% 50% 100%;
-	right: 0px;
-	top: 0px;
-	position: absolute;
-	box-shadow: inset 0px 0px 40px #4F243F;
-	overflow: hidden;
-	display: flex;
-	color: white;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	&:hover{
-		cursor: pointer;
-		box-shadow: inset 0px 0px 20px #4F243F;
-		opacity: 0.8;
-	}
-}
-.landing-circle2{
-	background: $color-1;
-	width: 100px;
-	height: 100px;
-	border-radius: 100%;
-	right: 45%;
-	top: 5vh;
-	position: absolute;
-	box-shadow: inset 0px 0px 40px pink;
-}
-.landing-circle3{
-	background: $color-1;
-	width: 150px;
-	height: 150px;
-	border-radius: 100%;
-	right: 55%;
-	top: 65vh;
-	position: absolute;
-	box-shadow: inset 0px 0px 40px #4F243F;
-}
-.landing-circle4{
-	background: $color-1;
-	width: 50px;
-	height: 50px;
-	border-radius: 100%;
-	right: 15%;
-	top: 67vh;
-	position: absolute;
-	box-shadow: inset 0px 0px 40px pink;
-}
 // Home.js
 
 // LeftPanel.js
@@ -343,11 +265,14 @@ p {
 	color: $text-1;
 	li{
 		padding: 5px 30px;
-		display: grid;
-		grid-template-columns: 2fr 8fr 1fr;
+		display: flex;
+		align-items: center;
 		width: calc(100%);
 		cursor: pointer;
 		min-height: 3.5vh;
+		.icon{
+			margin-right: 15px;
+		}
 		&:hover{
 			color: $color-1;
 			border-right: solid 2px $color-1;
@@ -902,6 +827,10 @@ footer{
 .pay-card{
 	margin-top: 15px;
 }
+.right-text{
+	text-align: right;
+	margin: 0px;
+}
 // pay.js
 
 // ImageSlider
@@ -923,16 +852,19 @@ footer{
 .slider{
 	position: relative;
 	&:hover{
-		.slider-button {
+		.slider-button, .slider-button2 {
 			opacity: 1;
 		}
 	}
-	.slider-button {
+	.slider-button, .slider-button2 {
 		position: absolute;
 		top: 45%;
 		z-index: 1000;
 		opacity: 0.1;
 		transition: all 0.3s;
+	}
+	.slider-button2{
+		opacity: 0;
 	}
 	.slider-left-button {
 		left: 0px;

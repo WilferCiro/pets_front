@@ -149,7 +149,7 @@ class Store {
 	}
 
 	getCart(ctx = null) {
-		let cart = this.readValue("cart", ctx);
+		let cart = this.readValue("kiwi_cart", ctx);
 		if (!cart){
 			return [];
 		}
@@ -178,7 +178,7 @@ class Store {
 			dataSave = JSON.stringify(cart);
 		}
 		catch (e) {}
-		this.saveData("cart", dataSave);
+		this.saveData("kiwi_cart", dataSave);
 	}
 
 	updateCart(obj) {
@@ -199,7 +199,7 @@ class Store {
 			dataSave = JSON.stringify(cart);
 		}
 		catch (e) {}
-		this.saveData("cart", dataSave);
+		this.saveData("kiwi_cart", dataSave);
 	}
 
 	// Cookies

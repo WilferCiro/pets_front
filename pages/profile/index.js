@@ -21,7 +21,12 @@ import {
 	Button,
 	Row,
 	Col,
-	message
+	Progress,
+	Card,
+	Alert,
+	message,
+	Tag,
+	Divider
 } from 'antd';
 import {
 	EditOutlined,
@@ -88,7 +93,6 @@ class ProfileView extends BasePanel{
 			body: body,
 			formData: true
 		});
-
 		if(data["success"]) {
 			this.getUserData();
 			message.success("Se han editados sus datos exitosamente");
@@ -150,6 +154,7 @@ class ProfileView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
+		console.log(data);
 		if(data["success"]) {
 			this.user.setName(data["data"]["full_name"]);
 			this.user.setAvatar(data["data"]["avatar"]);
@@ -190,7 +195,18 @@ class ProfileView extends BasePanel{
 		}
 
 		let dataMascota = user["mascotas"];
+		let strokeColor = {
+			'0%': '#108ee9',
+			'100%': 'purple',
+		};
 
+		let messagePuntos = "Tienes " + user.puntos + " puntos que puedes redimir en cualquier compra"
+		if (user.proxima_fecha_puntos === true) {
+			messagePuntos += " ahora mismo";
+		}
+		else{
+			messagePuntos += " a partir del " + user.proxima_fecha_puntos.formatDateTime();
+		}
 
 		return (
 			<div className="page-center">
@@ -286,6 +302,34 @@ class ProfileView extends BasePanel{
 									</List.Item>
 									)}
 								/>
+							</TabPane>
+							<TabPane tab="Mis puntos" key="4">
+								<Alert
+									message={messagePuntos}
+									type="success"
+									/>
+								<Card style={{marginTop: "15px", textAlign: "center"}}>
+									<Space size="large" align="end">
+										{
+											user.puntos_range.map((item, index) => {
+												return (
+													<Space direction="vertical" key={Math.random()}>
+														<Progress type="circle" percent={99} format={percent => item["porcentaje"] + "% dcto"} strokeColor={item["current"] ? strokeColor : "gray"}/>
+														<p>{item["minimo"]} - {item["maximo"]} puntos</p>
+														{
+															item["current"] ?
+																<Tag color="success">Estás aquí</Tag>
+															:
+															null
+														}
+													</Space>
+												)
+											})
+										}
+									</Space>
+									<Divider />
+									<Button type="primary" shape="round" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>Visitar tienda </Button>
+								</Card>
 							</TabPane>
 						</Tabs>
 

@@ -4,6 +4,10 @@
 	.container {
 		min-height: 60vh;
 	}
+	.index-section{
+		width: 70% !important;
+		margin-left: 15% !important;
+	}
 }
 
 @media (max-width: 1070px) and (min-width: 992px) {
@@ -50,6 +54,11 @@
 }
 
 @media (max-width: 767px) {
+	.index-section{
+		width: 100%;
+		height: 110vh;
+	}
+
 	.ant-page-header-heading-title{
 		text-overflow: ellipsis;
 	}
@@ -101,28 +110,11 @@
 	// Header.js
 
 	// Home.js
-	.landing-left-item{
-		width: 90%;
-		height: 50vh;
-	}
 	.landing-h4{
 		font-size: 25px !important;
 	}
 	.landing-h2{
 		font-size: 40px !important;
-	}
-	.landing-about-content{
-		div{
-			margin-top: 40vh;
-			width: 100%;
-		}
-	}
-	.landing-circle1{
-		width: 100%;
-		height: 50vh;
-	}
-	.landing-circle2, .landing-circle3, .landing-circle4{
-		display: none;
 	}
 	// Home.js
 

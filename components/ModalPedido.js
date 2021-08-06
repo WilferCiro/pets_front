@@ -24,7 +24,8 @@ import {
 } from 'antd';
 import {
 	HomeFilled,
-	CarFilled
+	CarFilled,
+	CreditCardOutlined
 } from '@ant-design/icons';
 
 const { Meta } = Card;
@@ -61,7 +62,6 @@ class ModalPedido extends BasePanel{
 			isPublic: false,
 			aditional: [pk]
 		});
-		console.log(data);
 		if(data["success"]) {
 			this.setState({
 				data: data["data"],
@@ -88,8 +88,20 @@ class ModalPedido extends BasePanel{
 									description={
 										<div>
 											{data["direccion"] + " - " + data["ciudad_nombre"]}<br />
-											Recibe: {data["first_name"] + " " + data["last_name"]}<br />
+											<b>Recibe:</b> {data["first_name"] + " " + data["last_name"]}<br />
 											{data["celular"]}
+										</div>
+									}
+									/>
+							</Card>
+							<Card style={{marginTop: "10px"}}>
+								<Meta
+									avatar={<Avatar icon={<CreditCardOutlined />} />}
+									description={
+										<div>
+											{data["puntos_descuento"]} % de descuento por puntos<br />
+											<b>Valor del envío: </b> {data["valor_envio"].formatPrice()} <br />
+											<b>Total: </b> {data["total"].formatPrice()}
 										</div>
 									}
 									/>
@@ -117,7 +129,7 @@ class ModalPedido extends BasePanel{
 									</Timeline.Item>
 
 									{
-										data["cancelado"] === true ? 
+										data["cancelado"] === true ?
 											<Timeline.Item color={"red"}>
 												Pago rechazado
 											</Timeline.Item>
@@ -170,7 +182,7 @@ class ModalPedido extends BasePanel{
 		}
 
 		return (
-			<Modal width={800} footer={[]} centered title="Datos del pedido" visible={this.state.open} onOk={this.close} onCancel={this.close}>
+			<Modal width={800} footer={[]} centered title={"Datos del pedido: " + (this.state.data ? this.state.data["referencia"] : "")} visible={this.state.open} onOk={this.close} onCancel={this.close}>
 
 				{content}
 

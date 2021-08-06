@@ -164,6 +164,7 @@ class LocalDashboard extends App{
 			<div className="site">
 				<Head>
 
+					<script type="text/javascript" src="/seo.js"/>
 
 					{/* Site data */}
 					<meta charSet="UTF-8" />
@@ -264,6 +265,8 @@ class LocalDashboard extends App{
 					}
 
 				</Head>
+
+				<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6D478S" height="0" width="0" style={{display: "none", visibility: "hidden"}}></iframe></noscript>
 
 				<ConfigProvider locale={esEs}>
 					<Layout>

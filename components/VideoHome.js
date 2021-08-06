@@ -8,6 +8,9 @@ import React          from 'react';
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
+// Third part
+import YouTube from 'react-youtube';
+
 // Ant components and icons
 import {
 	Modal
@@ -25,11 +28,15 @@ class VideoHome extends BasePanel{
 		// Methods
 		this.open = this.open.bind(this);
 		this.close = this.close.bind(this);
+
+		// References
+		this.refVideo = React.createRef();
 	}
 	componentDidMount() {
 	}
 
 	close() {
+		console.log(this.refVideo.current.resetPlayer());
 		this.setState({
 			open: false
 		})
@@ -42,9 +49,19 @@ class VideoHome extends BasePanel{
 	}
 
 	render() {
+		const opts = {
+			height: '390',
+			width: '100%',
+			playerVars: {
+				// https://developers.google.com/youtube/player_parameters
+				autoplay: 0,
+			},
+		};
 		return (
 			<Modal width={700} centered title="Somos Kiwi Peluditos" visible={this.state.open} onOk={this.close} onCancel={this.close}>
-				<iframe width="100%" height="370px" src="https://www.youtube.com/embed/fAMp8Np0okg" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+
+				<YouTube ref={this.refVideo} videoId="fAMp8Np0okg" opts={opts} onReady={this._onReady} />
+
 			</Modal>
 		);
 	}

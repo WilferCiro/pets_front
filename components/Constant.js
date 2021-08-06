@@ -78,6 +78,10 @@ class Constant{
 		this.img_producto           = "/images/general/producto.jpg";
 		this.img_user               = "/images/general/user.jpg";
 		this.img_no_mascota         = "/images/general/user.jpg";
+		this.img_huella             = "/images/index/huella.svg";
+		this.img_huella_qr          = "/images/index/huella_qr.svg";
+		this.img_huella_shop        = "/images/index/huella_shop.svg";
+		this.img_swipe              = "/images/index/swipe.svg";
 
 
 		/// Documentos legales

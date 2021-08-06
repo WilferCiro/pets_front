@@ -105,9 +105,9 @@ class LeftPanel extends BasePanel{
 								<div></div>
 							</li>
 						}
-						<li className={currentPage.includes("/perdidas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_perdidas)}>
+						<li className={currentPage.includes("/desaparecidas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_perdidas)}>
 							<div><AlertOutlined className="icon" /></div>
-							<div>Mascotas perdidas</div>
+							<div>Desaparecidas</div>
 							<div></div>
 						</li>
 						{/*<li className={currentPage.includes("/vacunas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_vacunas)}>
