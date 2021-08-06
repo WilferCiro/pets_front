@@ -154,7 +154,6 @@ class ProfileView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-		console.log(data);
 		if(data["success"]) {
 			this.user.setName(data["data"]["full_name"]);
 			this.user.setAvatar(data["data"]["avatar"]);
@@ -164,7 +163,7 @@ class ProfileView extends BasePanel{
 		}
 		else{
 			this.setState({
-				user: []
+				user: null
 			})
 			message.error("Hubo un erro al cargar los datos del usuario");
 		}
@@ -204,7 +203,7 @@ class ProfileView extends BasePanel{
 		if (user.proxima_fecha_puntos === true) {
 			messagePuntos += " ahora mismo";
 		}
-		else{
+		else if(user.proxima_fecha_puntos){
 			messagePuntos += " a partir del " + user.proxima_fecha_puntos.formatDateTime();
 		}
 

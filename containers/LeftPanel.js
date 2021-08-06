@@ -96,7 +96,7 @@ class LeftPanel extends BasePanel{
 							<li className={currentPage.includes("/mascotas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_mascotas)}>
 								<div><IdcardFilled className="icon" /></div>
 								<div>Mis mascotas</div>
-								<div>{userData ? userData["cantidad_mascotas"] : "-"}</div>
+								<div>{/*userData ? userData["cantidad_mascotas"] : "-"*/}</div>
 							</li>
 							:
 							<li onClick={(e) => this.clickMenu(this.constants.route_login, {"from_mascotas" : true})}>
