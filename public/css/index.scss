@@ -668,11 +668,8 @@ footer{
 	text-align: center;
 	margin-top: 30px;
 }
-.footer-separator{
-	display: grid;
-	grid-template-columns: 2fr 1fr;
-}
-.footer-social{
+
+.footer-social, footer a{
 	margin-left: 8px;
 	color: $text-1;
 }

@@ -271,6 +271,15 @@ class PreviewView extends ProductBase{
 								:
 
 								((this.props.isLogged && producto.seleccion_mascota) || !producto.seleccion_mascota) ?
+
+									this.props.mascotas === 0 ?
+										<Alert
+											message="Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, inscribe a tu primer mascota"
+											type="error"
+											action={
+												<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_mascotas)}>Inscribir</Button>
+											} />
+									:
 									<div className="preview-number-selector">
 										<NumberSelector showMax={false} disabled={!this.isEnabledAddCart()} ref={this.refNroSelector} onUpdate={this.localUpdateCart} max={this.stock} defaultValue={this.props.nroCart || 0} />
 									</div>
@@ -414,7 +423,7 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 		productPK = productPK.split("-")[0];
 	}
 	let nroCart = BasePanel.store.getNumCart({query, req, pathname}, productPK);
-
+	let mascotas = 0;
 	let producto = null;
 	let [_productos] = await Promise.all([
 		BasePanel.service.apiSend({
@@ -439,11 +448,12 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 				ctx: {query, req, pathname}
 			});
 			if(data["success"]) {
-				let mascotas = data["data"];
-				for (let index in mascotas){
-					let name = mascotas[index]["nombre"] + "";
+				let mascotas_data = data["data"];
+				mascotas = mascotas_data.length;
+				for (let index in mascotas_data){
+					let name = mascotas_data[index]["nombre"] + "";
 					producto["opciones"].push({
-						"pk" : mascotas[index]["pk"],
+						"pk" : mascotas_data[index]["pk"],
 						"tipo" : "mascota",
 						"tipo_nombre" : "Mascota",
 						"nombre" : (name).replace(/-/g, ' ').replace(/_/g, ' '),
@@ -480,7 +490,7 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 
 		query["structuredData"] = structuredData;
 	}
-	return {query, nroCart, productPK, producto, isLogged};
+	return {query, nroCart, productPK, producto, isLogged, mascotas};
 }
 PreviewView.getPageName = () => {
 	return "Producto";

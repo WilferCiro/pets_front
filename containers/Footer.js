@@ -5,6 +5,9 @@
 // React Components
 import React          from 'react';
 
+// NextJS libraries
+import Image from 'next/image'
+
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 
@@ -13,7 +16,9 @@ import {
 	Divider,
 	notification,
 	Button,
-	Space
+	Space,
+	Row,
+	Col
 } from 'antd';
 import {
 	FacebookFilled,
@@ -87,25 +92,39 @@ class Footer extends BasePanel{
 				</div>
 
 				<Divider />
+
+				<Row>
+					<Col xs={10} md={9} >
+						<div>
+							<div className="logo-footer" onClick={(e) => this.clickMenu(this.constants.route_index)}>
+								<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} />
+							</div>
+							<p><b>Todos los derechos reservados &copy; 2021 </b></p>
+							{!this.state.online ? "Estás fuera de línea" : ""}
+							<Divider />
+						</div>
+					</Col>
+					<Col xs={10} md={9} >
+						<Space direction="vertical" >
+							<a onClick={(e) => this.redirectPage(this.constants.route_cookies)}>Cookies en KiwiPeluditos</a>
+							<a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>Aviso Legal y Política de Privacidad</a>
+						</Space>
+					</Col>
+					<Col xs={10} md={6} >
+						<div>
+							<a target="_blank" className="footer-social facebook" href="https://facebook.com/"><FacebookFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social instagram" href="https://instagram.com/"><InstagramFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social twitter" href="https://twitter.com/"><TwitterSquareFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social youtube" href="https://youtube.com/"><YoutubeFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
+						</div>
+					</Col>
+				</Row>
+
 				<div className="footer-separator">
-					<div>
-						KiwiCat &copy; 2021 <br />
-						¿Deseas ayudar a mejorar este proyecto? Donaciones<br />
-						{!this.state.online ? "Estás fuera de línea" : ""}
-					</div>
-					<div>
-						<a target="_blank" className="footer-social facebook" href="https://facebook.com/"><FacebookFilled className="icon-big" /></a>
-						<a target="_blank" className="footer-social instagram" href="https://instagram.com/"><InstagramFilled className="icon-big" /></a>
-						<a target="_blank" className="footer-social twitter" href="https://twitter.com/"><TwitterSquareFilled className="icon-big" /></a>
-						<a target="_blank" className="footer-social youtube" href="https://youtube.com/"><YoutubeFilled className="icon-big" /></a>
-						<a target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
-					</div>
+
+
 				</div>
-				<Divider />
-				<Space direction="vertical">
-					<a onClick={(e) => this.redirectPage(this.constants.route_cookies)}>Cookies en KiwiPeluditos</a>
-					<a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>Aviso Legal y Política de Privacidad</a>
-				</Space>
 			</footer>
 		);
 	}

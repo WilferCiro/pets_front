@@ -5,6 +5,9 @@
 // React Components
 import React              from 'react';
 
+// NextJS libraries
+import Image from 'next/image'
+
 // Custom classes
 import BasePanel from '@/containers/BasePanel';
 import AyudaForm from '@/formclasses/ayuda';
@@ -13,7 +16,10 @@ import AyudaForm from '@/formclasses/ayuda';
 import {
 	Button,
 	Divider,
-	message
+	message,
+	Row,
+	Col,
+	Space
 } from 'antd';
 
 class AyudaView extends BasePanel{
@@ -60,17 +66,31 @@ class AyudaView extends BasePanel{
 
 		return (
 			<div className="page-center">
-				<section className="landing-section">
-					<div className="landing-circle1" />
-					<div className="landing-about-content">
-						<div>
-							<h2 className="landing-h2 landing-title">Ayuda Kiwi Cat</h2>
-							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
-							<p>Nuestro principal objetivo es que puedas tener un espacio propio en nuestra página web totalmente gratis, pues sabemos que por diferentes motivos nuestros peluditos se pierden y no sabemos que hacer. En Kiwi Peluditos, solo con un clic podrás reportar a tu mascota perdida y compartirlo en tus redes sociales. Lo mejor es que no tienes que preocuparte por diseñar un cartel donde probablemente te olvides de alguna información que sea importante, déjanos a nosotros, ¡en Kiwi Peluditos lo hacemos por ti!</p>
-							<p>Nuestro segundo objetivo es generar un código QR único para cada peludito, este código QR dirigirá a la persona que lo escaneé a nuestra página web donde podrá encontrar toda la información de tu peludito, además, esta persona podrá acceder a comunicarse contigo y así ponerse de acuerdo para programar el tan esperado reencuentro con tu peludito.</p>
+			<div className="index-section">
+				<Row gutter={[10, 16]} align="middle">
+					<Col xs={24} md={13}>
+						<div className="index-section-inner">
+							<div className="section1-huella">
+								<Image
+									src={this.constants.img_huella}
+									alt="imagen de huella"
+									width={200}
+									height={200}
+									layout="responsive"
+									priority={true}
+									/>
+							</div>
 						</div>
-					</div>
-				</section>
+					</Col>
+					<Col xs={24} md={11}>
+						<div>
+							<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
+							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
+							<Divider />
+						</div>
+					</Col>
+				</Row>
+			</div>
 
 
 				<section className="landing-section">
@@ -83,29 +103,34 @@ class AyudaView extends BasePanel{
 					</div>
 				</section>
 
-				<section className="landing-section donation-section" id="donar">
-					<div>
-						<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
-						<p>En Kiwi Peluditos no solo aquellos que adquieren una plaquita con código QR puede acceder a nuestra página web, puesto que nos preocupamos por el bienestar de todos, Kiwi Peluditos está a disposición de la población colombiana. Para poder sostener nuestra página web, vendemos diferentes productos y servicios, pero a veces no es suficiente y necesitaremos tu ayuda para poder mantener nuestra web al servicio de todos totalmente gratis. Con tu donación podremos:</p>
-						<ul>
-							<li>Actualizar constantemente la página, añadiendo mayores y mejores funciones</li>
-							<li>Brindar a todos nuestros usuarios seguridad, manteniendo la pagina vigilada.</li>
-							<li>Actualización de contenidos constante.</li>
-							<li>Además, podrás contribuir al desarrollo y crecimiento de empresas 100% colombianas.</li>
-						</ul>
-					</div>
-					<div className="donation-list">
-						<div className="donation-item">
-							<b>Daviplata:</b> 3173587462
-						</div>
-						<div className="donation-item">
-							<b>Nequi:</b> 3173587462
-						</div>
-						<div className="donation-item">
-							<b>Buy me a coffee:</b> aquí
-						</div>
-					</div>
-				</section>
+
+				<div className="index-section">
+					<Row gutter={[10, 16]} align="middle" className="index-section-inner">
+						<Col xs={24} md={13}>
+							<h4 className="landing-h4 landing-title">¿Deseas donar?</h4>
+							<p><b>¡Los servicios Kiwi Peluditos son completamente gratuitos!</b> Para seguir ayudando a mas Peluditos, contamos con nuestra tienda online y con tu colaboración. Gracias a tus donaciones podemos:</p>
+							<ul>
+								<li>Actualizar la aplicación, añadiendo mayores y mejores funciones.</li>
+								<li>Brindar seguridad a todos nuestros/as usuarios/as.</li>
+								<li>Subir contenido a nuestro Blog.</li>
+								<li>Además, podrás contribuir al desarrollo y crecimiento de empresas 100% Colombianas.</li>
+							</ul>
+						</Col>
+						<Col xs={24} md={11}>
+							<div className="donation-list">
+								<div className="donation-item">
+									<b>Daviplata:</b> 3173587462
+								</div>
+								<div className="donation-item">
+									<b>Nequi:</b> 3173587462
+								</div>
+								<div className="donation-item">
+									<b>Buy me a coffee:</b> aquí
+								</div>
+							</div>
+						</Col>
+					</Row>
+				</div>
 			</div>
 		);
 	}
