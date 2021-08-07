@@ -13,7 +13,8 @@ import { withRouter }  from 'next/router'
 import {ConfigProvider, Layout, Menu} from 'antd';
 import esEs            from 'antd/lib/locale/es_ES';
 import CustomBreadcrumb from '@/components/CustomBreadcrumb';
-import Script from 'next/script'
+
+import Login     from '@/containers/Login';
 
 //import 'antd/dist/antd.css';
 import '../public/css/index.css';
@@ -131,7 +132,7 @@ class LocalDashboard extends App{
 				  "@type": "ImageObject",
 				  "@id": urlPage + "#primaryimage",
 				  "inLanguage": "es-CO",
-				  "url": urlPage + "/images/favicon.png",
+				  "url": urlPage + "/app-icon-512x512",
 				  "width": 512,
 				  "height": 512
 			   },
@@ -164,8 +165,6 @@ class LocalDashboard extends App{
 		return (
 			<div className="site">
 				<Head>
-
-					<Script type="text/javascript" src="/seo.js"/>
 
 					{/* Site data */}
 					<meta charSet="UTF-8" />
@@ -267,9 +266,11 @@ class LocalDashboard extends App{
 
 				</Head>
 
-				<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6D478S" height="0" width="0" style={{display: "none", visibility: "hidden"}}></iframe></noscript>
+
 
 				<ConfigProvider locale={esEs}>
+					<Login ref={BasePanel.refLogin} />
+
 					<Layout>
 						<LeftPanelMobile {...leftPanelProps} ref={BasePanel.refMobileMenu} />
 						<Sider

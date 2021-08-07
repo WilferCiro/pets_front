@@ -79,8 +79,8 @@ class RecoverView extends BasePanel{
 		});
 
 		if(data["success"]) {
-			message.info("Se ha cambiado la contraseña con éxito, por favor inicia sesión");
-			this.redirectPage(this.constants.route_login, {});
+			message.info("Se ha cambiado la contraseña con éxito, puedes iniciar sesión");
+			this.redirectPage(this.constants.route_login);
 		}
 		else{
 			message.error("Ocurrió un error al cambiar la contraseña");

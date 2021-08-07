@@ -61,6 +61,9 @@ class Constant{
 		this.route_condiciones         = '/condiciones'
 		this.route_profile_producto    = '/producto/[pk]'
 
+		// ADMIN
+		this.route_pedidos    = '/pedidos'
+
 
 		/*** IMÁGENES ***/
 		this.img_logo                       = "/images/general/logo.png";

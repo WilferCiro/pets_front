@@ -224,7 +224,7 @@ p {
 	margin: auto;
 	margin-top: 5vh;
 	border-radius: 100%;
-	border: solid 2px $color-1;
+	//border: solid 2px $color-1;
 	padding: 3px;
 }
 .nav-username{
@@ -342,6 +342,35 @@ p {
 
 
 // login/index.js
+
+.login-signup-container{
+	.login{
+		display: block;
+	}
+	.signup{
+		display: none;
+	}
+}
+.login-signup-container-show{
+	.login{
+		display: none;
+	}
+	.signup{
+		display: block;
+	}
+}
+
+.login, .signup{
+	h2{
+		text-align: center;
+	}
+}
+.remember-password{
+	text-align: right;
+	display: block;
+}
+
+
 span {
 	font-size: 12px;
 }

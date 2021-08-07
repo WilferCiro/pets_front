@@ -21,10 +21,13 @@ import {
 	HeartFilled,
 	CheckCircleFilled,
 	FileTextFilled,
-	ShopFilled,
+	ShoppingFilled,
 	QuestionCircleFilled,
 	IdcardOutlined,
-	EditFilled
+	EditFilled,
+	HomeFilled,
+	AlertFilled,
+	CarFilled
 } from '@ant-design/icons';
 
 
@@ -91,6 +94,11 @@ class LeftPanel extends BasePanel{
 
 				<nav>
 					<ul className="left-panel-menu">
+						<li className={currentPage === "/" ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_index)}>
+							<div><HomeFilled className="icon" /></div>
+							<div>Inicio</div>
+							<div></div>
+						</li>
 						{
 							(isLogged) ?
 							<li className={currentPage.includes("/mascotas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_mascotas)}>
@@ -99,14 +107,14 @@ class LeftPanel extends BasePanel{
 								<div>{/*userData ? userData["cantidad_mascotas"] : "-"*/}</div>
 							</li>
 							:
-							<li onClick={(e) => this.clickMenu(this.constants.route_login, {"from_mascotas" : true})}>
+							<li onClick={(e) => this.openLogin({"from_mascotas" : true})}>
 								<div><IdcardFilled className="icon" /></div>
 								<div>Mis mascotas</div>
 								<div></div>
 							</li>
 						}
 						<li className={currentPage.includes("/desaparecidas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_perdidas)}>
-							<div><AlertOutlined className="icon" /></div>
+							<div><AlertFilled className="icon" /></div>
 							<div>Desaparecidas</div>
 							<div></div>
 						</li>
@@ -126,7 +134,7 @@ class LeftPanel extends BasePanel{
 							<div></div>
 						</li>
 						<li className={currentPage.includes("/tienda") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_tienda)}>
-							<div><ShopFilled className="icon" /></div>
+							<div><ShoppingFilled className="icon" /></div>
 							<div>Tienda</div>
 							<div></div>
 						</li>
@@ -135,6 +143,16 @@ class LeftPanel extends BasePanel{
 							<div>Ayuda</div>
 							<div></div>
 						</li>
+						{
+							this.props.isAdmin ?
+								<li className={currentPage.includes("/pedidos") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_pedidos)}>
+									<div><CarFilled className="icon" /></div>
+									<div>Pedidos</div>
+									<div></div>
+								</li>
+							:
+							null
+						}
 						<li>
 							<div></div>
 							<div></div>
@@ -148,7 +166,7 @@ class LeftPanel extends BasePanel{
 									<div></div>
 								</li>
 							:
-								<li onClick={e => this.clickMenu(this.constants.route_login)}>
+								<li onClick={e => this.openLogin()}>
 									<div><IdcardOutlined className="icon" /></div>
 									<div>Ingresar</div>
 									<div></div>
@@ -163,6 +181,7 @@ class LeftPanel extends BasePanel{
 
 LeftPanel.getInitialProps = async ({query, req, pathname}) => {
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
+	let isAdmin = BasePanel.store.isAdmin({query, req, pathname});
 	let userData = null;
 	if(isLogged) {
 		userData = {
@@ -173,7 +192,7 @@ LeftPanel.getInitialProps = async ({query, req, pathname}) => {
 		};
 	}
 	let currentPage = pathname;
-	return {query, isLogged, currentPage, userData};
+	return {query, isLogged, currentPage, userData, isAdmin};
 }
 
 export default LeftPanel;

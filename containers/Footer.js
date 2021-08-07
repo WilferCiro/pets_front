@@ -112,10 +112,10 @@ class Footer extends BasePanel{
 					</Col>
 					<Col xs={10} md={6} >
 						<div>
-							<a target="_blank" className="footer-social facebook" href="https://facebook.com/"><FacebookFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social instagram" href="https://instagram.com/"><InstagramFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social facebook" href="https://www.facebook.com/kiwipeluditos"><FacebookFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social instagram" href="https://www.instagram.com/kiwipeluditos/"><InstagramFilled className="icon-big" /></a>
 							<a target="_blank" className="footer-social twitter" href="https://twitter.com/"><TwitterSquareFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social youtube" href="https://youtube.com/"><YoutubeFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social youtube" href="https://youtube.com/kiwipeluditos"><YoutubeFilled className="icon-big" /></a>
 							<a target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
 						</div>
 					</Col>

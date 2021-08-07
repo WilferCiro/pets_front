@@ -148,7 +148,12 @@ class TableCart extends BasePanel{
 		}
 		return (
 			<div>
-				<Table pagination={false} dataSource={this.state.cart} columns={this.columnsCart} size="small" rowKey="code" />
+				<Table
+					pagination={false}
+					dataSource={this.state.cart}
+					columns={this.columnsCart}
+					size="small"
+					rowKey="code" />
 			</div>
 		);
 	}

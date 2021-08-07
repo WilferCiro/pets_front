@@ -40,18 +40,19 @@ class BaseFormStructure  extends React.Component{
 		this.id             = this.props.id || "";
 		this.fields         = this.props.fields || [];
 		this.vertical       = this.props.vertical || false;
-		this.initialValues  = this.props.initialValues || {};
 		this.modal          = this.props.modal || false;
 		this.modalOnOk      = this.props.modalOnOk;
 		this.modalOnCancel  = this.props.modalOnCancel;
 		this.onValuesChange = this.props.onValuesChange;
+		this.pk = null;
 
 		// States
 		this.state = {
 			modal: {
 				open: false,
-				title: "Hola mundo"
+				title: "Formulario"
 			},
+			initialValues: this.props.initialValues || {},
 			preconditions: null,
 			defaultFileList : this.props.defaultFileList || null
 		}
@@ -69,6 +70,7 @@ class BaseFormStructure  extends React.Component{
 		this.onChange       = this.onChange.bind(this);
 		this.getFieldRender = this.getFieldRender.bind(this);
 		this.getFormField   = this.getFormField.bind(this);
+		this.getPk          = this.getPk.bind(this);
 
 		// Específico para select
 		this.getValueLabelSelect = this.getValueLabelSelect.bind(this);
@@ -96,13 +98,19 @@ class BaseFormStructure  extends React.Component{
 		}
 	}
 
-	open(title, defaultFileList = null, preconditions = null) {
+	getPk() {
+		return this.pk;
+	}
+
+	open(title, defaultFileList = null, preconditions = null, values = null, pk = null) {
+		this.pk = pk;
 		if(this.modal) {
 			this.setState({
 				modal: {
 					open: true,
 					title: title
 				},
+				initialValues: values || this.state.initialValues,
 				defaultFileList: defaultFileList !== null ? defaultFileList : this.state.defaultFileList,
 				preconditions : preconditions
 			})
@@ -227,7 +235,7 @@ class BaseFormStructure  extends React.Component{
 				name={"form" + this.id}
 				ref={this.formRef}
 				layout={this.vertical ? "vertical" : "horizontal"}
-				initialValues={this.initialValues}
+				initialValues={this.state.initialValues}
 				onValuesChange={this.onChange}
 			>
 			{
@@ -244,7 +252,7 @@ class BaseFormStructure  extends React.Component{
 		</Form>
 
 		if (this.modal) {
-			return <Modal width={550} style={{ top: 20 }} title={this.state.modal.title} visible={this.state.modal.open} onOk={this.handleOk} onCancel={this.handleCancel}>
+			return <Modal destroyOnClose={true} width={550} style={{ top: 20 }} title={this.state.modal.title} visible={this.state.modal.open} onOk={this.handleOk} onCancel={this.handleCancel}>
 				{form}
 			</Modal>
 		}

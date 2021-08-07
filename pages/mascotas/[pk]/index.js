@@ -313,7 +313,7 @@ class MascotasProfileView extends BasePanel{
 		if(!mascota["visible"] && !mascota["desaparecido"] && !this.canEdit) {
 			let title = !this.isLogged ? "Esta mascota está oculta, ¿es tuya? Inicia sesión" : "Esta mascota está oculta";
 			let button = !this.isLogged ?
-				<Button type="primary" onClick={e => this.redirectPage(this.constants.route_login, {"mascota" : this.mascota_pk})}>Iniciar sesión</Button>
+				<Button type="primary" onClick={e => this.openLogin({"mascota" : this.mascota_pk})}>Iniciar sesión</Button>
 				:
 				<Button type="primary" onClick={e => this.redirectPage(this.constants.route_mascotas)}>Volver a las mascotas</Button>
 			return (

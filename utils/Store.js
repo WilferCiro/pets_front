@@ -27,6 +27,7 @@ class Store {
 		this.deleteData     = this.deleteData.bind(this);
 		this.checkIsLogged  = this.checkIsLogged.bind(this);
 		this.isLogged       = this.isLogged.bind(this);
+		this.isAdmin        = this.isAdmin.bind(this);
 
 		// Cart
 		this.getNumCart     = this.getNumCart.bind(this);
@@ -100,17 +101,34 @@ class Store {
 	}
 
 	// Token
+
+	isAdmin(ctx) {
+		let dataLogged = this.isLogged(ctx, null, true);
+		if (dataLogged !== false) {
+			if(dataLogged["admin"] === true){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	setToken(token) {
 		return this.saveData("token", token);
 	}
-	checkIsLogged(token = null) {
+
+
+	checkIsLogged(token = null, complete = false) {
 		try {
 			let options = {
 				algorithms: ['HS256', 'HS384', 'HS512'],
-				ignoreExpiration: false
+				ignoreExpiration: false,
+				complete: complete
 			}
 			if(token && token !== "undefined"){
-				jwt.verify(token, "CIRO", options);
+				let decoded = jwt.verify(token, "CIRO", options);
+				if (complete) {
+					return decoded.payload;
+				}
 				return true;
 			}
 		} catch (e) {
@@ -119,14 +137,26 @@ class Store {
 		return false;
 	}
 
-	isLogged(ctx, pToken = null) {
-		if (pToken) {
-			return this.checkIsLogged(pToken);
+	isLogged(ctx, pToken = null, complete = false) {
+		if(complete) {
+			let token_user = this.getData("token");
+			let token_server = this.readValue("token", ctx);
+			if (this.checkIsLogged(token_server, complete) !== false) {
+				return this.checkIsLogged(token_server, complete);
+			}
+			else if(this.checkIsLogged(token_user, complete)){
+				return this.checkIsLogged(token_user, complete);
+			}
 		}
-		let token_user = this.getData("token");
-		let token_server = this.readValue("token", ctx);
-		if (this.checkIsLogged(token_server) || this.checkIsLogged(token_user)) {
-			return true;
+		else{
+			if (pToken) {
+				return this.checkIsLogged(pToken);
+			}
+			let token_user = this.getData("token");
+			let token_server = this.readValue("token", ctx);
+			if (this.checkIsLogged(token_server) || this.checkIsLogged(token_user)) {
+				return true;
+			}
 		}
 		return false;
 	}

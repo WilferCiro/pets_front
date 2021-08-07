@@ -57,7 +57,7 @@ class Home extends BasePanel{
 			this.redirectPage(this.constants.route_mascotas);
 		}
 		else{
-			this.redirectPage(this.constants.route_login);
+			this.openLogin();
 		}
 	}
 
@@ -217,5 +217,5 @@ Home.getPageName = () => {
 export default Home;
 
 /*
-	
+
 */

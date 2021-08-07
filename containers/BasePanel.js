@@ -26,6 +26,7 @@ export default class BasePanel extends Component {
 	static refBreadcrumb = new React.createRef();
 	static refButtonCart = new React.createRef();
 	static refMobileMenu = new React.createRef();
+	static refLogin      = new React.createRef();
 
 	constructor(props) {
 		super(props);
@@ -44,10 +45,17 @@ export default class BasePanel extends Component {
 		this.setBreadCrumb = this.setBreadCrumb.bind(this);
 		this.updateCart    = this.updateCart.bind(this);
 		this.getDataCart   = this.getDataCart.bind(this);
+		this.openLogin     = this.openLogin.bind(this);
 
 		this.finalBuy      = this.finalBuy.bind(this);
 
 		BasePanel.service.setLogout(this.logout);
+	}
+
+	openLogin(attrs = {}) {
+		if(BasePanel.refLogin.current) {
+			BasePanel.refLogin.current.open(attrs);
+		}
 	}
 
 	updateCart(obj) {

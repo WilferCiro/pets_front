@@ -9,6 +9,7 @@ import NProgress  from 'nprogress';
 // custom classes
 import Constant   from '@/components/Constant';
 import Store      from '@/utils/Store';
+import { saveAs } from 'file-saver';
 
 // Ant
 import {message}  from 'antd';
@@ -39,7 +40,8 @@ class Services {
 		showError = false,
 		formData = false,
 		token,
-		ctx,
+		ctx = null,
+		download = null,
 		showLoad = true
 	}){
 		if(showLoad){
@@ -95,6 +97,11 @@ class Services {
 				{ "status" : 400}
 			);
 		});
+
+		if (download) {
+			saveAs(await fetchResponse.blob(), download)
+		}
+
 		try{
 			dataGet = await fetchResponse.json();
 		}

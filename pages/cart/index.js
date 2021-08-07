@@ -178,7 +178,7 @@ class CartView extends BasePanel{
 		// TODO: validations
 		if(!this.props.isLogged){
 			let properties = {"from_cart" : true}
-			this.redirectPage(this.constants.route_login, properties);
+			this.openLogin(properties);
 		}
 		else{
 			let valid = this.refTable.current.validate();

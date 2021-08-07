@@ -289,7 +289,7 @@ class PreviewView extends ProductBase{
 										message="Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, por ello es necesario iniciar sesión"
 										type="error"
 										action={
-											<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_login, {"producto" : producto.pk})}>Iniciar sesión</Button>
+											<Button type="primary" onClick={(e) => this.openLogin({"producto" : producto.pk})}>Iniciar sesión</Button>
 										} />
 
 								</div>

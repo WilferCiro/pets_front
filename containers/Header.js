@@ -64,7 +64,7 @@ class Header extends BasePanel{
 								{/*</Badge>*/}
 								<CartButton nroCart={this.props.nroCart} ref={BasePanel.refButtonCart} />
 								{(!isLogged)?
-								<a key={Math.random()} onClick={e => this.redirectPage(this.constants.route_login)} className="center-vertical iniciar-sesion-header">Login</a>
+								<a key={Math.random()} onClick={e => this.openLogin()} className="center-vertical iniciar-sesion-header">Login</a>
 								:
 								null}
 							</Space>
