@@ -52,7 +52,13 @@ class MascotasView extends BasePanel{
 
 	componentDidMount() {
 		this.searchMascotas(1);
-		this.setBreadCrumb([{"label" : "Mascotas"}])
+		this.setBreadCrumb([{"label" : "Mascotas"}]);
+
+		if (this.props.query.add === "true") {
+			if(this.refFormAdd.current) {
+				this.addMascota();
+			}
+		}
 	}
 
 	async searchMascotas(page) {
@@ -67,7 +73,6 @@ class MascotasView extends BasePanel{
 			isPublic: false,
 			body: body
 		});
-		console.log(data);
 		if(data["success"]) {
 			this.setState({
 				mascotas: data["data"],
@@ -127,24 +132,29 @@ class MascotasView extends BasePanel{
 	}
 
 	render() {
+		let formAdd = <AddMascotaForm
+			modal={true}
+			vertical={false}
+			ref={this.refFormAdd}
+			modalOnOk={this.onAddMascota}
+			initialValues={{
+				"visible" : true
+			}}
+			/>
+
 		if (!this.state.mascotas) {
 			return (
-				<MascotaCard loading={true} />
+				<div>
+					{formAdd}
+					<MascotaCard loading={true} />
+				</div>
 			);
 		}
 
 		if(this.state.mascotas.length === 0) {
 			return (
 				<div>
-					<AddMascotaForm
-						modal={true}
-						vertical={false}
-						ref={this.refFormAdd}
-						modalOnOk={this.onAddMascota}
-						initialValues={{
-							"visible" : true
-						}}
-						/>
+					{formAdd}
 					<Result
 						icon={<InboxOutlined />}
 						title="No has inscrito tus mascotas, inscríbelas totalmente gratis y obtén su código QR para su propio collar"
@@ -156,15 +166,7 @@ class MascotasView extends BasePanel{
 
 		return (
 			<div>
-				<AddMascotaForm
-					modal={true}
-					vertical={false}
-					ref={this.refFormAdd}
-					modalOnOk={this.onAddMascota}
-					initialValues={{
-						"visible" : true
-					}}
-					/>
+				{formAdd}
 				<Tooltip title="Registrar nueva mascota">
 					<Button type="primary" icon={<PlusCircleFilled />} onClick={this.addMascota}>Registrar mascota</Button>
 				</Tooltip>
@@ -201,6 +203,10 @@ class MascotasView extends BasePanel{
 			</div>
 		);
 	}
+}
+
+MascotasView.getInitialProps = async ({query}) => {
+	return {query};
 }
 MascotasView.getPageName = () => {
 	return "Mis mascotas";

@@ -117,7 +117,7 @@ class ModalMissing extends BasePanel{
 									A
 								</Avatar>
 							</div><br />
-							<p><i><b>Fecha de desaparición: </b> {this.mascotaData && this.mascotaData["fecha_desaparecido"] ? this.mascotaData["fecha_desaparecido"].formatDateTime() : ""}</i></p>
+							<p><i><b>Fecha de desaparición: </b> {this.mascotaData && this.mascotaData["fecha_desaparecido"] ? this.mascotaData["fecha_desaparecido"].formatDate() : ""}</i></p>
 							<Divider />
 							<p className="text-uppercase">
 								<Label

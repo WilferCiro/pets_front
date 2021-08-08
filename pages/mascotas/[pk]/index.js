@@ -87,6 +87,7 @@ class MascotasProfileView extends BasePanel{
 		this.openMissingModal          = this.openMissingModal.bind(this);
 		this.nextImage                 = this.nextImage.bind(this);
 		this.prevImage                 = this.prevImage.bind(this);
+		this.sendEscaneo               = this.sendEscaneo.bind(this);
 
 		// References
 		this.refFormEdit         = React.createRef();
@@ -99,6 +100,40 @@ class MascotasProfileView extends BasePanel{
 	componentDidMount() {
 		this.searchMascota();
 		this.setBreadCrumb(this.breadcrumbData);
+
+		if(typeof navigator !== "undefined" && this.props.query.qr){
+			if ('geolocation' in navigator) {
+				let self = this;
+				let options = {
+					enableHighAccuracy: true,
+					timeout: 1000,
+					maximumAge: 0
+				};
+				navigator.geolocation.getCurrentPosition(this.sendEscaneo, null, options);
+			}
+		}
+	}
+
+	async sendEscaneo(position) {
+		let lat = position.coords.latitude;
+		let lon = position.coords.longitude;
+		let accuracy = position.coords.accuracy;
+		console.log(position.coords);
+		let body = {
+			latitud: lat,
+			longitud: lon,
+			accuracy: accuracy
+		}
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "mascota",
+			model: "reporte_escaneo",
+			body: body,
+			aditional : [this.mascota_pk],
+		});
+		if(data["success"]) {
+			//this.redirectPage(this.route_mascotas_profile, {"pk" : this.mascota_pk});
+		}
 	}
 
 	openMissingModal() {
@@ -344,14 +379,14 @@ class MascotasProfileView extends BasePanel{
 		];
 
 		dataMissing = [
-			{title: "Fecha de desaparición", description: mascota["fecha_desaparecido"] ? (mascota["fecha_desaparecido"] + "").formatDateTime() : "No hay fecha registrada"},
+			{title: "Fecha de desaparición", description: mascota["fecha_desaparecido"] ? (mascota["fecha_desaparecido"] + "").formatDate() : "No hay fecha registrada"},
 			{title: "Descripción", description: mascota["descripcion_desaparecido"]},
 		]
 		if(this.canEdit) {
 			dataMissing.push({title: "Acciones", description: <Button type="primary" onClick={this.openMissingModal}>Generar cartel</Button>});
 		}
 
-		let urlMascota = this.constants.getUrlFront() + this.constants.route_profile_mascotas.replace("[pk]", mascota["pk"] + "?fromQR=true")
+		let urlMascota = this.constants.getUrlFront() + this.constants.route_profile_mascotas.replace("[pk]", mascota["pk"] + "?qr=true")
 		let mascotaURLShare = this.constants.getUrlFront() + this.constants.route_profile_mascotas.replace("[pk]", mascota["pk"] + "-" + mascota["nombre"].formatURL());
 		let mascotaShareText = "Mi mascota " + mascota["nombre"] + " está desaparecida, aquí te comparto su perfil en KiwiPeluditos";
 		return (
@@ -634,6 +669,10 @@ class MascotasProfileView extends BasePanel{
 
 MascotasProfileView.getInitialProps = async ({query, ctx, req, pathname}) => {
 	let mascota_pk = query.pk;
+
+	if(mascota_pk && mascota_pk.split("-").length > 0){
+		mascota_pk = mascota_pk.split("-")[0];
+	}
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
 	return {query, mascota_pk, isLogged};
 }

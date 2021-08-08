@@ -10,6 +10,7 @@ import BasePanel          from '@/containers/BasePanel';
 import EditUserForm       from '@/formclasses/edit_user';
 import EditPasswordForm   from '@/formclasses/edit_password';
 import ModalPedido        from '@/components/ModalPedido';
+import ModalPuntos        from '@/components/ModalPuntos';
 
 // Ant components and icons
 import {
@@ -52,11 +53,14 @@ class ProfileView extends BasePanel{
 		this.editUserData            = this.editUserData.bind(this);
 		this.editUserPassword        = this.editUserPassword.bind(this);
 		this.openPedido              = this.openPedido.bind(this);
+		this.openModalPuntos         = this.openModalPuntos.bind(this);
+		this.sendConfirmation        = this.sendConfirmation.bind(this);
 
 		// References
 		this.refFormEditPassword = React.createRef();
 		this.refFormEdit         = React.createRef();
 		this.refModalPedido      = React.createRef();
+		this.refModalPuntos      = React.createRef();
 	}
 
 	componentDidMount() {
@@ -169,6 +173,28 @@ class ProfileView extends BasePanel{
 		}
 	}
 
+	openModalPuntos() {
+		this.refModalPuntos.current.open();
+	}
+
+	async sendConfirmation() {
+
+		let data = await BasePanel.service.apiSend({
+			method: "PUT",
+			register: "user",
+			model: "generar_confirmar",
+			isPublic: false,
+			body: {}
+		});
+
+		if(data["success"]) {
+			message.success("Se ha enviado un correo electrónico");
+		}
+		else{
+			message.error("Hubo un error al generar el código de confirmación");
+		}
+	}
+
 	render() {
 		let user = this.state.user;
 		if(!user) {
@@ -206,9 +232,9 @@ class ProfileView extends BasePanel{
 		else if(user.proxima_fecha_puntos){
 			messagePuntos += " a partir del " + user.proxima_fecha_puntos.formatDateTime();
 		}
-
 		return (
 			<div className="page-center">
+				<ModalPuntos ref={this.refModalPuntos} />
 				<ModalPedido ref={this.refModalPedido} />
 				<EditUserForm
 					ref={this.refFormEdit}
@@ -221,19 +247,38 @@ class ProfileView extends BasePanel{
 					modal={true}
 					modalOnOk={this.editUserPassword}/>
 
+				{
+					!user.confirmado?
+					<div>
+						<Alert
+							message="Tu correo electrónico no ha sido validado, revisa tu correo electrónico para validarlo."
+							type="warning"
+							action={
+								<Space>
+									<Button size="small" type="ghost" onClick={this.sendConfirmation}>
+										Volver a enviar
+									</Button>
+								</Space>
+							}
+						/>
+						<Divider />
+					</div>
+					:
+					null
+				}
+
+
 				<Row gutter={[40, 16]} align="top">
 					<Col xs={24} md={11} lg={8}>
 						<div key={Math.random()} className="carouser-foto-container">
 							{
 								user.avatar ?
-									<Avatar src={user.avatar} size={{ xs: 250, sm: 250, md: 250, lg: 250, xl: 300, xxl: 350 }} />
+									<Avatar src={user.avatar} size={{ xs: 250, sm: 250, md: 300, lg: 250, xl: 300, xxl: 350 }} />
 								:
-								<Avatar size={{ xs: 250, sm: 250, md: 250, lg: 250, xl: 300, xxl: 350 }}>
+								<Avatar size={{ xs: 250, sm: 250, md: 300, lg: 250, xl: 300, xxl: 350 }}>
 									{user.first_name}
 								</Avatar>
 							}
-
-
 						</div>
 					</Col>
 					<Col xs={24} md={13} lg={16}>
@@ -258,6 +303,15 @@ class ProfileView extends BasePanel{
 						<Tabs defaultActiveKey="3">
 
 							<TabPane tab="Mis mascotas" key="1">
+								{
+									dataMascota.length === 0 ?
+										<div>
+											<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_mascotas, {add: true})}>Agregar mascota</Button>
+											<Divider />
+										</div>
+									:
+									null
+								}
 								<List
 									size="small"
 									itemLayout="horizontal"
@@ -327,7 +381,10 @@ class ProfileView extends BasePanel{
 										}
 									</Row>
 									<Divider />
-									<Button type="primary" shape="round" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>Visitar tienda </Button>
+									<Space>
+										<Button type="primary" shape="round" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>Visitar tienda </Button>
+										<Button onClick={this.openModalPuntos}>¿Cómo conseguir puntos? </Button>
+									</Space>
 								</Card>
 							</TabPane>
 						</Tabs>

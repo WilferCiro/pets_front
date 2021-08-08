@@ -12,7 +12,8 @@ import Constant  from '@/components/Constant';
 // Ant components and icons
 import {
 	Result,
-	Button
+	Button,
+	Divider
 } from 'antd';
 import {
 	ArrowLeftOutlined
@@ -22,6 +23,18 @@ import {
 class BlogProfileView extends BasePanel{
 	constructor(props) {
 		super(props);
+	}
+
+	componentDidMount() {
+		let dataBread = [];
+		dataBread.push({
+			"label" : "Blog",
+			"route" : this.constants.route_blog,
+		});
+		dataBread.push({
+			"label" : this.props.blog.titulo
+		});
+		this.setBreadCrumb(dataBread);
 	}
 
 	render() {
@@ -44,12 +57,17 @@ class BlogProfileView extends BasePanel{
 					src={blog.portada}
 					alt={"Portada del blog"}
 					layout='responsive'
-					width={700}
-					height={100}
+					width={1600}
+					height={200}
 				/>
-				<h2 className="landing-title">{blog.titulo}</h2>
-				<div className="content" dangerouslySetInnerHTML={{__html: blog.cuerpo}}></div>
-				<p className="foot-entry">Modificado: {blog.fecha_modificacion} <br /> por {blog.usuario}</p>
+				<div className="blog-content">
+					<h2 className="landing-title">{blog.titulo}</h2>
+					<p className="foot-entry">Modificado: {blog.fecha_modificacion} <br /> por {blog.usuario}</p>
+					<Divider />
+					<div className="content" dangerouslySetInnerHTML={{__html: blog.cuerpo}}></div>
+					<Divider />
+					<p className="foot-entry">Modificado: {blog.fecha_modificacion} <br /> por {blog.usuario}</p>
+				</div>
 			</div>
 		);
 	}
@@ -105,8 +123,6 @@ BlogProfileView.getInitialProps = async ({query, req, pathname}) => {
 		}
 
 		blog["fecha_modificacion"] = blog["fecha_modificacion"].formatDateTime();
-
-		console.log(query);
 
 	}
 	return {query, blog};

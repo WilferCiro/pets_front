@@ -116,16 +116,11 @@ class Footer extends BasePanel{
 							<a target="_blank" className="footer-social facebook" href="https://www.facebook.com/kiwipeluditos"><FacebookFilled className="icon-big" /></a>
 							<a target="_blank" className="footer-social instagram" href="https://www.instagram.com/kiwipeluditos/"><InstagramFilled className="icon-big" /></a>
 							<a target="_blank" className="footer-social twitter" href="https://twitter.com/"><TwitterSquareFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social youtube" href="https://youtube.com/kiwipeluditos"><YoutubeFilled className="icon-big" /></a>
+							<a target="_blank" className="footer-social youtube" href="https://www.youtube.com/channel/UCLgg_5ovtz2Krxt2Ft5rLkg"><YoutubeFilled className="icon-big" /></a>
 							<a target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
 						</div>
 					</Col>
 				</Row>
-
-				<div className="footer-separator">
-
-
-				</div>
 			</footer>
 		);
 	}

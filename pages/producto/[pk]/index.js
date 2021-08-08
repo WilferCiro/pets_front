@@ -247,15 +247,15 @@ class PreviewView extends ProductBase{
 						</Space>
 						<br />
 						<p>{producto.descripcion}</p>
+						<Divider />
 
-						<Space direction="vertical">
 							{
 								Object.keys(radioOptions).map((key, index) => {
-									return <Row gutter={[3, 1]} align="middle" key={Math.random()}>
+									return <Row gutter={[3, 15]} align="middle" key={Math.random()} style={{marginBottom: "15px"}}>
 										<Col xs={24} md={5}>
 											<b>{radioOptions[key]["nombre"]}</b>
 										</Col>
-										<Col  xs={24} md={19}>
+										<Col xs={24} md={19}>
 											<Radio.Group
 												onChange={(e) => this.changeOption(e, key)}
 												options={radioOptions[key]["options"]}
@@ -265,14 +265,14 @@ class PreviewView extends ProductBase{
 									</Row>
 								})
 							}
+						<Space direction="vertical">
 							{
 								producto.stock === 0 ?
 								<Alert message="Producto agotado" type="error" />
 								:
 
 								((this.props.isLogged && producto.seleccion_mascota) || !producto.seleccion_mascota) ?
-
-									this.props.mascotas === 0 ?
+									this.props.mascotas === 0 && producto.seleccion_mascota ?
 										<Alert
 											message="Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, inscribe a tu primer mascota"
 											type="error"

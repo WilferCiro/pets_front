@@ -87,13 +87,15 @@ class AyudaView extends BasePanel{
 								<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
 								<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
 								<Divider />
+								<Button type="primary" shape="round" href="#contacto">Envíanos un mensaje</Button>
 							</div>
 						</Col>
 					</Row>
 				</div>
 
-
-				<section className="landing-section">
+				<Divider id="contacto" />
+				<br />
+				<div className="index-section">
 					<div className="help-form">
 						<h4 className="landing-h4 landing-title">Contáctanos</h4>
 						<p>Déjanos un mensaje, sugerencia o duda.</p>
@@ -101,7 +103,7 @@ class AyudaView extends BasePanel{
 						<Divider />
 						<Button type="primary" onClick={this.sendMessage}>Enviar Mensaje</Button>
 					</div>
-				</section>
+				</div>
 
 
 				<div className="index-section">

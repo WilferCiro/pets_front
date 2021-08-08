@@ -18,7 +18,7 @@ import FormNumber         from '@/formcomponents/FormNumber';
 import FormSwitch         from '@/formcomponents/FormSwitch';
 import FormLabel          from '@/formcomponents/FormLabel';
 import FormUrl            from '@/formcomponents/FormUrl';
-
+import FormSelectQuery    from '@/formcomponents/FormSelectQuery';
 // Ant components and icons
 import {
 	Form,
@@ -187,6 +187,7 @@ class BaseFormStructure  extends React.Component{
 			"email"           : (item) => <FormInputText {...props} {...item} inputType={"email"} max={200} />,
 			"datetime"        : (item) => <FormDateTime {...props} {...item} />,
 			"select"          : (item) => <FormSelect {...props} {...item} />,
+			"select_query"    : (item) => <FormSelectQuery {...props} {...item} />,
 			"label"           : (item) => <FormLabel {...props} {...item} />,
 			"search"          : (item) => <FormSearch {...props} {...item} />,
 			"price"           : (item) => <FormNumber {...props} ref={item["id"]} {...item} />,

@@ -9,6 +9,7 @@ import React          from 'react';
 import AddMascotaForm from '@/formclasses/add_mascota';
 import MascotaCard    from '@/components/MascotaCard';
 import BasePanel      from '@/containers/BasePanel';
+import FilterDesaparecidoForm from '@/formclasses/filter_desaparecidos';
 
 // Ant components and icons
 import {
@@ -19,6 +20,8 @@ import {
 	Button,
 	List,
 	message,
+	Row,
+	Col
 } from 'antd';
 import {
 	InboxOutlined
@@ -44,7 +47,8 @@ class PerdidasView extends BasePanel{
 		this.searchMascotas        = this.searchMascotas.bind(this);
 
 		// References
-		this.refFormAdd = React.createRef();
+		this.refFormAdd          = React.createRef();
+		this.refFormDesaparecido = React.createRef();
 	}
 
 	componentDidMount() {
@@ -54,11 +58,18 @@ class PerdidasView extends BasePanel{
 	}
 
 	async searchMascotas(page) {
+		let ciudad = null;
+		if (this.refFormDesaparecido.current) {
+			let valid = await this.refFormDesaparecido.current.validate();
+			if (!valid) {
+				return;
+			}
+
+			ciudad = this.refFormDesaparecido.current.getValues()["ciudad_desaparecido"];
+		}
 		let body = {
-			"cantidad" : this.pageSize,
 			"page" : page,
-			"modelo" : "perdidas",
-			"ordenar_por" : "-pk"
+			"ciudad" : ciudad
 		}
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
@@ -94,25 +105,30 @@ class PerdidasView extends BasePanel{
 			);
 		}
 
+		let filterForm = <Row gutter={[20, 16]} align="top">
+				<Col span={8}>
+					<FilterDesaparecidoForm ref={this.refFormDesaparecido} />
+				</Col>
+				<Col span={12}>
+					<Button type="primary" onClick={(e) => this.searchMascotas(1)}>Filtrar</Button>
+				</Col>
+			</Row>
+
 		if(this.state.mascotas.length === 0) {
 			return (
-				<Result
-					icon={<InboxOutlined />}
-					title="No hay mascotas reportadas como desaparecidas"
-				/>
+				<div>
+					{filterForm}
+					<Result
+						icon={<InboxOutlined />}
+						title="No hay mascotas reportadas como desaparecidas en esta ciudad"
+					/>
+				</div>
 			);
 		}
 
 		return (
 			<div>
-				<AddMascotaForm
-					modal={true}
-					vertical={false}
-					ref={this.refFormAdd}
-					modalOnOk={this.onAddMascota}
-					initialValues={{
-						"visible" : true
-					}} />
+				{filterForm}
 				<List
 					itemLayout="vertical"
 					size="large"

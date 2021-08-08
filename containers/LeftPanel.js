@@ -107,11 +107,7 @@ class LeftPanel extends BasePanel{
 								<div>{/*userData ? userData["cantidad_mascotas"] : "-"*/}</div>
 							</li>
 							:
-							<li onClick={(e) => this.openLogin({"from_mascotas" : true})}>
-								<div><IdcardFilled className="icon" /></div>
-								<div>Mis mascotas</div>
-								<div></div>
-							</li>
+							null
 						}
 						<li className={currentPage.includes("/desaparecidas") ? "active" : ""} onClick={(e) => this.clickMenu(this.constants.route_perdidas)}>
 							<div><AlertFilled className="icon" /></div>
