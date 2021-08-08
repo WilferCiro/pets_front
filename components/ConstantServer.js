@@ -1,4 +1,4 @@
-const isProduction = false;
+const isProduction = true;
 
 const ConstantServer = {
 	URL_public        : '/api/public/',
