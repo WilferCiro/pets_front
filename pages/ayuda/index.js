@@ -65,32 +65,32 @@ class AyudaView extends BasePanel{
 	render() {
 
 		return (
-			<div className="page-center">
-			<div className="index-section">
-				<Row gutter={[10, 16]} align="middle">
-					<Col xs={24} md={13}>
-						<div className="index-section-inner">
-							<div className="section1-huella">
-								<Image
-									src={this.constants.img_huella}
-									alt="imagen de huella"
-									width={200}
-									height={200}
-									layout="responsive"
-									priority={true}
-									/>
+			<div>
+				<div className="index-section">
+					<Row gutter={[10, 16]} align="middle">
+						<Col xs={24} md={13}>
+							<div>
+								<div className="section1-huella">
+									<Image
+										src={this.constants.img_huella}
+										alt="imagen de huella"
+										width={200}
+										height={200}
+										layout="responsive"
+										priority={true}
+										/>
+								</div>
 							</div>
-						</div>
-					</Col>
-					<Col xs={24} md={11}>
-						<div>
-							<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
-							<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
-							<Divider />
-						</div>
-					</Col>
-				</Row>
-			</div>
+						</Col>
+						<Col xs={24} md={11}>
+							<div>
+								<h2 className="landing-h2 landing-title">{this.constants.getWebName()}</h2>
+								<p>Somos una organización que se preocupa por el bienestar de los <b>Kiwi Peluditos</b>, por ese motivo buscamos soluciones para brindarte un poco más de seguridad y tranquilidad a ti y a tu peludito totalmente gratis.</p>
+								<Divider />
+							</div>
+						</Col>
+					</Row>
+				</div>
 
 
 				<section className="landing-section">

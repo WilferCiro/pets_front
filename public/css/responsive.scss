@@ -52,15 +52,63 @@
 		width: 100%;
 	}
 }
-
 @media (max-width: 767px) {
+
+	.swipe-index{
+		display: block;
+		position: absolute;
+		right: 10px;
+		top: 50%;
+		z-index: 20;
+		animation: slidein linear 30s;
+		-webkit-animation: slidein linear 30s;
+		-moz-animation: slidein linear 30s;
+		animation-iteration-count: infinite;
+	}
+	@-moz-keyframes slidein {
+		0% { opacity: 0; }
+		2% { opacity: 0.9; }
+		4% { opacity: 0.5; }
+		8% { opacity: 0.8; }
+		12% { opacity: 1; }
+		14% { opacity: 0; }
+		100% { opacity: 0; }
+	}
+	@-webkit-keyframes slidein {
+		0% { opacity: 0; }
+		2% { opacity: 0.9; }
+		4% { opacity: 0.5; }
+		8% { opacity: 0.8; }
+		12% { opacity: 1; }
+		14% { opacity: 0; }
+		100% { opacity: 0; }
+	}
+	@keyframes slidein {
+		0% { opacity: 0; }
+		2% { opacity: 0.9; }
+		4% { opacity: 0.5; }
+		8% { opacity: 0.8; }
+		12% { opacity: 1; }
+		14% { opacity: 0; }
+		100% { opacity: 0; }
+	}
+
 	.index-section{
 		width: 100%;
 		height: 110vh;
 	}
 
+	.slider-index{
+		.slider-button, .slider-button2 {
+			display: none;
+		}
+	}
+
 	.ant-page-header-heading-title{
 		text-overflow: ellipsis;
+	}
+	.ant-page-header-heading-left{
+		width: 72%;
 	}
 	.header-noLogin{
 		.ant-page-header-heading-left{

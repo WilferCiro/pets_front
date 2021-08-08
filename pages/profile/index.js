@@ -238,10 +238,10 @@ class ProfileView extends BasePanel{
 					</Col>
 					<Col xs={24} md={13} lg={16}>
 						<Row gutter={[40, 16]} align="middle">
-							<Col xs={24} md={19}>
+							<Col xs={15} md={19}>
 								<h2 className="mascota-name">Mi perfil · {user.full_name}</h2>
 							</Col>
-							<Col xs={24} md={5}>
+							<Col xs={9} md={5}>
 								<Space>
 									<Tooltip title="Editar datos de la mascota">
 										<Button shape="circle" type="primary" icon={<EditOutlined />} onClick={this.openFormEdit}></Button>
@@ -308,11 +308,11 @@ class ProfileView extends BasePanel{
 									type="success"
 									/>
 								<Card style={{marginTop: "15px", textAlign: "center"}}>
-									<Space size="large" align="end">
+									<Row align="bottom">
 										{
 											user.puntos_range.map((item, index) => {
 												return (
-													<Space direction="vertical" key={Math.random()}>
+													<Col xs={12} md={8} key={Math.random()}>
 														<Progress type="circle" percent={99} format={percent => item["porcentaje"] + "% dcto"} strokeColor={item["current"] ? strokeColor : "gray"}/>
 														<p>{item["minimo"]} - {item["maximo"]} puntos</p>
 														{
@@ -321,11 +321,11 @@ class ProfileView extends BasePanel{
 															:
 															null
 														}
-													</Space>
+													</Col>
 												)
 											})
 										}
-									</Space>
+									</Row>
 									<Divider />
 									<Button type="primary" shape="round" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>Visitar tienda </Button>
 								</Card>

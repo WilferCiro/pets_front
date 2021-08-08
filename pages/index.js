@@ -75,7 +75,18 @@ class Home extends BasePanel{
 			<div className="index-page">
 
 				<VideoHome ref={this.refVideo}/>
-				<div className="slider">
+				<div className="swipe-index">
+					<Image
+						src={this.constants.img_swipe}
+						alt="imagen de huella"
+						width={60}
+						height={60}
+						layout="fixed"
+						priority={true}
+						/>
+				</div>
+
+				<div className="slider slider-index">
 					<div className="slider-left-button slider-button2">
 						<Button type="primary" size={"large"} icon={<LeftOutlined />} onClick={this.prevPage}/>
 					</div>

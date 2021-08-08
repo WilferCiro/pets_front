@@ -94,23 +94,24 @@ class Footer extends BasePanel{
 				<Divider />
 
 				<Row>
-					<Col xs={10} md={9} >
+					<Col xs={24} md={9} >
 						<div>
 							<div className="logo-footer" onClick={(e) => this.clickMenu(this.constants.route_index)}>
 								<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} />
 							</div>
 							<p><b>Todos los derechos reservados &copy; 2021 </b></p>
 							{!this.state.online ? "Estás fuera de línea" : ""}
-							<Divider />
+							<Divider className="show-mobile" />
 						</div>
 					</Col>
-					<Col xs={10} md={9} >
+					<Col xs={24} md={9} >
 						<Space direction="vertical" >
 							<a onClick={(e) => this.redirectPage(this.constants.route_cookies)}>Cookies en KiwiPeluditos</a>
 							<a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>Aviso Legal y Política de Privacidad</a>
 						</Space>
+						<Divider className="show-mobile" />
 					</Col>
-					<Col xs={10} md={6} >
+					<Col xs={24} md={6} >
 						<div>
 							<a target="_blank" className="footer-social facebook" href="https://www.facebook.com/kiwipeluditos"><FacebookFilled className="icon-big" /></a>
 							<a target="_blank" className="footer-social instagram" href="https://www.instagram.com/kiwipeluditos/"><InstagramFilled className="icon-big" /></a>
