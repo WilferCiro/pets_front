@@ -1,6 +1,6 @@
 {
-	"short_name" : "KiwiPyme",
-	"name" : "KiwiPyme",
+	"short_name" : "Kiwi Peluditos",
+	"name" : "Kiwi Peluditos",
 	"icons" : [
 		{
 			"src" : "/app-icon-512x512.png",
@@ -11,6 +11,6 @@
 	],
 	"start_url" : "/",
 	"display" : "standalone",
-	"theme_color" : "#ffffff",
-	"background_color" : "#00132B"
+	"theme_color" : "purple",
+	"background_color" : "purple"
 }

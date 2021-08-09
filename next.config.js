@@ -1,26 +1,34 @@
 // next.config.js
 const withAntdLess = require('next-plugin-antd-less');
+const withPWA = require("next-pwa");
 
-module.exports = withAntdLess({
-	// optional
-	modifyVars: { '@primary-color': 'purple', '@link-color': 'purple' },
-	// optional
-	lessVarsFilePathAppendToEndOfContent: false,
-	// optional https://github.com/webpack-contrib/css-loader#object
-	cssLoaderOptions: {},
 
-	// Other Config Here...
-	images: {
-		domains: [
-			'127.0.0.1',
-			'kiwipeluditosapi.herokuapp.com'
-		],
-	},
+module.exports = withPWA(withAntdLess({
+		pwa: {
+			dest: "public",
+			register: true,
+			skipWaiting: true,
+		},
+		// optional
+		modifyVars: { '@primary-color': 'purple', '@link-color': 'purple' },
+		// optional
+		lessVarsFilePathAppendToEndOfContent: false,
+		// optional https://github.com/webpack-contrib/css-loader#object
+		cssLoaderOptions: {},
 
-	webpack(config) {
-		return config;
-	},
-});
+		// Other Config Here...
+		images: {
+			domains: [
+				'127.0.0.1',
+				'kiwipeluditosapi.herokuapp.com'
+			],
+		},
+
+		webpack(config) {
+			return config;
+		},
+	})
+);
 
 
 /*

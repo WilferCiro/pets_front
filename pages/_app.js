@@ -15,7 +15,6 @@ import esEs            from 'antd/lib/locale/es_ES';
 import CustomBreadcrumb from '@/components/CustomBreadcrumb';
 
 import Login     from '@/containers/Login';
-//import MessengerCustomerChat from 'react-messenger-customer-chat';
 import { LiveChatLoaderProvider, Messenger } from 'react-live-chat-loader'
 
 //import 'antd/dist/antd.css';
@@ -305,6 +304,7 @@ class LocalDashboard extends App{
 					provider="messenger"
 					providerKey="100921802295312"
 					appID="1225262257945841"
+					color="purple"
 					locale="es_CO">
 					<Messenger />
 				</LiveChatLoaderProvider>

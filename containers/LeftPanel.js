@@ -68,6 +68,7 @@ class LeftPanel extends BasePanel{
 					<Avatar
 						size={90}
 						src={userData && userData["avatar"] !== "" && userData["avatar"] !== null ? userData["avatar"] : this.constants.img_user}
+						alt="Foto usuario"
 					/>
 				</div>
 				<h4 className="nav-username">

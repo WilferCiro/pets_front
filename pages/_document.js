@@ -13,7 +13,7 @@ class MyDocument extends Document {
 
 	render() {
 		return (
-			<Html>
+			<Html lang="es">
 				<Head>
 					<link
 						href="https://fonts.googleapis.com/css2?family=Lato&display=optional"
