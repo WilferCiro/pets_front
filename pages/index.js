@@ -135,7 +135,6 @@ class Home extends BasePanel{
 												width={200}
 												height={200}
 												layout="responsive"
-												priority={true}
 												/>
 										</div>
 									</Col>
@@ -170,7 +169,6 @@ class Home extends BasePanel{
 												width={200}
 												height={200}
 												layout="responsive"
-												priority={true}
 												/>
 										</div>
 									</Col>

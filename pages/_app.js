@@ -178,7 +178,8 @@ class LocalDashboard extends App{
 					<meta name="author" content="Davinci"/>
 					<link rel="manifest" href="/manifest.json" />
 					<link rel="icon" href="/favicon.png" />
-					<meta name="theme-color" content="#00132B" />
+					<link rel="apple-touch-icon" href="/favicon.png" />
+					<meta name="theme-color" content="purple" />
 
 					{/* Additional data */}
 					<meta httpEquiv="Expires" content="0"/>
