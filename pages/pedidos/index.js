@@ -177,6 +177,7 @@ class PedidosView extends BasePanel{
 				<EditPedidoForm
 					modal="true"
 					ref={this.refEditPedido}
+					destroyOnClose={true}
 					modalOnOk={this.onEditPedidoFinal} />
 
 				<ModalPedido ref={this.refModalPedido} />

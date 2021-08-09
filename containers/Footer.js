@@ -10,6 +10,7 @@ import Image from 'next/image'
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
+import SuscribirForm  from '@/formclasses/suscribir';
 
 // Ant components and icons
 import {
@@ -18,7 +19,8 @@ import {
 	Button,
 	Space,
 	Row,
-	Col
+	Col,
+	message
 } from 'antd';
 import {
 	FacebookFilled,
@@ -41,9 +43,11 @@ class Footer extends BasePanel{
 		this.online        = this.online.bind(this);
 		this.offline       = this.offline.bind(this);
 		this.acceptCookies = this.acceptCookies.bind(this);
+		this.suscribirme  = this.suscribirme.bind(this);
 
 		// Refs
 		this.refCookiesModal = React.createRef();
+		this.refSuscribeForm = React.createRef();
 	}
 
 	componentDidMount() {
@@ -83,6 +87,26 @@ class Footer extends BasePanel{
 		this.refCookiesModal.current.classList.add("cookies-hide");
 	}
 
+	async suscribirme() {
+		if (await this.refSuscribeForm.current.validate()) {
+			let values = this.refSuscribeForm.current.getValues();
+
+			let data = await BasePanel.service.apiSend({
+				method: "POST",
+				register: "suscripcion",
+				model: "crear",
+				body: {
+					email: values["email"].trim()
+				},
+				showError: true
+			});
+			if(data["success"]) {
+				this.refSuscribeForm.current.clearValues();
+				message.success("Su suscripción se ha realizado con éxito");
+			}
+		}
+	}
+
 	render() {
 		return (
 			<footer>
@@ -90,14 +114,25 @@ class Footer extends BasePanel{
 					<p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario a través de su navegación. Si continúas navegando aceptas su uso. <a onClick={(e) => this.redirectPage(this.constants.route_cookies)}>Política de cookies</a></p>
 					<Button type="primary" onClick={this.acceptCookies} block>Entendido</Button>
 				</div>
+				<div className="footer-suscribe">
+					<Row gutter={[0, 20]} align="middle">
+						<Col xs={24} md={9}>
+							<b>Suscríbete</b> y recibe todas las novedades
+						</Col>
+						<Col xs={14} md={10}>
+							<SuscribirForm ref={this.refSuscribeForm} vertical={true} />
+						</Col>
+						<Col xs={10} md={5}>
+							<Button onClick={this.suscribirme}>Suscribirme</Button>
+						</Col>
+					</Row>
 
-				<Divider />
-
+				</div>
 				<Row>
 					<Col xs={24} md={9} >
 						<div>
 							<div className="logo-footer" onClick={(e) => this.clickMenu(this.constants.route_index)}>
-								<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} />
+								<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} alt="Logo" />
 							</div>
 							<p><b>Todos los derechos reservados &copy; 2021 </b></p>
 							{!this.state.online ? "Estás fuera de línea" : ""}
@@ -113,14 +148,18 @@ class Footer extends BasePanel{
 					</Col>
 					<Col xs={24} md={6} >
 						<div>
-							<a target="_blank" className="footer-social facebook" href="https://www.facebook.com/kiwipeluditos"><FacebookFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social instagram" href="https://www.instagram.com/kiwipeluditos/"><InstagramFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social twitter" href="https://twitter.com/"><TwitterSquareFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social youtube" href="https://www.youtube.com/channel/UCLgg_5ovtz2Krxt2Ft5rLkg"><YoutubeFilled className="icon-big" /></a>
-							<a target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
+							<a rel="noreferrer" target="_blank" className="footer-social facebook" href="https://www.facebook.com/kiwipeluditos"><FacebookFilled className="icon-big" /></a>
+							<a rel="noreferrer" target="_blank" className="footer-social instagram" href="https://www.instagram.com/kiwipeluditos/"><InstagramFilled className="icon-big" /></a>
+							<a rel="noreferrer" target="_blank" className="footer-social twitter" href="https://twitter.com/"><TwitterSquareFilled className="icon-big" /></a>
+							<a rel="noreferrer" target="_blank" className="footer-social youtube" href="https://www.youtube.com/channel/UCLgg_5ovtz2Krxt2Ft5rLkg"><YoutubeFilled className="icon-big" /></a>
+							<a rel="noreferrer" target="_blank" className="footer-social whatsapp" href="https://whatsapp.com/"><WhatsAppOutlined className="icon-big" /></a>
 						</div>
 					</Col>
 				</Row>
+				<Divider />
+				<div className="metodos-pago-footer">
+					<Image alt="Métodos de pago" width={430} height={80} layout={"responsive"} src={this.constants.img_medios_pago} />
+				</div>
 			</footer>
 		);
 	}

@@ -17,7 +17,8 @@ class EditUserForm extends BaseFormStructure{
 			{type: "cell", container: 4, size: 12, id: "celular2", label: "Celular 2"},
 			{type: "cell", container: 5, size: 12, id: "telefono", label: "Teléfono"},
 			{type: "text", container: 6, size: 12, id: "direccion", label: "Dirección"},
-			{type: "multiimage", container: 7, size: 12, id: "avatar", label: "Foto", required : false, maxCount: 1}
+			{type: "select_query", container: 7, size: 12, id: "ciudad", label: "Ciudad residencia", service: "ciudad"},
+			{type: "multiimage", container: 8, size: 12, id: "avatar", label: "Foto", required : false, maxCount: 1}
 		];
 	}
 }

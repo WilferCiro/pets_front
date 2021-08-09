@@ -49,11 +49,14 @@
 		padding: 10px 0px;
 	}
 	.perdido-cartel-footer{
-		width: 100%;
+		width: 95%;
 	}
 }
 @media (max-width: 767px) {
-
+	.metodos-pago-footer{
+		width: 100%;
+		margin: auto;
+	}
 	.swipe-index{
 		display: block;
 		position: absolute;
@@ -202,6 +205,9 @@
 	// Footer.js
 	.footer-separator{
 		display: block;
+	}
+	.footer-suscribe{
+		padding: 30px 4%;
 	}
 	// Footer.js
 

@@ -253,7 +253,7 @@ class BaseFormStructure  extends React.Component{
 		</Form>
 
 		if (this.modal) {
-			return <Modal destroyOnClose={true} width={550} style={{ top: 20 }} title={this.state.modal.title} visible={this.state.modal.open} onOk={this.handleOk} onCancel={this.handleCancel}>
+			return <Modal destroyOnClose={this.props.destroyOnClose || false} width={550} style={{ top: 20 }} title={this.state.modal.title} visible={this.state.modal.open} onOk={this.handleOk} onCancel={this.handleCancel}>
 				{form}
 			</Modal>
 		}

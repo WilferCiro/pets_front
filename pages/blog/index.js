@@ -42,6 +42,11 @@ class BlogView extends BasePanel{
 
 	componentDidMount() {
 		this.searchBlogs(1);
+		let dataBread = [];
+		dataBread.push({
+			"label" : "Blog"
+		});
+		this.setBreadCrumb(dataBread);
 	}
 
 	async searchBlogs(page) {

@@ -148,7 +148,48 @@ class PayView extends BasePanel{
 		let valorEnvio = this.valorEnvio;
 		for (let index in dataCart){
 			for(let index2 in this.dataService) {
-				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + ""){
+
+				let aditional = "";
+				let cartCodeArray = [];
+				let error = false;
+
+				if(dataCart[index]["code"]){
+					let opciones = this.dataService[index2]["opciones"];
+
+					let newCode = "";
+					let cartCode = dataCart[index]["code"].split(",");
+
+					let seleccion_mascota = this.dataService[index2]["seleccion_mascota"];
+
+					if ((dataCart[index]["user_pk"] === this.store.getUserPK() && seleccion_mascota) || !seleccion_mascota) {
+						for (let i in cartCode){
+							if (cartCode[i]) {
+								cartCodeArray.push(cartCode[i])
+							}
+						}
+						for(let i in opciones) {
+							let item = opciones[i]["tipo"] + ":" + opciones[i]["pk"];
+							let inArray = cartCodeArray.indexOf(item);
+							if(inArray > -1) {
+								cartCodeArray.splice(inArray, 1);
+								aditional +=  opciones[i]["tipo_nombre"] + ": " + opciones[i]["nombre"] + "<br />";
+							}
+						}
+						if(cartCodeArray.length === 1) {
+							if(cartCodeArray[0].includes("mascota:")) {
+								aditional +=  "Mascota: " + cartCodeArray[0].split("_")[1];
+							}
+							cartCodeArray = [];
+						}
+					}
+					else{
+						error = true;
+						this.updateCart({"pk" : dataCart[index]["pk"], "count" : 0, "code" : dataCart[index]["code"]});
+						message.error("Un producto contenía referencia a una mascota de otro usuario, por ello no se cuenta en el pedido.")
+					}
+				}
+
+				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + "" && cartCodeArray.length === 0 && !error){
 					subTotal += this.dataService[index2]["precio"] * dataCart[index]["count"];
 					descuentos += (this.dataService[index2]["precio_original"] - this.dataService[index2]["precio"]) * dataCart[index]["count"];
 
@@ -157,7 +198,7 @@ class PayView extends BasePanel{
 						"cantidad" : dataCart[index]["count"],
 						"nombre" : this.dataService[index2]["nombre"],
 						"precio" : this.dataService[index2]["precio"],
-						"adicional" : dataCart[index]["code"]
+						"adicional" : aditional
 					})
 				}
 			}
@@ -165,7 +206,7 @@ class PayView extends BasePanel{
 		let valorDescuentoPuntos = (subTotal * this.discountPointPercent / 100);
 		subTotal = subTotal - valorDescuentoPuntos;
 
-		if (dataCart.length === 0) {
+		if (subTotal === 0) {
 			valorEnvio = 0;
 			this.redirectPage(this.constants.route_cart);
 		}

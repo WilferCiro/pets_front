@@ -55,8 +55,8 @@ class TablePedidos extends BasePanel{
 				dataIndex: 'estado',
 				render: (text, record) => (
 					<Space size="middle">
-						<Progress type="circle" percent={parseInt(text) * 100 / 5} width={30} />
-						<label>{record["estado_nombre"]}</label>
+						<Progress type="circle" percent={parseInt(text) * 100 / 5} width={30} status={record["cancelado"] ? "exception" : ""} />
+						<label>{record["cancelado"] ? "Cancelado" : record["estado_nombre"]}</label>
 					</Space>
 				),
 			},

@@ -196,7 +196,9 @@ class MascotasView extends BasePanel{
 						<List.Item
 							key={Math.random()}
 						>
-							<MascotaCard mascota={mascota} />
+							<div style={{marginTop: "5px"}}>
+								<MascotaCard mascota={mascota} />
+							</div>
 						</List.Item>
 						)}
 					/>

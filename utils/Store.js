@@ -28,6 +28,7 @@ class Store {
 		this.checkIsLogged  = this.checkIsLogged.bind(this);
 		this.isLogged       = this.isLogged.bind(this);
 		this.isAdmin        = this.isAdmin.bind(this);
+		this.getUserPK      = this.getUserPK.bind(this);
 
 		// Cart
 		this.getNumCart     = this.getNumCart.bind(this);
@@ -101,8 +102,16 @@ class Store {
 	}
 
 	// Token
-
-	isAdmin(ctx) {
+	getUserPK(ctx = null) {
+		let dataLogged = this.isLogged(ctx, null, true);
+		if (dataLogged !== false) {
+			if(dataLogged["user_id"]){
+				return dataLogged["user_id"];
+			}
+		}
+		return null;
+	}
+	isAdmin(ctx = null) {
 		let dataLogged = this.isLogged(ctx, null, true);
 		if (dataLogged !== false) {
 			if(dataLogged["admin"] === true){

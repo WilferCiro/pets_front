@@ -85,6 +85,7 @@ class Constant{
 		this.img_huella_qr          = "/images/index/huella_qr.svg";
 		this.img_huella_shop        = "/images/index/huella_shop.svg";
 		this.img_swipe              = "/images/index/swipe.svg";
+		this.img_medios_pago        = "/images/footer/metodos_pago.png";
 
 
 		/// Documentos legales

@@ -27,7 +27,8 @@ import {
 	Alert,
 	message,
 	Tag,
-	Divider
+	Divider,
+	Skeleton
 } from 'antd';
 import {
 	EditOutlined,
@@ -66,7 +67,16 @@ class ProfileView extends BasePanel{
 	componentDidMount() {
 		this.getUserData();
 
-		this.setBreadCrumb([{"label" : "Mi perfil"}])
+		this.setBreadCrumb([{"label" : "Mi perfil"}]);
+
+		if (this.props.query.transactionState) {
+			if (this.props.query.transactionState === "4") {
+				message.success("Su pago ha sido realizado con éxito");
+			}
+			else{
+				message.error("Hubo un error al realizar el pago, por favor, vuelva a intentarlo");
+			}
+		}
 	}
 
 	openPedido(pk) {
@@ -81,7 +91,8 @@ class ProfileView extends BasePanel{
 			"celular1" : formValues["celular1"],
 			"celular2" : formValues["celular2"],
 			"telefono" : formValues["telefono"],
-			"direccion" : formValues["direccion"]
+			"direccion" : formValues["direccion"],
+			"ciudad" : formValues["ciudad"],
 		}
 		if(formValues["avatar"]["fotos"].length > 0 && formValues["avatar"]["fotos"][0]["uid"].includes("rc-upload")) {
 			body["avatar"] = formValues["avatar"]["fotos"].length > 0 ? formValues["avatar"]["fotos"][0]["originFileObj"] : null;
@@ -198,7 +209,20 @@ class ProfileView extends BasePanel{
 	render() {
 		let user = this.state.user;
 		if(!user) {
-			return (<div>Cargando</div>);
+			return (
+				<div>
+					<Row gutter={[40, 16]} align="top">
+						<Col xs={24} md={11} lg={8}>
+							<Skeleton.Avatar active={true} style={{width: "300px", height: "300px"}} shape={"circle"} />
+						</Col>
+						<Col xs={24} md={13} lg={16}>
+							<Skeleton active={true}/>
+							<Skeleton active={true}/>
+							<Skeleton active={true}/>
+						</Col>
+					</Row>
+				</div>
+			);
 		}
 
 		user["celular1"] = user["celular1"] === "null" ? "" : user["celular1"];

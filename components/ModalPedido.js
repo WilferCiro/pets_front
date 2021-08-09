@@ -163,6 +163,7 @@ class ModalPedido extends BasePanel{
 													title={<a onClick={(e) => this.redirectPage(this.constants.route_profile_producto, {pk: producto["pk"]})}>{producto["producto_nombre"]}</a>}
 													description={
 														<div>
+															<div dangerouslySetInnerHTML={{__html: producto["adicional"]}}></div>
 															{producto["precio"].formatPrice()} x {producto["cantidad"]} unidad(es)
 														</div>
 													}

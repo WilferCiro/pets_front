@@ -95,8 +95,9 @@ class FormSelect extends BaseFormComponent{
 			this.setState({
 				options: newData
 			})
-
-			this.onChange(this.formRef.current.getFieldValue(this.getName()), true);
+			if(this.formRef.current){
+				this.onChange(this.formRef.current.getFieldValue(this.getName()), true);
+			}
 		}
 	}
 

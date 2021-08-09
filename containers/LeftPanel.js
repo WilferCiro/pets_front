@@ -61,7 +61,7 @@ class LeftPanel extends BasePanel{
 			<div className="left-panel">
 
 				<div className="logo" onClick={(e) => this.clickMenu(this.constants.route_index)}>
-					<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} />
+					<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} alt="Logo página" />
 				</div>
 
 				<div className="avatar-user">

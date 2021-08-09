@@ -113,6 +113,9 @@ class PreviewView extends ProductBase{
 				pk: this.props.productPK,
 				code: this.getCode()
 			}
+			if(this.props.producto.seleccion_mascota){
+				data["user_pk"] = this.store.getUserPK();
+			}
 			this.updateCart(data);
 		}
 		else{

@@ -65,7 +65,9 @@ export default class BasePanel extends Component {
 		else{
 			this.store.updateCart(obj);
 		}
-		BasePanel.refButtonCart.current.setNro(this.store.getNumCart());
+		if(BasePanel.refButtonCart.current) {
+			BasePanel.refButtonCart.current.setNro(this.store.getNumCart());
+		}
 	}
 
 	async getDataCart() {
