@@ -46,7 +46,7 @@ class ButtonCustom extends BasePanel{
 
 	render() {
 		return (
-			<Button type="primary" block onClick={this.handleClick} disabled={this.state.disabled}>
+			<Button onClick={this.handleClick} {...this.props} disabled={this.state.disabled}>
 				{this.text}
 			</Button>
 		);

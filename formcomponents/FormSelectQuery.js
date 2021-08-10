@@ -31,7 +31,7 @@ class FormSelectQuery extends BaseFormComponent{
 	}
 
 	componentDidMount() {
-		if (this.service && (this.service_index === null || this.service_index === undefined)) {
+		if (this.service) {
 			this.searchService();
 		}
 	}
@@ -52,12 +52,18 @@ class FormSelectQuery extends BaseFormComponent{
 	}
 
 	onSearch(value) {
-		console.log(value);
 		this.searchService(value);
 	}
 
 	async searchService(value = null) {
 		let body = {query: value}
+
+		if (this.preconditions && value === null) {
+			if(this.preconditions[this.getName()] !== undefined) {
+				body["pk"] = this.preconditions[this.getName()];
+				this.preconditions = {};
+			}
+		}
 
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
@@ -88,6 +94,7 @@ class FormSelectQuery extends BaseFormComponent{
 				style={this.style}
 			>
 				<Select
+					autoComplete="dontshow"
 					showSearch
 					showArrow
 					onSearch={this.onSearch}

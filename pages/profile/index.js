@@ -129,7 +129,10 @@ class ProfileView extends BasePanel{
 			});
 		}
 
-		this.refFormEdit.current.open("Editar mis datos", [{"id" : "avatar", "values" : fotos}]);
+		let preconditions = {
+			ciudad: this.state.user["ciudad"]
+		}
+		this.refFormEdit.current.open("Editar mis datos", [{"id" : "avatar", "values" : fotos}], preconditions);
 	}
 
 	openFormEditPassword() {

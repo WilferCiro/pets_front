@@ -154,5 +154,5 @@ String.prototype.formatURL  = function (){
 }
 Number.prototype.formatPrice = function () {
 	let a = this;
-	return a.toLocaleString('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 2})
+	return a.toLocaleString('es-CO', {style: 'currency',currency: 'COP', minimumFractionDigits: 1})
 };

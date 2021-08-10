@@ -84,6 +84,9 @@ class PreviewView extends ProductBase{
 		// References
 		this.refNroSelector  = React.createRef();
 		this.refModalAvisame = React.createRef();
+
+		// Variables
+		this.cartProducto = null;
 	}
 
 	componentDidMount() {
@@ -105,20 +108,123 @@ class PreviewView extends ProductBase{
 				"params" : {"categoria3" : this.producto["categorias"]["categoria3"]["pk"] + "-" + this.producto["categorias"]["categoria3"]["nombre"].formatURL()}
 			});
 			this.setBreadCrumb(dataBread);
+
+			this.getCartProducto();
 		}
 	}
 
-	localUpdateCart(nro) {
+
+	async getCartProducto() {
+		let body = {
+			"producto" : this.producto["pk"]
+		}
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "carrito",
+			model: "producto",
+			body: body,
+			isPublic: false,
+			showError: true
+		});
+		console.log("---", data);
+		if(data["success"]) {
+			this.cartProducto = data["data"];
+		}
+	}
+
+
+	async localUpdateCart(nro, pk = null) {
 		if(parseInt(this.stock) >= parseInt(nro)) {
-			let data = {
+			/*let data = {
 				count: nro,
 				pk: this.props.productPK,
 				code: this.getCode()
 			}
 			if(this.props.producto.seleccion_mascota){
 				data["user_pk"] = this.store.getUserPK();
+			}*/
+
+			let data = {
+				"nro" : nro,
+				"pk" : pk,
+				"producto" : this.props.productPK,
+				"opciones" : this.getCode(),
+				"mascota" : 48
 			}
-			this.updateCart(data);
+
+			let newPk = await this.updateCart(data);
+			this.refNroSelector.current.setValue(nro, false, this.stock, newPk);
+
+			await this.getCartProducto();
+			/*
+			if (nro === 0) {
+				// Delete
+				let data = await BasePanel.service.apiSend({
+					method: "DELETE",
+					register: "carrito",
+					model: "eliminar",
+					isPublic: false,
+					showError: true,
+					aditional: [pk]
+				});
+				if(data["success"]) {
+					this.refNroSelector.current.setValue(nro, false, this.stock, null);
+
+					if(BasePanel.refButtonCart.current) {
+						BasePanel.refButtonCart.current.setNro(data["data"]["total_usuario"]);
+					}
+				}
+			}
+			else {
+				if (pk === null) {
+					// Add
+					let body = {
+						"cantidad" : nro,
+						"producto" : this.props.productPK,
+						"opciones" : this.getCode(),
+						"mascota" : 48
+					}
+					let data = await BasePanel.service.apiSend({
+						method: "POST",
+						register: "carrito",
+						model: "crear",
+						body: body,
+						isPublic: false,
+						showError: true
+					});
+					if(data["success"]) {
+						this.refNroSelector.current.setValue(nro, false, this.stock, data["data"]["pk"])
+
+						if(BasePanel.refButtonCart.current) {
+							BasePanel.refButtonCart.current.setNro(data["data"]["total_usuario"]);
+						}
+					}
+
+				}
+				else{
+					// Modify
+					let body={
+						cantidad: nro
+					}
+					let data = await BasePanel.service.apiSend({
+						method: "PUT",
+						register: "carrito",
+						model: "modificar",
+						body: body,
+						isPublic: false,
+						showError: true,
+						aditional: [pk]
+					});
+					if(data["success"]) {
+
+						if(BasePanel.refButtonCart.current) {
+							BasePanel.refButtonCart.current.setNro(data["data"]["total_usuario"]);
+						}
+
+					}
+				}
+			}
+			*/
 		}
 		else{
 			message.error("Solo hay " + this.stock + " unidades de este producto");
@@ -139,15 +245,19 @@ class PreviewView extends ProductBase{
 		let code = [];
 		for (let index in this.options) {
 			if (this.options[index] != null) {
-				code.push(index + ":" + this.options[index].split("-")[0]);
+				code.push({
+					"tipo" : index,
+					"value" : this.options[index].split("-")[0]
+				});
 			}
 		}
-		return code.join(",");
+		return code;//code.join(",");
 	}
 
 
 	changeOption(value, type) {
 		//console.log(value.target.value, type);
+
 		this.options[type] = value.target.value;
 
 		let valid = true;
@@ -159,22 +269,52 @@ class PreviewView extends ProductBase{
 				valid = false;
 			}
 			else{
-				code.push(index + ":" + this.options[index].split("-")[0]);
+				code.push({
+					"tipo" : index,
+					"value" : this.options[index].split("-")[0]
+				});
 				stock = parseInt(this.options[index].split("-")[1]) < stock ? parseInt(this.options[index].split("-")[1]) : stock;
 			}
 		}
-		code = code.join(",");
-		//console.log(this.options);
+		//code = code.join(",");
+		console.log(code);
 		if(this.refNroSelector.current) {
-			let nroCart = BasePanel.store.getNumCart(null, this.producto.pk, code);
+			//let nroCart = BasePanel.store.getNumCart(null, this.producto.pk, code);
 
 			this.stock = stock;
-
 			if (valid) {
-				this.refNroSelector.current.setValue(nroCart, false, stock)
+				let nroCart = 0;
+				let pk = null;
+
+				// TODO: Mejorarrrr
+				this.cartProducto.map((item, index) => {
+					let nroCoincide = 0;
+					if (item["opciones_basic"].length > 0) {
+						item["opciones_basic"].map((opcion, iOpcion) => {
+
+							code.map((co, iCo) => {
+								if (opcion["producto_opcion_tipo"] + "" === co["tipo"] + "" && opcion["producto_opcion_pk"] + "" === co["value"] + "") {
+									nroCoincide += 1;
+								}
+
+								return null;
+							})
+
+							return null;
+						});
+
+						if(nroCoincide + 1 === code.length) {
+							nroCart = item["cantidad"];
+							pk = item["pk"];
+						}
+					}
+					return null;
+				})
+
+				this.refNroSelector.current.setValue(nroCart, false, stock, pk)
 			}
 			else{
-				this.refNroSelector.current.setValue(0, true, stock)
+				this.refNroSelector.current.setValue(0, true, stock, null)
 			}
 		}
 
@@ -208,22 +348,18 @@ class PreviewView extends ProductBase{
 
 		let opciones = producto["opciones"];
 		let radioOptions = {};
+
 		for(let index in opciones) {
 			if (radioOptions[opciones[index]["tipo"]] === undefined) {
 				radioOptions[opciones[index]["tipo"]] = {"nombre" : opciones[index]["tipo_nombre"], "options" : []};
 			}
-			if(opciones[index]["tipo"] === "mascota"){
-				radioOptions[opciones[index]["tipo"]]["options"].push({
-					label: opciones[index]["nombre"],
-					value: opciones[index]["pk"] + "_" + opciones[index]["nombre"] + "-" + opciones[index]["stock"],
-				})
-			}
-			else{
-				radioOptions[opciones[index]["tipo"]]["options"].push({
-					label: opciones[index]["nombre"],
-					value: opciones[index]["pk"] + "-" + opciones[index]["stock"],
-				})
-			}
+
+			radioOptions[opciones[index]["tipo"]]["options"].push({
+				label: opciones[index]["nombre"],
+				value: opciones[index]["pk"] + "-" + opciones[index]["stock"],
+			})
+
+			// TODO: cambiar stock de lugar
 		}
 
 		return (
@@ -354,6 +490,7 @@ class PreviewView extends ProductBase{
 								</Tooltip>
 							</Col>
 						</Row>
+
 					</Col>
 				</Row>
 

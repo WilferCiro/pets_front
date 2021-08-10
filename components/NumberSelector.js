@@ -35,7 +35,8 @@ class NumberSelector extends BasePanel{
 		this.state = {
 			value : this.defaultValue,
 			disabled: this.props.disabled || false,
-			max: this.props.max || 100
+			max: this.props.max || 100,
+			pk: null
 		}
 
 		// Methods
@@ -43,14 +44,17 @@ class NumberSelector extends BasePanel{
 		this.plus         = this.plus.bind(this);
 		this.buttonClick  = this.buttonClick.bind(this);
 		this.setValue     = this.setValue.bind(this);
+
+		// Variables
 	}
 
-	setValue(value, disabled, max = null) {
+	setValue(value, disabled, max = null, pk = null) {
 		this.setState({
 			value: value,
 			disabled: disabled,
-			max: max || 100
-		})
+			max: max || 100,
+			pk: pk
+		});
 	}
 
 	minus() {
@@ -61,7 +65,7 @@ class NumberSelector extends BasePanel{
 			});
 
 			if(this.onUpdate) {
-				this.onUpdate(newValue, this.parameterUpdate)
+				this.onUpdate(newValue, this.state.pk)
 			}
 		}
 	}
@@ -74,7 +78,7 @@ class NumberSelector extends BasePanel{
 			});
 
 			if(this.onUpdate) {
-				this.onUpdate(newValue, this.parameterUpdate)
+				this.onUpdate(newValue, this.state.pk)
 			}
 		}else{
 			message.error("Solo hay " + this.state.max + " unidades de este producto");

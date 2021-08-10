@@ -110,6 +110,7 @@ class FormSelect extends BaseFormComponent{
 				style={this.style}
 			>
 				<Select
+					autoComplete="dontshow"
 					showSearch
 					showArrow
 					onChange={this.onChange}

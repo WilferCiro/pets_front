@@ -58,16 +58,81 @@ export default class BasePanel extends Component {
 		}
 	}
 
-	updateCart(obj) {
-		if (obj["count"] === 0) {
+	async updateCart(obj) {
+		/*if (obj["count"] === 0) {
 			this.store.removeCart(obj["pk"], obj["code"]);
 		}
 		else{
 			this.store.updateCart(obj);
+		}*/
+		let pkReturn = null;
+		let nroCart = 0;
+		if (obj["nro"] === 0) {
+			// Delete
+			let data = await BasePanel.service.apiSend({
+				method: "DELETE",
+				register: "carrito",
+				model: "eliminar",
+				isPublic: false,
+				showError: true,
+				aditional: [obj["pk"]]
+			});
+			if(data["success"]) {
+				pkReturn = null;
+				//this.refNroSelector.current.setValue(obj["nro"], false, obj["stock"], null);
+				nroCart = data["data"]["total_usuario"];
+			}
 		}
+		else {
+			if (obj["pk"] === null) {
+				// Add
+				let body = {
+					"cantidad" : obj["nro"],
+					"producto" : obj["producto"],
+					"opciones" : obj["opciones"],
+					"mascota" : obj["mascota"]
+				}
+				let data = await BasePanel.service.apiSend({
+					method: "POST",
+					register: "carrito",
+					model: "crear",
+					body: body,
+					isPublic: false,
+					showError: true
+				});
+				if(data["success"]) {
+					pkReturn = data["data"]["pk"];
+					//this.refNroSelector.current.setValue(obj["nro"], false, obj["stock"], data["data"]["pk"]);
+					nroCart = data["data"]["total_usuario"];
+				}
+
+			}
+			else{
+				// Modify
+				let body={
+					cantidad: obj["nro"]
+				}
+				let data = await BasePanel.service.apiSend({
+					method: "PUT",
+					register: "carrito",
+					model: "modificar",
+					body: body,
+					isPublic: false,
+					showError: true,
+					aditional: [obj["pk"]]
+				});
+				if(data["success"]) {
+					pkReturn = data["data"]["pk"];
+					nroCart = data["data"]["total_usuario"];
+				}
+			}
+		}
+
 		if(BasePanel.refButtonCart.current) {
-			BasePanel.refButtonCart.current.setNro(this.store.getNumCart());
+			BasePanel.refButtonCart.current.setNro(nroCart);
 		}
+
+		return pkReturn;
 	}
 
 	async getDataCart() {

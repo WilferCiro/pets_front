@@ -289,42 +289,39 @@ class PayView extends BasePanel{
 					<Col xs={24} md={8}>
 						<Card title="Resumen de orden">
 							<Row>
-								<Col span={15}>
+								<Col span={14}>
 									<b>Subtotal: </b>
 								</Col>
-								<Col span={9}>
+								<Col span={10}>
 									<p className="right-text"><Label ref={this.refSubTotalLabel} /></p>
 								</Col>
-								<Col span={15}>
+								<Col span={14}>
 									<b>Descuentos: </b>
 								</Col>
-								<Col span={9}>
+								<Col span={10}>
 									<p className="right-text"><Label ref={this.refDescuentosLabel} /></p>
 								</Col>
-								<Col span={15}>
-									<b>Descuentos por puntos: </b>
+								<Col span={14}>
+									<b>Descuentos puntos: </b>
 								</Col>
-								<Col span={9}>
+								<Col span={10}>
 									<p className="right-text"><Label ref={this.refDescuentosPuntosLabel} /></p>
 								</Col>
-								<Col span={15}>
+								<Col span={14}>
 									<b>Envío: </b>
 								</Col>
-								<Col span={9}>
+								<Col span={10}>
 									<p className="right-text"><Label ref={this.refEnvioLabel} /></p>
 								</Col>
-								<Col span={15}>
+								<Col span={14}>
 									<h2><b>Total: </b></h2>
 								</Col>
-								<Col span={9}>
+								<Col span={10}>
 									<h3 className="right-text"><Label ref={this.refTotalLabel} /></h3>
 								</Col>
 							</Row>
 							<Divider />
-							<Alert
-								message="Esta es una compra segura"
-								type="success"
-								/>
+							<Image alt="Métodos de pago" width={430} height={80} layout={"responsive"} src={this.constants.img_medios_pago} />
 						</Card>
 
 					</Col>

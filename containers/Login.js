@@ -9,6 +9,7 @@ import React          from 'react';
 import BasePanel      from '@/containers/BasePanel';
 import LoginForm       from '@/formclasses/login';
 import SignUpForm      from '@/formclasses/signup';
+import ButtonCustom   from '@/components/ButtonCustom';
 
 // Ant components and icons
 import {
@@ -28,9 +29,11 @@ class Login extends BasePanel{
 		}
 
 		// Refs
-		this.refFormLogin  = React.createRef();
-		this.refFormSignup = React.createRef();
-		this.refContainer  = React.createRef();
+		this.refFormLogin         = React.createRef();
+		this.refFormSignup        = React.createRef();
+		this.refContainer         = React.createRef();
+		this.refButtonLogin       = React.createRef();
+		this.refButtonRegistrarme = React.createRef();
 
 		// Methods
 		this.handleSocialLogin = this.handleSocialLogin.bind(this);
@@ -76,6 +79,7 @@ class Login extends BasePanel{
 	async onSignUp() {
 		let valid = await this.refFormSignup.current.validate();
 		if(valid) {
+			this.refButtonRegistrarme.current.setDisabled(true);
 			let values = this.refFormSignup.current.getValues();
 			let body = {
 				"email" : values["email"].trim().toLowerCase(),
@@ -98,6 +102,7 @@ class Login extends BasePanel{
 				this.refFormSignup.current.clearValues();
 				this.onRegisterLogin();
 			}
+			this.refButtonRegistrarme.current.setDisabled(false);
 
 		}
 	}
@@ -107,7 +112,7 @@ class Login extends BasePanel{
 		if(!valid) {
 			return;
 		}
-
+		this.refButtonLogin.current.setDisabled(true);
 		let values = this.refFormLogin.current.getValues();
 
 		let body = {
@@ -130,7 +135,7 @@ class Login extends BasePanel{
 			this.user.setNroPedidos(data["data"]["cantidad_pedidos"]);
 			message.success("Sesión iniciada con éxito, redireccionado...");
 			if(this.attrs["from_cart"]){
-				this.redirectPage(this.constants.route_pay);
+				this.redirectPage(this.constants.route_cart);
 			}
 			else if(this.attrs["mascota"] !== null && this.attrs["mascota"] !== undefined){
 				this.redirectPage(this.constants.route_profile_mascotas, {pk: this.attrs["mascota"], fromLogin: true});
@@ -148,6 +153,7 @@ class Login extends BasePanel{
 		else{
 			message.error("Usuario o contraseña incorrectos");
 		}
+		this.refButtonLogin.current.setDisabled(false);
 	}
 
 	handleSocialLogin(e) {
@@ -166,7 +172,7 @@ class Login extends BasePanel{
 							<LoginForm ref={this.refFormLogin} vertical={true} />
 							<a onClick={(e) => this.redirectPage(this.constants.route_recover)} className="remember-password">¿Olvidaste tu contraseña?</a>
 							<Divider />
-							<Button type="primary" shape="round" size="large" onClick={(e) => this.onLogin()} block>Iniciar sesión</Button>
+							<ButtonCustom type="primary" shape="round" size="large" onClick={this.onLogin} text="Iniciar sesión" ref={this.refButtonLogin} block />
 							<Divider>ó</Divider>
 							<Button onClick={(e) => this.onRegisterLogin()} block>Regístrate</Button>
 						</div>
@@ -181,7 +187,7 @@ class Login extends BasePanel{
 							/>
 							<p>Al registrarse usted acepta nuestra <a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>política de privacidad de datos</a></p>
 							<Divider />
-							<Button type="primary" shape="round" size="large" onClick={(e) => this.onSignUp()} block>Registrarme</Button>
+							<ButtonCustom type="primary" shape="round" size="large" onClick={this.onSignUp} text="Registrarme" ref={this.refButtonRegistrarme} block />
 							<Divider>ó</Divider>
 							<Button onClick={(e) => this.onRegisterLogin()} block>Iniciar sesión</Button>
 						</div>
