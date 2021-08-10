@@ -131,7 +131,7 @@ class Footer extends BasePanel{
 				<Row>
 					<Col xs={24} md={9} >
 						<div>
-							<div className="logo-footer" onClick={(e) => this.clickMenu(this.constants.route_index)}>
+							<div className="logo-footer">
 								<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} alt="Logo" />
 							</div>
 							<p><b>Todos los derechos reservados &copy; 2021 </b></p>

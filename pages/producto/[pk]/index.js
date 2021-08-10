@@ -15,7 +15,7 @@ import ProductCard    from '@/components/ProductCard';
 import NumberSelector from '@/components/NumberSelector';
 import ImageSlider    from '@/components/ImageSlider';
 import Constant       from '@/components/Constant';
-
+import ModalAvisame   from '@/components/ModalAvisame';
 // React-shared
 import {
 	FacebookShareButton,
@@ -79,9 +79,11 @@ class PreviewView extends ProductBase{
 		this.changeOption     = this.changeOption.bind(this);
 		this.isEnabledAddCart = this.isEnabledAddCart.bind(this);
 		this.getCode          = this.getCode.bind(this);
+		this.avisame          = this.avisame.bind(this);
 
 		// References
-		this.refNroSelector = React.createRef();
+		this.refNroSelector  = React.createRef();
+		this.refModalAvisame = React.createRef();
 	}
 
 	componentDidMount() {
@@ -180,6 +182,10 @@ class PreviewView extends ProductBase{
 
 	}
 
+	avisame() {
+		this.refModalAvisame.current.open(this.props.productPK);
+	}
+
 	render() {
 		let producto = this.props.producto;
 
@@ -222,6 +228,7 @@ class PreviewView extends ProductBase{
 
 		return (
 			<div>
+				<ModalAvisame ref={this.refModalAvisame} />
 				<Row gutter={[40, 1]} align="top">
 					<Col xs={24} md={11}>
 						{
@@ -271,7 +278,14 @@ class PreviewView extends ProductBase{
 						<Space direction="vertical">
 							{
 								producto.stock === 0 ?
-								<Alert message="Producto agotado" type="error" />
+								<Alert
+									message="Este producto está agotado, ¿Te avisamos cuando tengamos disponible?"
+									type="error"
+									action={
+										<Button type="primary" onClick={this.avisame}>
+											Si, Avísame
+										</Button>
+									} />
 								:
 
 								((this.props.isLogged && producto.seleccion_mascota) || !producto.seleccion_mascota) ?

@@ -153,7 +153,7 @@ class PayView extends BasePanel{
 				let cartCodeArray = [];
 				let error = false;
 
-				if(dataCart[index]["code"]){
+				if(dataCart[index]["code"] && dataCart[index]["code"] !== ""){
 					let opciones = this.dataService[index2]["opciones"];
 
 					let newCode = "";

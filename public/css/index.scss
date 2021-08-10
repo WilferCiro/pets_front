@@ -128,6 +128,9 @@ p {
 // generic
 
 // _app.js
+.page-container{
+	min-height: 60vh;
+}
 .complete-page{
 	display: grid;
 	grid-template-columns: 20% 80%;

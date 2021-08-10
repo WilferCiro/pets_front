@@ -13,9 +13,9 @@ class Custom404 extends BasePanel {
 	render() {
 		return (
 			<Result
-				status="404"
-				title="404"
-				subTitle="Lo sentimos, esta página no existe."
+				status="505"
+				title="505"
+				subTitle="Lo sentimos, estamos presentando inconvenientes."
 				extra={<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_index)}>Volver al inicio</Button>}
 			/>
 		)

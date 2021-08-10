@@ -294,7 +294,9 @@ class LocalDashboard extends App{
 							<Header empresas={this.props.empresas} pageName={this.props.pageName} {...headerProps} />
 							<CustomBreadcrumb ref={BasePanel.refBreadcrumb} />
 							<Content style={{padding: "10px 20px"}}>
-								<Component {...pageProps}/>
+								<div className="page-container">
+									<Component {...pageProps}/>
+								</div>
 							</Content>
 							<Footer />
 						</Layout>

@@ -11,16 +11,8 @@ import BasePanel      from '@/containers/BasePanel';
 // Ant components and icons
 import {
 	Modal,
-	message,
-	Timeline,
-	Row,
-	Col,
-	Card,
-	Avatar,
-	Divider
 } from 'antd';
 
-const { Meta } = Card;
 
 class ModalPuntos extends BasePanel{
 	constructor(props) {

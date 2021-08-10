@@ -8,6 +8,7 @@ module.exports = withPWA(withAntdLess({
 			dest: "public",
 			register: true,
 			skipWaiting: true,
+			disable: process.env.NODE_ENV === 'development',
 		},
 		// optional
 		modifyVars: { '@primary-color': 'purple', '@link-color': 'purple' },
