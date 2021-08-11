@@ -8,17 +8,17 @@ import BasePanel      from '@/containers/BasePanel';
 // Ant components and icons
 import { Result, Button } from 'antd';
 
-class Custom404 extends BasePanel {
+class Custom500 extends BasePanel {
 
 	render() {
 		return (
 			<Result
-				status="505"
-				title="505"
+				status="500"
+				title="500"
 				subTitle="Lo sentimos, estamos presentando inconvenientes."
 				extra={<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_index)}>Volver al inicio</Button>}
 			/>
 		)
 	}
 }
-export default Custom404;
+export default Custom500;
