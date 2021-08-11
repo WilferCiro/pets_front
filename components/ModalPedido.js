@@ -90,7 +90,7 @@ class ModalPedido extends BasePanel{
 											{data["direccion"] + " - " + data["ciudad_nombre"]}<br />
 											<b>Recibe:</b> {data["first_name"] + " " + data["last_name"]}<br />
 											{data["celular"]}<br />
-											"{data["adicional"]}"
+											&quot;{data["adicional"]}&ldquo;
 										</div>
 									}
 									/>
