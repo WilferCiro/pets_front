@@ -29,14 +29,13 @@ class NumberSelector extends BasePanel{
 		this.min             = this.props.min || 0;
 		this.defaultValue    = this.props.defaultValue || 0;
 		this.onUpdate        = this.props.onUpdate;
-		this.parameterUpdate = this.props.parameterUpdate;
 		this.showMax         = this.props.showMax || false;
 		// States
 		this.state = {
 			value : this.defaultValue,
 			disabled: this.props.disabled || false,
 			max: this.props.max || 100,
-			pk: null
+			pk: this.props.parameterUpdate || null
 		}
 
 		// Methods
@@ -44,8 +43,22 @@ class NumberSelector extends BasePanel{
 		this.plus         = this.plus.bind(this);
 		this.buttonClick  = this.buttonClick.bind(this);
 		this.setValue     = this.setValue.bind(this);
+		this.disable      = this.disable.bind(this);
+		this.enable       = this.enable.bind(this);
 
 		// Variables
+	}
+
+	disable() {
+		this.setState({
+			disabled: true
+		})
+	}
+
+	enable() {
+		this.setState({
+			disabled: false
+		})
 	}
 
 	setValue(value, disabled, max = null, pk = null) {
@@ -107,7 +120,7 @@ class NumberSelector extends BasePanel{
 
 		return (
 			<div>
-				<div className="number-selector">
+				<div className={"number-selector"}>
 					<Button disabled={this.state.disabled} onClick={this.minus} size="small" type="link" shape="circle" icon={this.state.value === 1 && this.min < 1 ? <DeleteFilled /> : <MinusOutlined />} />
 					<Input disabled={this.state.disabled} size="small" value={this.state.value} min={this.min} max={this.state.max} style={{border: "none", width: "100%", textAlign: "center"}} />
 					<Button disabled={this.state.disabled} onClick={this.plus} size="small" type="link" shape="circle" icon={<PlusOutlined />} />

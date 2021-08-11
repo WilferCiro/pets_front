@@ -16,6 +16,8 @@ import NumberSelector from '@/components/NumberSelector';
 import ImageSlider    from '@/components/ImageSlider';
 import Constant       from '@/components/Constant';
 import ModalAvisame   from '@/components/ModalAvisame';
+import RadioMascotasProducto from '@/components/RadioMascotasProducto';
+import RadioVariantesProducto from '@/components/RadioVariantesProducto';
 // React-shared
 import {
 	FacebookShareButton,
@@ -45,15 +47,18 @@ import {
 	Alert,
 	Tooltip,
 	message,
-	Radio
+	Radio,
+	Skeleton,
+	Avatar
 } from 'antd';
 import {
 	MinusOutlined,
 	PlusOutlined,
-	FileSearchOutlined
+	FileSearchOutlined,
+	QuestionCircleFilled
 } from '@ant-design/icons';
 
-
+const { Meta } = Card;
 const { TabPane } = Tabs;
 
 class PreviewView extends ProductBase{
@@ -61,62 +66,117 @@ class PreviewView extends ProductBase{
 		super(props);
 
 		// Props
-		this.producto = this.props.producto;
-		let opciones = this.producto["opciones"];
-
-		this.options = {}
-
-		for (let index in opciones) {
-			this.options[opciones[index]["tipo"]] = null;
-		}
-
-		this.stock = this.producto.stock;
+		this.mascota = null;
 
 		// States
+		this.state = {
+			producto: null
+		}
 
 		// Methods
 		this.localUpdateCart  = this.localUpdateCart.bind(this);
-		this.changeOption     = this.changeOption.bind(this);
+		this.changeMascota    = this.changeMascota.bind(this);
 		this.isEnabledAddCart = this.isEnabledAddCart.bind(this);
-		this.getCode          = this.getCode.bind(this);
 		this.avisame          = this.avisame.bind(this);
+		this.changeVariante   = this.changeVariante.bind(this);
+		this.initialSetup     = this.initialSetup.bind(this);
+		this.searchProducto   = this.searchProducto.bind(this);
 
 		// References
 		this.refNroSelector  = React.createRef();
 		this.refModalAvisame = React.createRef();
+		this.refRadioMascota = React.createRef();
+
 
 		// Variables
 		this.cartProducto = null;
+		this.pk = this.props.productPK;
 	}
 
 	componentDidMount() {
+		this.searchProducto();
+	}
+	componentDidUpdate() {
+		if (this.pk !== this.props.productPK) {
+			this.pk = this.props.productPK;
+			this.mascota = null;
+			this.searchProducto();
+		}
+	}
+
+	async searchProducto() {
+		let data = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "producto",
+			model: "todo",
+			showLoad: true,
+			aditional : [this.pk]
+		})
+		if (data["success"]) {
+			let producto = data["data"];
+
+			if (producto["seleccion_mascota"] === true && this.props.isLogged) {
+				let dataM = await BasePanel.service.apiSend({
+					method: "GET",
+					register: "mascota",
+					model: "card",
+					isPublic: false,
+					body: {},
+					showLoad: false
+				});
+				if(dataM["success"]){
+					producto["mascotas"] = dataM["data"];
+				}
+			}
+
+			this.setState({
+				producto: producto
+			});
+
+			this.initialSetup();
+		}
+		else{
+			message.error("Hubo un error al cargar el producto, por favor recargue la página");
+		}
+	}
+
+	initialSetup(){
 		let dataBread = [];
-		if(this.producto) {
+		if(this.state.producto) {
+			let producto = this.state.producto;
 			dataBread.push({
-				"label" : this.producto["categorias"]["categoria1"]["nombre"],
+				"label" : producto["categorias"]["categoria1"]["nombre"],
 				"route" : this.constants.route_tienda_cat1,
-				"params" : {"categoria1" : this.producto["categorias"]["categoria1"]["pk"] + "-" + this.producto["categorias"]["categoria1"]["nombre"].formatURL()}
+				"params" : {"categoria1" : producto["categorias"]["categoria1"]["pk"] + "-" + producto["categorias"]["categoria1"]["nombre"].formatURL()}
 			});
 			dataBread.push({
-				"label" : this.producto["categorias"]["categoria2"]["nombre"],
+				"label" : producto["categorias"]["categoria2"]["nombre"],
 				"route" : this.constants.route_tienda_cat2,
-				"params" : {"categoria2" : this.producto["categorias"]["categoria2"]["pk"] + "-" + this.producto["categorias"]["categoria2"]["nombre"].formatURL()}
+				"params" : {"categoria2" : producto["categorias"]["categoria2"]["pk"] + "-" + producto["categorias"]["categoria2"]["nombre"].formatURL()}
 			});
 			dataBread.push({
-				"label" : this.producto["categorias"]["categoria3"]["nombre"],
+				"label" : producto["categorias"]["categoria3"]["nombre"],
 				"route" : this.constants.route_tienda_cat3,
-				"params" : {"categoria3" : this.producto["categorias"]["categoria3"]["pk"] + "-" + this.producto["categorias"]["categoria3"]["nombre"].formatURL()}
+				"params" : {"categoria3" : producto["categorias"]["categoria3"]["pk"] + "-" + producto["categorias"]["categoria3"]["nombre"].formatURL()}
+			});
+			dataBread.push({
+				"label" : producto["nombre"]
 			});
 			this.setBreadCrumb(dataBread);
 
-			this.getCartProducto();
+			if (this.props.isLogged) {
+				this.getCartProducto();
+			}
 		}
 	}
 
 
 	async getCartProducto() {
+		if(this.refNroSelector.current) {
+			this.refNroSelector.current.disable();
+		}
 		let body = {
-			"producto" : this.producto["pk"]
+			"producto" : this.state.producto["pk"]
 		}
 		let data = await BasePanel.service.apiSend({
 			method: "GET",
@@ -126,241 +186,126 @@ class PreviewView extends ProductBase{
 			isPublic: false,
 			showError: true
 		});
-		console.log("---", data);
 		if(data["success"]) {
 			this.cartProducto = data["data"];
+			this.changeMascota(this.refRadioMascota.current.getValue());
+			/*if(!this.state.producto.seleccion_mascota && this.cartProducto.length > 0) {
+				if(this.refNroSelector.current){
+					this.refNroSelector.current.setValue(this.cartProducto[0]["cantidad"], false, this.state.producto.stock, this.cartProducto[0]["pk"]);
+				}
+			}
+			else if(this.isEnabledAddCart()) {
+				if(this.refNroSelector.current){
+					this.refNroSelector.current.setValue(0, false, this.state.producto.stock, null);
+				}
+			}*/
 		}
 	}
 
 
 	async localUpdateCart(nro, pk = null) {
-		if(parseInt(this.stock) >= parseInt(nro)) {
-			/*let data = {
-				count: nro,
-				pk: this.props.productPK,
-				code: this.getCode()
-			}
-			if(this.props.producto.seleccion_mascota){
-				data["user_pk"] = this.store.getUserPK();
-			}*/
-
+		if(parseInt(this.state.producto.stock) >= parseInt(nro)) {
 			let data = {
 				"nro" : nro,
 				"pk" : pk,
-				"producto" : this.props.productPK,
-				"opciones" : this.getCode(),
-				"mascota" : 48
+				"producto" : this.state.producto.pk,
+				"mascota" : this.mascota
 			}
-
 			let newPk = await this.updateCart(data);
-			this.refNroSelector.current.setValue(nro, false, this.stock, newPk);
-
+			this.refNroSelector.current.setValue(nro, false, this.state.producto.stock, newPk);
 			await this.getCartProducto();
-			/*
-			if (nro === 0) {
-				// Delete
-				let data = await BasePanel.service.apiSend({
-					method: "DELETE",
-					register: "carrito",
-					model: "eliminar",
-					isPublic: false,
-					showError: true,
-					aditional: [pk]
-				});
-				if(data["success"]) {
-					this.refNroSelector.current.setValue(nro, false, this.stock, null);
-
-					if(BasePanel.refButtonCart.current) {
-						BasePanel.refButtonCart.current.setNro(data["data"]["total_usuario"]);
-					}
-				}
-			}
-			else {
-				if (pk === null) {
-					// Add
-					let body = {
-						"cantidad" : nro,
-						"producto" : this.props.productPK,
-						"opciones" : this.getCode(),
-						"mascota" : 48
-					}
-					let data = await BasePanel.service.apiSend({
-						method: "POST",
-						register: "carrito",
-						model: "crear",
-						body: body,
-						isPublic: false,
-						showError: true
-					});
-					if(data["success"]) {
-						this.refNroSelector.current.setValue(nro, false, this.stock, data["data"]["pk"])
-
-						if(BasePanel.refButtonCart.current) {
-							BasePanel.refButtonCart.current.setNro(data["data"]["total_usuario"]);
-						}
-					}
-
-				}
-				else{
-					// Modify
-					let body={
-						cantidad: nro
-					}
-					let data = await BasePanel.service.apiSend({
-						method: "PUT",
-						register: "carrito",
-						model: "modificar",
-						body: body,
-						isPublic: false,
-						showError: true,
-						aditional: [pk]
-					});
-					if(data["success"]) {
-
-						if(BasePanel.refButtonCart.current) {
-							BasePanel.refButtonCart.current.setNro(data["data"]["total_usuario"]);
-						}
-
-					}
-				}
-			}
-			*/
 		}
 		else{
-			message.error("Solo hay " + this.stock + " unidades de este producto");
+			message.error("Solo hay " + this.state.producto.stock + " unidades de este producto");
 		}
 	}
 
 	isEnabledAddCart() {
-		let valid = true;
-		for (let index in this.options) {
-			if (this.options[index] == null) {
-				valid = false;
-			}
-		}
-		return valid;
+		return (this.mascota !== null && this.mascota !== undefined && this.state.producto.seleccion_mascota) || !this.state.producto.seleccion_mascota;
 	}
 
-	getCode() {
-		let code = [];
-		for (let index in this.options) {
-			if (this.options[index] != null) {
-				code.push({
-					"tipo" : index,
-					"value" : this.options[index].split("-")[0]
-				});
+	changeMascota(value) {
+		this.mascota = value; //value.target.value;
+
+		if(this.state.producto.seleccion_mascota && this.mascota === null){
+			if(this.refNroSelector.current) {
+				this.refNroSelector.current.setValue(0, true, this.state.producto.stock, null);
 			}
+			return;
 		}
-		return code;//code.join(",");
+		this.refNroSelector.current.enable();
+		let updated = false;
+		this.cartProducto.map((item, index) => {
+			if(item["mascota"] === this.mascota) {
+				this.refNroSelector.current.setValue(item["cantidad"], false, this.state.producto.stock, item["pk"]);
+				updated = true;
+			}
+			return null;
+		});
+
+		if (!updated) {
+			this.refNroSelector.current.setValue(0, false, this.state.producto.stock, null);
+		}
 	}
 
-
-	changeOption(value, type) {
-		//console.log(value.target.value, type);
-
-		this.options[type] = value.target.value;
-
-		let valid = true;
-		let stock = 100000;
-
-		let code = [];
-		for (let index in this.options) {
-			if (this.options[index] == null) {
-				valid = false;
-			}
-			else{
-				code.push({
-					"tipo" : index,
-					"value" : this.options[index].split("-")[0]
-				});
-				stock = parseInt(this.options[index].split("-")[1]) < stock ? parseInt(this.options[index].split("-")[1]) : stock;
-			}
-		}
-		//code = code.join(",");
-		console.log(code);
-		if(this.refNroSelector.current) {
-			//let nroCart = BasePanel.store.getNumCart(null, this.producto.pk, code);
-
-			this.stock = stock;
-			if (valid) {
-				let nroCart = 0;
-				let pk = null;
-
-				// TODO: Mejorarrrr
-				this.cartProducto.map((item, index) => {
-					let nroCoincide = 0;
-					if (item["opciones_basic"].length > 0) {
-						item["opciones_basic"].map((opcion, iOpcion) => {
-
-							code.map((co, iCo) => {
-								if (opcion["producto_opcion_tipo"] + "" === co["tipo"] + "" && opcion["producto_opcion_pk"] + "" === co["value"] + "") {
-									nroCoincide += 1;
-								}
-
-								return null;
-							})
-
-							return null;
-						});
-
-						if(nroCoincide + 1 === code.length) {
-							nroCart = item["cantidad"];
-							pk = item["pk"];
-						}
-					}
-					return null;
-				})
-
-				this.refNroSelector.current.setValue(nroCart, false, stock, pk)
-			}
-			else{
-				this.refNroSelector.current.setValue(0, true, stock, null)
-			}
-		}
-
-		//console.log(valid, code.join(","));
-
+	changeVariante(value) {
+		this.redirectPage(this.constants.route_profile_producto, {pk: value})
 	}
+
 
 	avisame() {
-		this.refModalAvisame.current.open(this.props.productPK);
+		this.refModalAvisame.current.open(this.state.producto.pk);
 	}
 
 	render() {
-		let producto = this.props.producto;
-
+		let producto = this.state.producto;
 
 		if (!producto) {
 			return (
-				<Result
-					status="warning"
-					title="Este producto no existe."
-					extra={
-						<Button type="primary" key="console" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>
-							Volver a la tienda
-						</Button>
-					}
-				>
-				</Result>
+				<div>
+					<Row gutter={[40, 16]} align="top">
+						<Col xs={24} md={11} lg={8}>
+							<Skeleton.Avatar active={true} style={{width: "300px", height: "300px"}} />
+						</Col>
+						<Col xs={24} md={13} lg={16}>
+							<Skeleton active={true}/>
+							<Skeleton active={true}/>
+							<Skeleton active={true}/>
+						</Col>
+					</Row>
+				</div>
 			)
 		}
 		let productURL = this.constants.getUrlFront() + this.constants.route_profile_producto.replace("[pk]", producto["pk"] + "-" + producto["nombre"].formatURL());
 
-		let opciones = producto["opciones"];
-		let radioOptions = {};
+		let radioMascotas = [];
+		for(let index in this.state.producto.mascotas) {
+			radioMascotas.push({
+				label: this.state.producto.mascotas[index]["nombre"],
+				value: this.state.producto.mascotas[index]["pk"]
+			})
+		}
 
-		for(let index in opciones) {
-			if (radioOptions[opciones[index]["tipo"]] === undefined) {
-				radioOptions[opciones[index]["tipo"]] = {"nombre" : opciones[index]["tipo_nombre"], "options" : []};
+		let radioVariantes = [];
+		let descripcion_prod = [];
+		let variantes = this.state.producto.variantes;
+		for(let index in variantes) {
+			let opciones = [];
+			for (let iOpcion in variantes[index]["opciones"]) {
+				opciones.push(variantes[index]["opciones"][iOpcion]["nombre"])
 			}
-
-			radioOptions[opciones[index]["tipo"]]["options"].push({
-				label: opciones[index]["nombre"],
-				value: opciones[index]["pk"] + "-" + opciones[index]["stock"],
+			radioVariantes.push({
+				label: opciones.join(", "),
+				value: variantes[index]["pk"],
+				pk: variantes[index]["pk"],
+				foto: variantes[index]["foto"],
 			})
 
-			// TODO: cambiar stock de lugar
+			if (variantes[index]["pk"] === this.state.producto.pk) {
+				descripcion_prod = variantes[index]["opciones"];
+			}
 		}
+		console.log(radioVariantes)
 
 		return (
 			<div>
@@ -393,24 +338,22 @@ class PreviewView extends ProductBase{
 						</Space>
 						<br />
 						<p>{producto.descripcion}</p>
+
+						{
+							radioVariantes.length > 1 ?
+							<div>
+								<Divider />
+								<RadioVariantesProducto options={radioVariantes} pk={this.state.producto.pk} changeVariante={this.changeVariante}/>
+								<br />
+							</div>
+							:
+							null
+						}
+
+
+						<RadioMascotasProducto ref={this.refRadioMascota} changeMascota={this.changeMascota} options={radioMascotas} />
 						<Divider />
 
-							{
-								Object.keys(radioOptions).map((key, index) => {
-									return <Row gutter={[3, 15]} align="middle" key={Math.random()} style={{marginBottom: "15px"}}>
-										<Col xs={24} md={5}>
-											<b>{radioOptions[key]["nombre"]}</b>
-										</Col>
-										<Col xs={24} md={19}>
-											<Radio.Group
-												onChange={(e) => this.changeOption(e, key)}
-												options={radioOptions[key]["options"]}
-												optionType="button"
-											/>
-										</Col>
-									</Row>
-								})
-							}
 						<Space direction="vertical">
 							{
 								producto.stock === 0 ?
@@ -424,22 +367,22 @@ class PreviewView extends ProductBase{
 									} />
 								:
 
-								((this.props.isLogged && producto.seleccion_mascota) || !producto.seleccion_mascota) ?
-									this.props.mascotas === 0 && producto.seleccion_mascota ?
+								(this.props.isLogged && (producto.seleccion_mascota || !producto.seleccion_mascota)) ?
+									radioMascotas.length === 0 && producto.seleccion_mascota ?
 										<Alert
 											message="Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, inscribe a tu primer mascota"
 											type="error"
 											action={
-												<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_mascotas)}>Inscribir</Button>
+												<Button type="primary" onClick={(e) => this.redirectPage(this.constants.route_mascotas, {add: true})}>Inscribir</Button>
 											} />
 									:
 									<div className="preview-number-selector">
-										<NumberSelector showMax={false} disabled={!this.isEnabledAddCart()} ref={this.refNroSelector} onUpdate={this.localUpdateCart} max={this.stock} defaultValue={this.props.nroCart || 0} />
+										<NumberSelector showMax={false} disabled={!this.isEnabledAddCart()} ref={this.refNroSelector} onUpdate={this.localUpdateCart} max={this.state.producto.stock} defaultValue={0} />
 									</div>
 								:
 								<div>
 									<Alert
-										message="Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, por ello es necesario iniciar sesión"
+										message={producto.seleccion_mascota ? "Para agregar este producto al carrito necesitas seleccionar una de tus mascotas, por ello es necesario iniciar sesión" : "Para agregar este producto al carrito necesitas iniciar sesión"}
 										type="error"
 										action={
 											<Button type="primary" onClick={(e) => this.openLogin({"producto" : producto.pk})}>Iniciar sesión</Button>
@@ -577,7 +520,7 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 		productPK = productPK.split("-")[0];
 	}
 	let nroCart = BasePanel.store.getNumCart({query, req, pathname}, productPK);
-	let mascotas = 0;
+	let mascotas = [];
 	let producto = null;
 	let [_productos] = await Promise.all([
 		BasePanel.service.apiSend({
@@ -590,32 +533,6 @@ PreviewView.getInitialProps = async ({query, req, pathname}) => {
 	]);
 	if(_productos["success"]) {
 		producto = _productos["data"];
-
-		if (producto["seleccion_mascota"] === true && isLogged) {
-			let data = await BasePanel.service.apiSend({
-				method: "GET",
-				register: "mascota",
-				model: "card",
-				isPublic: false,
-				body: {},
-				showLoad: false,
-				ctx: {query, req, pathname}
-			});
-			if(data["success"]) {
-				let mascotas_data = data["data"];
-				mascotas = mascotas_data.length;
-				for (let index in mascotas_data){
-					let name = mascotas_data[index]["nombre"] + "";
-					producto["opciones"].push({
-						"pk" : mascotas_data[index]["pk"],
-						"tipo" : "mascota",
-						"tipo_nombre" : "Mascota",
-						"nombre" : (name).replace(/-/g, ' ').replace(/_/g, ' '),
-						"stock" : producto["stock"]
-					});
-				}
-			}
-		}
 
 		query["head"] = {
 			"title" : producto["nombre"],

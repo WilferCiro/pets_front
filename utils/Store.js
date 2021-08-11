@@ -32,6 +32,7 @@ class Store {
 
 		// Cart
 		this.getNumCart     = this.getNumCart.bind(this);
+		this.setNumCart     = this.setNumCart.bind(this);
 		this.updateCart     = this.updateCart.bind(this);
 		this.removeCart     = this.removeCart.bind(this);
 		this.getCart        = this.getCart.bind(this);
@@ -171,8 +172,14 @@ class Store {
 	}
 
 	// Cart handler
-	getNumCart(ctx = null, pk = null, code = null) {
-		let cart = this.getCart(ctx);
+	setNumCart(nro) {
+		this.saveData("kiwi_nro_cart", nro);
+	}
+
+	getNumCart(ctx = null) {
+		let cart = this.readValue("kiwi_nro_cart", ctx);
+		return cart || 0;
+		/*let cart = this.getCart(ctx);
 		if(cart.length === 0) {
 			return 0;
 		}
@@ -184,7 +191,7 @@ class Store {
 			}
 			return 0;
 		}
-		return cart.length;
+		return cart.length;*/
 	}
 
 	getCart(ctx = null) {

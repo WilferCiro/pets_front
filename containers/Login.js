@@ -63,6 +63,9 @@ class Login extends BasePanel{
 		if(this.attrs["from_cart"]) {
 			message.info("Inicia sesión para continuar con el proceso de compra");
 		}
+		if(this.attrs["producto"]) {
+			message.info("Inicia sesión para realizar la compra.");
+		}
 		this.setState({
 			show: true
 		})
@@ -133,7 +136,9 @@ class Login extends BasePanel{
 			this.user.setAvatar(data["data"]["avatar"]);
 			this.user.setMascotasPk(data["data"]["mascotas"]);
 			this.user.setNroPedidos(data["data"]["cantidad_pedidos"]);
+			this.store.setNumCart(data["data"]["nro_carrito"]);
 			message.success("Sesión iniciada con éxito, redireccionado...");
+			let optionProfile = {first_login: !data["data"]["last_login"] ? true : false}
 			if(this.attrs["from_cart"]){
 				this.redirectPage(this.constants.route_cart);
 			}
@@ -147,7 +152,7 @@ class Login extends BasePanel{
 				this.redirectPage(this.constants.route_profile_producto, {pk: this.attrs["producto"], fromLogin: true});
 			}
 			else{
-				this.redirectPage(this.constants.route_profile);
+				this.redirectPage(this.constants.route_profile, optionProfile);
 			}
 		}
 		else{

@@ -20,6 +20,7 @@ import {
 	Popconfirm,
 	Button,
 	Badge,
+	Skeleton
 } from 'antd';
 import {
 	DeleteOutlined
@@ -63,7 +64,10 @@ class TableCart extends BasePanel{
 				title: 'Descripción',
 				dataIndex: 'descripcion',
 				render: (value, record) => (
-					<span  dangerouslySetInnerHTML={{__html: value }} />
+					<div>
+						{record["nombre"]}<br />
+						<span dangerouslySetInnerHTML={{__html: value }} />
+					</div>
 				),
 			},
 			{
@@ -89,13 +93,13 @@ class TableCart extends BasePanel{
 			},
 			{
 				title: '',
-				dataIndex: 'code',
+				dataIndex: 'pk',
 				render: (pk, record) => (
 					<Popconfirm
 						title="¿Está seguro de eliminar este producto?"
 						okText="Si, eliminar"
 						cancelText="No"
-						onConfirm={(e) => this.onDeleteCart(record["pk"], record["code"])}
+						onConfirm={(e) => this.onDeleteCart(record)}
 						>
 							<Button type="danger" icon={<DeleteOutlined />}></Button>
 					</Popconfirm>
@@ -123,16 +127,25 @@ class TableCart extends BasePanel{
 		})
 	}
 
-	onDeleteCart(pk, code) {
-		this.updateCart({"pk" : pk, "count" : 0, "code" : code});
+	async onDeleteCart(obj) {
+		let data = {
+			"nro" : 0,
+			"pk" : obj["pk"]
+		}
+		await this.updateCart(data);
 		if(this.update) {
 			this.update();
 		}
 	}
 
-	onUpdateCart(value, data) {
-		data["count"] = value;
-		this.updateCart(data);
+	async onUpdateCart(value, dataIn) {
+		let data = {
+			"nro" : value,
+			"pk" : dataIn["pk"]
+		}
+
+		await this.updateCart(data);
+
 		if(this.update) {
 			this.update();
 		}
@@ -142,7 +155,7 @@ class TableCart extends BasePanel{
 		if(this.state.cart === null) {
 			return (
 				<div>
-					Cargando...
+					<Skeleton />
 				</div>
 			)
 		}
@@ -153,7 +166,7 @@ class TableCart extends BasePanel{
 					dataSource={this.state.cart}
 					columns={this.columnsCart}
 					size="small"
-					rowKey="code" />
+					rowKey="pk" />
 			</div>
 		);
 	}

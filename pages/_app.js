@@ -275,21 +275,11 @@ class LocalDashboard extends App{
 
 					<Layout>
 						<LeftPanelMobile {...leftPanelProps} ref={BasePanel.refMobileMenu} />
-						<Sider
-							breakpoint="lg"
-							collapsedWidth="0"
-							theme="light"
-							width="255"
-							style={{
-								height: "100vh",
-								position: "absolute",
-								backgroundColor: "#f0f2f5",
-								border: "none"
-							}}
+						<div
 							className="sidebar"
 						>
 							<LeftPanel {...leftPanelProps} />
-						</Sider>
+						</div>
 						<Layout className="layout-content" style={{backgroundColor: "white"}}>
 							<Header empresas={this.props.empresas} pageName={this.props.pageName} {...headerProps} />
 							<CustomBreadcrumb ref={BasePanel.refBreadcrumb} />

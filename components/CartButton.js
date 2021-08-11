@@ -28,6 +28,7 @@ class CartButton extends BasePanel{
 	}
 
 	setNro(nro) {
+		this.store.setNumCart(nro);
 		this.setState({
 			nro: nro
 		})

@@ -30,26 +30,15 @@ class ImageSlider extends BasePanel{
 		super(props);
 
 		// Props
-		this.fotos  = this.props.fotos;
 
-		if (this.fotos.length === 0) {
-			this.fotos = [{
-				"foto" : this.constants.img_producto,
-				"descripcion" : "Foto del producto"
-			}];
-		}
-
-		this.videos = this.props.videos;
 
 		// References
 		this.refCarousel = React.createRef();
 
 		// Methods
-		this.nextImage = this.nextImage.bind(this);
-		this.prevImage = this.prevImage.bind(this);
-		this.goToImage = this.goToImage.bind(this);
-	}
-	componentDidMount() {
+		this.nextImage      = this.nextImage.bind(this);
+		this.prevImage      = this.prevImage.bind(this);
+		this.goToImage      = this.goToImage.bind(this);
 	}
 
 	prevImage() {
@@ -65,6 +54,17 @@ class ImageSlider extends BasePanel{
 	}
 
 	render() {
+		this.fotos  = this.props.fotos;
+
+		if (this.fotos.length === 0) {
+			this.fotos = [{
+				"foto" : this.constants.img_producto,
+				"descripcion" : "Foto del producto"
+			}];
+		}
+
+		this.videos = this.props.videos;
+		
 		return (
 			<Row gutter={[5, 5]}>
 				<Col span={4}>

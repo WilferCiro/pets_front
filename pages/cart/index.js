@@ -67,10 +67,9 @@ class CartView extends BasePanel{
 		this.refCardUser              = React.createRef();
 
 		// variables
-		this.dataService          = [];
 		this.discountPointPercent = 0;
 		this.productos = [];
-		this.dataValorEnvio = {};
+		this.dataValorEnvio = null;
 		this.lastCity = null;
 	}
 
@@ -104,17 +103,14 @@ class CartView extends BasePanel{
 			body: body
 		});
 		if(data["success"]) {
-			this.searchValorEnvio(data["data"]["ciudad"]);
-
 			let preconditions = {
 				ciudad: data["data"]["ciudad"]
 			}
 			this.refDataUserForm.current.setValues(data["data"], preconditions);
-
 			if(data["data"]["puntos_porcentaje"] > 0){
-				//this.discountPointPercent = data["puntos_porcentaje"];
 				this.refDiscountAlert.current.setDiscount(data["data"]["puntos_porcentaje"]);
 			}
+			this.searchValorEnvio(data["data"]["ciudad"]);
 		}
 		else{
 			message.error("Hubo un error al cargar los datos del usuario, por favor recargue");
@@ -122,130 +118,101 @@ class CartView extends BasePanel{
 	}
 
 	async searchValorEnvio(city) {
-		this.lastCity = city;
-		let data = await BasePanel.service.apiSend({
-			method: "GET",
-			register: "ciudad",
-			model: "costo_envio",
-			aditional: [city]
-		});
-		if(data["success"]) {
-			this.dataValorEnvio = data["data"];
-			if(this.dataService.length === 0) {
-				this.searchCart();
+		if(city){
+			this.lastCity = city;
+			let data = await BasePanel.service.apiSend({
+				method: "GET",
+				register: "ciudad",
+				model: "costo_envio",
+				aditional: [city]
+			});
+			if(data["success"]) {
+				this.dataValorEnvio = data["data"];
 			}
 			else{
-				this.formatCart();
+				message.error("Hubo un error al consultar los datos, por favor intente de nuevo más tarde");
 			}
 		}
-		else{
-			message.error("Hubo un error al consultar los datos, por favor intente de nuevo más tarde");
-		}
+
+		this.searchCart();
 	}
 
 	async searchCart() {
 		this.refTable.current.setCart(null);
-		this.dataService = await this.getDataCart();
 		this.formatCart();
 	}
 
-	formatCart() {
-		let dataCart = this.store.getCart();
-		let data = [];
-		this.productos = [];
-		let subTotal = 0;
-		let descuentos = 0;
-		let valorEnvio = 0;
-		for (let index in dataCart){
-			for(let index2 in this.dataService) {
-				let aditional = "";
-				let cartCodeArray = [];
-				let error = false;
+	async formatCart() {
+		let dataCart = await BasePanel.service.apiSend({
+			method: "GET",
+			register: "carrito",
+			model: "todo",
+			isPublic: false,
+			showError: true
+		});
+		console.log(dataCart);
+		if(dataCart["success"]) {
+			dataCart = dataCart["data"];
+			let data = [];
+			this.productos = [];
+			let subTotal = 0;
+			let descuentos = 0;
+			let valorEnvio = 0;
 
-				if(dataCart[index]["code"] && dataCart[index]["code"] !== ""){
-					let opciones = this.dataService[index2]["opciones"];
+			for (let index in dataCart){
+				data.push({
+					"pk" : dataCart[index]["pk"],
+					"count" : dataCart[index]["cantidad"],
+					"foto" : dataCart[index]["producto"]["foto"].length > 0 ? dataCart[index]["producto"]["foto"][0]["foto"] : null,
+					"precio" : dataCart[index]["producto"]["precio"],
+					"promocion" : dataCart[index]["producto"]["promocion"],
+					"stock" : dataCart[index]["stock"],
+					"descripcion" : dataCart[index]["producto"]["opciones_text"] + (dataCart[index]["mascota_nombre"] ? "<b>Mascota:</b> " + dataCart[index]["mascota_nombre"] : ""),
+					"nombre" : dataCart[index]["producto"]["nombre"],
+				});
 
-					let newCode = "";
-					let cartCode = dataCart[index]["code"].split(",");
+				this.productos.push({
+					"pk" : dataCart[index]["producto"]["pk"],
+					"cantidad" : dataCart[index]["cantidad"],
+					"nombre" : dataCart[index]["producto"]["nombre"],
+					"precio" : dataCart[index]["producto"]["precio"],
+					"adicional" : dataCart[index]["producto"]["opciones_text"]
+				})
 
-					let seleccion_mascota = this.dataService[index2]["seleccion_mascota"];
-
-					if ((dataCart[index]["user_pk"] === this.store.getUserPK() && seleccion_mascota) || !seleccion_mascota) {
-						for (let i in cartCode){
-							if (cartCode[i]) {
-								cartCodeArray.push(cartCode[i])
-							}
-						}
-						for(let i in opciones) {
-							let item = opciones[i]["tipo"] + ":" + opciones[i]["pk"];
-							let inArray = cartCodeArray.indexOf(item);
-							if(inArray > -1) {
-								cartCodeArray.splice(inArray, 1);
-								aditional +=  opciones[i]["tipo_nombre"] + ": " + opciones[i]["nombre"] + "<br />";
-							}
-						}
-						if(cartCodeArray.length === 1) {
-							if(cartCodeArray[0].includes("mascota:")) {
-								aditional +=  "Mascota: " + cartCodeArray[0].split("_")[1];
-							}
-							cartCodeArray = [];
-						}
-					}
-					else{
-						error = true;
-						this.updateCart({"pk" : dataCart[index]["pk"], "count" : 0, "code" : dataCart[index]["code"]});
-						message.error("Un producto contenía referencia a una mascota de otro usuario, por ello no se cuenta en el pedido.")
-					}
-				}
-
-				if(this.dataService[index2]["pk"] + "" === dataCart[index]["pk"] + "" && cartCodeArray.length === 0 && !error){
-					data.push({
-						"pk" : dataCart[index]["pk"],
-						"count" : dataCart[index]["count"],
-						"descripcion" : this.dataService[index2]["nombre"] + " " + aditional,
-						"foto" : this.dataService[index2]["foto"].length > 0 ? this.dataService[index2]["foto"][0]["foto"] : null,
-						"precio" : this.dataService[index2]["precio"],
-						"promocion" : this.dataService[index2]["promocion"],
-						"stock" : this.dataService[index2]["stock"],
-						"code" : dataCart[index]["code"]
-					});
-
-					this.productos.push({
-						"pk" : dataCart[index]["pk"],
-						"cantidad" : dataCart[index]["count"],
-						"nombre" : this.dataService[index2]["nombre"],
-						"precio" : this.dataService[index2]["precio"],
-						"adicional" : aditional
-					})
-
-					subTotal += this.dataService[index2]["precio"] * dataCart[index]["count"];
-					descuentos += (this.dataService[index2]["precio_original"] - this.dataService[index2]["precio"]) * dataCart[index]["count"];
-				}
+				subTotal += dataCart[index]["producto"]["precio"] * dataCart[index]["cantidad"];
+				descuentos += (dataCart[index]["producto"]["precio_original"] - dataCart[index]["producto"]["precio"]) * dataCart[index]["cantidad"];
 			}
+
+
+			let valorDescuentoPuntos = (subTotal * this.discountPointPercent / 100);
+			subTotal = subTotal - valorDescuentoPuntos;
+			if (subTotal === 0 || this.props.isLogged === false || !this.dataValorEnvio) {
+				valorEnvio = 0;
+				this.refButtonPay.current.setDisabled(true);
+				this.refCardUser.current.classList.add("disabled-div");
+			}
+			else{
+				valorEnvio = subTotal >= this.dataValorEnvio["precio_para_gratis"] ? 0 : subTotal >= this.dataValorEnvio["precio_para_descuento"] ? this.dataValorEnvio["valor_descuento"] : this.dataValorEnvio["valor_envio"];
+				this.refButtonPay.current.setDisabled(false);
+				this.refCardUser.current.classList.remove("disabled-div");
+			}
+
+			if(!this.dataValorEnvio) {
+				this.refButtonPay.current.setDisabled(true);
+				this.refCardUser.current.classList.remove("disabled-div");
+				this.refEnvioLabel.current.setText("sin ciudad");
+				this.refTotalLabel.current.setText("sin ciudad");
+			}
+			else{
+				this.refEnvioLabel.current.setText(valorEnvio.formatPrice());
+				this.refTotalLabel.current.setText((subTotal + valorEnvio).formatPrice());
+			}
+			this.refDescuentosLabel.current.setText(descuentos.formatPrice());
+			this.refDescuentosPuntosLabel.current.setText(valorDescuentoPuntos.formatPrice());
+			this.refSubTotalLabel.current.setText(subTotal.formatPrice());
+			this.refTable.current.setCart(data);
+
 		}
-
-
-		let valorDescuentoPuntos = (subTotal * this.discountPointPercent / 100);
-		subTotal = subTotal - valorDescuentoPuntos;
-
-		valorEnvio = subTotal >= this.dataValorEnvio["precio_para_gratis"] ? 0 : subTotal >= this.dataValorEnvio["precio_para_descuento"] ? this.dataValorEnvio["valor_descuento"] : this.dataValorEnvio["valor_envio"];
-
-		if (subTotal === 0 || this.props.isLogged === false) {
-			valorEnvio = 0;
-			this.refButtonPay.current.setDisabled(true);
-			this.refCardUser.current.classList.add("disabled-div");
-		}
-		else{
-			this.refButtonPay.current.setDisabled(false);
-			this.refCardUser.current.classList.remove("disabled-div");
-		}
-
-		this.refDescuentosLabel.current.setText(descuentos.formatPrice());
-		this.refDescuentosPuntosLabel.current.setText(valorDescuentoPuntos.formatPrice());
-		this.refSubTotalLabel.current.setText(subTotal.formatPrice());
-		this.refEnvioLabel.current.setText(valorEnvio.formatPrice());
-		this.refTotalLabel.current.setText((subTotal + valorEnvio).formatPrice());
-		this.refTable.current.setCart(data);
 	}
 
 	update() {
@@ -344,6 +311,7 @@ class CartView extends BasePanel{
 									ref={this.refDataUserForm}
 									onValuesChange={this.onFormChange}
 									vertical={true}
+									id="form-user"
 									 />
 							</Card>
 							<DiscountAlert onApply={this.applyDiscount} ref={this.refDiscountAlert} />

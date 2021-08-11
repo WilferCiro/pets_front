@@ -41,6 +41,7 @@ class ProfileView extends BasePanel{
 		super(props);
 
 		// Props
+		this.first_login = this.props.query.first_login === "true";
 
 		// States
 		this.state = {
@@ -177,7 +178,12 @@ class ProfileView extends BasePanel{
 			this.user.setAvatar(data["data"]["avatar"]);
 			this.setState({
 				user: data["data"]
-			})
+			});
+
+			if(this.first_login && data["data"]["ciudad"] === null) {
+				this.first_login = false;
+				this.openFormEdit();
+			}
 		}
 		else{
 			this.setState({

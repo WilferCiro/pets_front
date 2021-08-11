@@ -83,6 +83,9 @@ class Header extends BasePanel{
 Header.getInitialProps = async ({query, req, pathname}) => {
 	let isLogged = BasePanel.store.isLogged({query, req, pathname});
 	let nroCart = BasePanel.store.getNumCart({query, req, pathname});
+	if (!isLogged) {
+		nroCart = 0;
+	}
 	return {query, isLogged, nroCart};
 }
 

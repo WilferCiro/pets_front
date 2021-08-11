@@ -89,23 +89,13 @@ class ModalPedido extends BasePanel{
 										<div>
 											{data["direccion"] + " - " + data["ciudad_nombre"]}<br />
 											<b>Recibe:</b> {data["first_name"] + " " + data["last_name"]}<br />
-											{data["celular"]}
+											{data["celular"]}<br />
+											"{data["adicional"]}"
 										</div>
 									}
 									/>
 							</Card>
-							<Card style={{marginTop: "10px"}}>
-								<Meta
-									avatar={<Avatar icon={<CreditCardOutlined />} />}
-									description={
-										<div>
-											{data["puntos_descuento"]} % de descuento por puntos<br />
-											<b>Valor del envío: </b> {data["valor_envio"].formatPrice()} <br />
-											<b>Total: </b> {data["total"].formatPrice()}
-										</div>
-									}
-									/>
-							</Card>
+
 							{
 								(data["url_guia"] && data["nro_guia"]) ?
 									<Card style={{marginTop: "10px"}}>
@@ -164,6 +154,7 @@ class ModalPedido extends BasePanel{
 													description={
 														<div>
 															<div dangerouslySetInnerHTML={{__html: producto["adicional"]}}></div>
+															<div dangerouslySetInnerHTML={{__html: producto["opciones_text"]}}></div>
 															{producto["precio"].formatPrice()} x {producto["cantidad"]} unidad(es)
 														</div>
 													}
@@ -173,6 +164,24 @@ class ModalPedido extends BasePanel{
 									)
 								})
 							}
+							<Card style={{marginTop: "10px"}}>
+								<Meta
+									avatar={<Avatar icon={<CreditCardOutlined />} />}
+									description={
+										<div>
+											{
+												data["puntos_descuento"] > 0?
+													<label>{data["puntos_descuento"]} % de descuento por puntos<br /></label>
+													:
+													null
+											}
+
+											<b>Valor del envío: </b> {data["valor_envio"].formatPrice()} <br />
+											<b>Total: </b> {data["total"].formatPrice()}
+										</div>
+									}
+									/>
+							</Card>
 						</Col>
 					</Row>
 				</div>
