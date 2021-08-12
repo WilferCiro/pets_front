@@ -104,7 +104,7 @@ class RadioVariantesProducto extends BasePanel{
 												{
 													opci.map((item, index) => {
 														return (
-														<Col span={24 / size} key={Math.random()}>
+														<Col xs={12} md={24 / size} key={Math.random()}>
 															<Card size="small"
 																key={Math.random()}
 																className={item["pk"] === pk ? "card-variante card-variante-selected" : "card-variante"}

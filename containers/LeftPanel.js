@@ -79,11 +79,11 @@ class LeftPanel extends BasePanel{
 				{
 					isLogged ?
 					<div className="nav-userdata">
-						<div>
+						<div onClick={(e) => this.clickMenu(this.constants.route_mascotas)}>
 							<h5 className="title">{userData ? userData["cantidad_mascotas"] : "-"}</h5>
 							<h5 className="subtitle">Mascotas</h5>
 						</div>
-						<div>
+						<div onClick={(e) => this.clickMenu(this.constants.route_profile, {show_pedidos: true})}>
 							<h5 className="title">{userData ? userData["cantidad_pedidos"] : "-"}</h5>
 							<h5 className="subtitle">Pedidos</h5>
 						</div>

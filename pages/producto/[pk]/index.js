@@ -305,7 +305,6 @@ class PreviewView extends ProductBase{
 				descripcion_prod = variantes[index]["opciones"];
 			}
 		}
-		console.log(radioVariantes)
 
 		return (
 			<div>
@@ -324,8 +323,7 @@ class PreviewView extends ProductBase{
 					</Col>
 					<Col xs={24} md={12}>
 						<h2>{producto.nombre}</h2>
-						<Space align="center" size="large">
-							<Tag color="purple">{producto.marca}</Tag>
+						<Space align="center">
 							<Space align="center">
 								{
 									(producto.promocion) ?
@@ -338,6 +336,17 @@ class PreviewView extends ProductBase{
 						</Space>
 						<br />
 						<p>{producto.descripcion}</p>
+						<Tooltip title="Marca del producto">
+							<Tag color="purple">{producto.marca}</Tag>
+						</Tooltip>
+						{
+							producto.dias_fabricacion > 0 ?
+							<Tooltip title="Tiempo de fabricación">
+								<Tag color="purple">{producto.dias_fabricacion} días de fabricación</Tag>
+							</Tooltip>
+							:
+							null
+						}
 
 						{
 							radioVariantes.length > 1 ?
@@ -455,18 +464,18 @@ class PreviewView extends ProductBase{
 						}
 
 						<Row gutter={[3, 1]} align="middle" key={Math.random()}>
-							<Col xs={24} md={5}>
+							<Col span={6}>
 								<b>SKU</b>
 							</Col>
-							<Col  xs={24} md={19}>
+							<Col span={18}>
 								{producto.sku}
 							</Col>
 						</Row>
 						<Row gutter={[3, 1]} align="middle" key={Math.random()}>
-							<Col xs={24} md={5}>
+							<Col span={6}>
 								<b>Código</b>
 							</Col>
-							<Col  xs={24} md={19}>
+							<Col span={18}>
 								{producto.codigo}
 							</Col>
 						</Row>
@@ -497,7 +506,7 @@ class PreviewView extends ProductBase{
 							<Row gutter={[5, 5]}>
 								{
 									producto.relacionados.map((producto, index) => {
-										return <Col xs={12} md={6} key={Math.random()}>
+										return <Col xs={24} md={6} key={Math.random()}>
 											<ProductCard product={producto} />
 										</Col>
 									})
