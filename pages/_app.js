@@ -5,6 +5,7 @@
 // React Classes
 import React           from 'react'
 import { withRouter }  from 'next/router'
+import loadable from '@loadable/component'
 
 // Next classes
 import App             from 'next/app';
@@ -14,12 +15,13 @@ import Head            from 'next/head';
 // Custom classes
 import Constant        from '@/components//Constant';
 import Header          from '@/containers//Header';
-import Footer          from '@/containers//Footer';
 import BasePanel       from '@/containers//BasePanel';
 import LeftPanel       from '@/containers//LeftPanel';
-import LeftPanelMobile from '@/containers//LeftPanelMobile';
-import Login           from '@/containers/Login';
-import CustomBreadcrumb from '@/components/CustomBreadcrumb';
+
+const LeftPanelMobile = loadable(() => import('@/containers//LeftPanelMobile'));
+const Footer = loadable(() => import('@/containers//Footer'));
+const Login = loadable(() => import('@/containers/Login'));
+const CustomBreadcrumb = loadable(() => import('@/components/CustomBreadcrumb'));
 
 // Ant classes
 import {
