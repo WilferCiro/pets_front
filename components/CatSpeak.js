@@ -33,7 +33,7 @@ class CatSpeak extends BasePanel{
 						<Image
 							priority={true}
 							alt="Gato Kiwi"
-							src={this.constants.img_index_video}
+							src={this.constants.img_producto}
 							width={260}
 							height={260}
 							layout="fixed" />

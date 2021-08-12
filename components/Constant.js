@@ -78,7 +78,7 @@ class Constant{
 		this.img_producto_empty             = "/images/general/product_empty.png";
 
 		this.img_index_video        = "/images/index/video.png";
-		this.img_producto           = "/images/general/producto.jpg";
+		this.img_producto           = "/images/general/producto.png";
 		this.img_user               = "/images/general/user.jpg";
 		this.img_no_mascota         = "/images/general/user.jpg";
 		this.img_huella             = "/images/index/huella.svg";
