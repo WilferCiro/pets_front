@@ -11,7 +11,6 @@ import Image from 'next/image'
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
 import VideoHome      from '@/components/VideoHome';
-import CatSpeak       from '@/components/CatSpeak';
 
 // Third part
 //import TextLoop from "react-text-loop";

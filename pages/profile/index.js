@@ -74,7 +74,7 @@ class ProfileView extends BasePanel{
 				message.success("Su pago ha sido realizado con éxito");
 			}
 			else{
-				message.error("Hubo un error al realizar el pago, por favor, vuelva a intentarlo");
+				message.error("Hubo un error al realizar el pago, si gastaste puntos, no te preocupes, estos se te retornarán.");
 			}
 		}
 	}
