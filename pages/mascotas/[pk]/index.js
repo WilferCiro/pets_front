@@ -114,6 +114,13 @@ class MascotasProfileView extends BasePanel{
 		}
 	}
 
+	componentDidUpdate(){
+		if(this.isLogged !== this.props.isLogged) {
+			this.isLogged = this.props.isLogged;
+			this.searchMascota();
+		}
+	}
+
 	async sendEscaneo(position) {
 		let lat = position.coords.latitude;
 		let lon = position.coords.longitude;

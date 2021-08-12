@@ -17,7 +17,8 @@ class MyDocument extends Document {
 				<Head>
 					<link
 						href="https://fonts.googleapis.com/css2?family=Lato&display=optional"
-						rel="stylesheet"
+						as="font"
+						rel="preload"
 						/>
 						<script
 							dangerouslySetInnerHTML={{

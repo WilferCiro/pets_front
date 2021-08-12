@@ -132,7 +132,7 @@ class Footer extends BasePanel{
 					<Col xs={24} md={9} >
 						<div>
 							<div className="logo-footer">
-								<Image width={150} height={23} layout={"fixed"} src={this.constants.img_logo} alt="Logo" />
+								<Image width={250} height={34} layout={"fixed"} src={this.constants.img_logo} alt="Logo" />
 							</div>
 							<p><b>Todos los derechos reservados &copy; 2021 </b></p>
 							{!this.state.online ? "Estás fuera de línea" : ""}

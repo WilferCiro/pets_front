@@ -14,7 +14,7 @@ import VideoHome      from '@/components/VideoHome';
 import CatSpeak       from '@/components/CatSpeak';
 
 // Third part
-import TextLoop from "react-text-loop";
+//import TextLoop from "react-text-loop";
 
 
 // Ant components and icons

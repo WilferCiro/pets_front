@@ -91,13 +91,16 @@ class PreviewView extends ProductBase{
 		// Variables
 		this.cartProducto = null;
 		this.pk = this.props.productPK;
+		this.logged = this.props.isLogged;
 	}
 
 	componentDidMount() {
 		this.searchProducto();
 	}
 	componentDidUpdate() {
-		if (this.pk !== this.props.productPK) {
+		if (this.pk !== this.props.productPK || this.logged !== this.props.isLogged) {
+			this.logged = this.props.isLogged;
+			this.fromLogin = true;
 			this.pk = this.props.productPK;
 			this.mascota = null;
 			this.searchProducto();
@@ -114,7 +117,9 @@ class PreviewView extends ProductBase{
 		})
 		if (data["success"]) {
 			let producto = data["data"];
+			let mascotas = [];
 
+			console.log("****", producto["seleccion_mascota"], this.props.isLogged);
 			if (producto["seleccion_mascota"] === true && this.props.isLogged) {
 				let dataM = await BasePanel.service.apiSend({
 					method: "GET",
@@ -124,10 +129,12 @@ class PreviewView extends ProductBase{
 					body: {},
 					showLoad: false
 				});
+				console.log("---", dataM);
 				if(dataM["success"]){
-					producto["mascotas"] = dataM["data"];
+					mascotas = dataM["data"];
 				}
 			}
+			producto["mascotas"] = mascotas;
 
 			this.setState({
 				producto: producto

@@ -174,7 +174,7 @@ class Login extends BasePanel{
 						<div className="login">
 							<h2>Inicia sesión</h2>
 							<Divider />
-							<LoginForm ref={this.refFormLogin} vertical={true} />
+							<LoginForm ref={this.refFormLogin} vertical={true} id="login-form" />
 							<a onClick={(e) => this.redirectPage(this.constants.route_recover)} className="remember-password">¿Olvidaste tu contraseña?</a>
 							<Divider />
 							<ButtonCustom type="primary" shape="round" size="large" onClick={this.onLogin} text="Iniciar sesión" ref={this.refButtonLogin} block />
@@ -188,7 +188,7 @@ class Login extends BasePanel{
 							<SignUpForm
 								vertical={true}
 								ref={this.refFormSignup}
-								id="signup"
+								id="signup-form"
 							/>
 							<p>Al registrarse usted acepta nuestra <a onClick={(e) => this.redirectPage(this.constants.route_condiciones)}>política de privacidad de datos</a></p>
 							<Divider />
