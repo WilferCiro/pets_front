@@ -4,14 +4,14 @@
 
 // React Components
 import React          from 'react';
-import loadable from '@loadable/component'
 
 // NextJS libraries
 import Image from 'next/image'
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
-const VideoHome = loadable(() => import('@/components/VideoHome'));
+import VideoHome      from '@/components/VideoHome';
+import CatSpeak       from '@/components/CatSpeak';
 
 // Third part
 //import TextLoop from "react-text-loop";
@@ -26,9 +26,11 @@ import {
 	Divider,
 	Space
 } from 'antd';
+import {QrcodeOutlined} from '@ant-design/icons'
 import {
 	RightOutlined,
 	LeftOutlined,
+	VideoCameraFilled
 } from '@ant-design/icons';
 
 class Home extends BasePanel{
