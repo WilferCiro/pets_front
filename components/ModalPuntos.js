@@ -3,7 +3,7 @@
 **/
 
 // React Components
-import React          from 'react';
+import React, {useState}          from 'react';
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
@@ -14,43 +14,25 @@ import {
 } from 'antd';
 
 
-class ModalPuntos extends BasePanel{
-	constructor(props) {
-		super(props);
+function ModalPuntos({forwardRef}) {
+	const [visible, setVisible] = useState(false);
 
-		// States
-		this.state = {
-			open : false
-		}
+	forwardRef(setVisible);
 
-		// Methods
-		this.open = this.open.bind(this);
-		this.close = this.close.bind(this);
-	}
-	componentDidMount() {
+	const close = () => {
+		setVisible(false);
 	}
 
-	close() {
-		this.setState({
-			open: false
-		})
+	const open = () => {
+		setVisible(true);
 	}
 
-	open() {
-		this.setState({
-			open: true
-		})
-	}
-
-	render() {
-
-		return (
-			<Modal centered title={"¿Cómo gano puntos en Kiwi Peluditos?"} visible={this.state.open} onOk={this.close} onCancel={this.close}>
-				<p>En Kiwi Peluditos puedes ganar puntos que puedes redimir por porcentaje de descuento en tus compras, puedes hacer esto cada mes con máximo 1000 puntos.</p>
-				<p>Por ahora, la forma de obtener estos puntos es realizando compras, en un futuro esperamos ampliar estas posibilidades.</p>
-			</Modal>
-		);
-	}
+	return (
+		<Modal centered title={"¿Cómo gano puntos en Kiwi Peluditos?"} visible={visible} onOk={close} onCancel={close}>
+			<p>En Kiwi Peluditos puedes ganar puntos que puedes redimir por porcentaje de descuento en tus compras, puedes hacer esto cada mes con máximo 1000 puntos.</p>
+			<p>Por ahora, la forma de obtener estos puntos es realizando compras, en un futuro esperamos ampliar estas posibilidades.</p>
+		</Modal>
+	)
 }
 
 export default ModalPuntos;

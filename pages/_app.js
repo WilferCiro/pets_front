@@ -1,33 +1,51 @@
+/**
+	* Creado por Wilfer Daniel Ciro Maya - 2021
+**/
+
+// React Classes
+import React           from 'react'
+import { withRouter }  from 'next/router'
+
+// Next classes
 import App             from 'next/app';
 import Router          from 'next/router'
 import Head            from 'next/head';
-import NProgress       from 'nprogress';
-import React           from 'react'
+
+// Custom classes
 import Constant        from '@/components//Constant';
 import Header          from '@/containers//Header';
 import Footer          from '@/containers//Footer';
 import BasePanel       from '@/containers//BasePanel';
 import LeftPanel       from '@/containers//LeftPanel';
 import LeftPanelMobile from '@/containers//LeftPanelMobile';
-import { withRouter }  from 'next/router'
-import {ConfigProvider, Layout, Menu} from 'antd';
-import esEs            from 'antd/lib/locale/es_ES';
+import Login           from '@/containers/Login';
 import CustomBreadcrumb from '@/components/CustomBreadcrumb';
 
-import Login     from '@/containers/Login';
+// Ant classes
+import {
+	ConfigProvider,
+	Layout,
+	Menu
+} from 'antd';
+import esEs            from 'antd/lib/locale/es_ES';
+const { Content, Sider } = Layout;
+
+// Third part
+import NProgress       from 'nprogress';
 //import { LiveChatLoaderProvider, Messenger } from 'react-live-chat-loader'
 
-//import 'antd/dist/antd.css';
+// Styles
 import '../public/css/index.css';
 import '../public/css/responsive.css';
 require('format-unicorn');
+
+// NProgress config
 Router.events.on('routeChangeStart', (url) => {
 	NProgress.start()
 })
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
-const { Content, Sider } = Layout;
 
 
 export function redirectUser(ctx, location) {
@@ -35,6 +53,8 @@ export function redirectUser(ctx, location) {
 	res.writeHead(302, { Location: location });
 	res.end();
 }
+
+// My App
 
 class LocalDashboard extends App{
 	static async getInitialProps({Component,router, ctx, asPath, req}) {
@@ -88,26 +108,6 @@ class LocalDashboard extends App{
 			}
 		});
 
-
-		/*window.onload = (e) => {
-			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('./sw.js', {useCache: true}).then(function(registration) {
-					console.log('Worker registration is successful', registration.scope);
-				}, function(err) {
-					console.log('Worker registration has failed', err);
-				}).catch(function(err) {
-					console.log(err);
-				});
-			} else {
-				console.log('Service Worker is not supported by your browser.');
-			}
-			window.addEventListener('beforeinstallprompt', (e) => {
-				console.log(e);
-			});
-		}*/
-
-	}
-	componentDidUpdate(){
 	}
 
 	render(){
@@ -130,38 +130,38 @@ class LocalDashboard extends App{
 					"inLanguage": "es-CO"
 				},
 				{
-				  "@type": "ImageObject",
-				  "@id": urlPage + "#primaryimage",
-				  "inLanguage": "es-CO",
-				  "url": urlPage + "/app-icon-512x512",
-				  "width": 512,
-				  "height": 512
-			   },
-			   {
-				  "@type": "WebPage",
-				  "@id": urlPage + "/#webpage",
-				  "url": urlPage + "/",
-				  "name": "Inicio : " + nombrePage,
-				  "isPartOf": {
-					 "@id": urlPage + "#website"
-				  },
-				  "primaryImageOfPage": {
-					 "@id": urlPage + "#primaryimage"
-				  },
-				  "datePublished": "2021-03-29T02:30:36+00:00",
-				  "dateModified": "2021-03-28T18:57:03+00:00",
-				  "inLanguage": "es-CO",
-				  "potentialAction": [
-					 {
-						"@type": "ReadAction",
-						"target": [
-						  urlPage
-						]
-					 }
-				  ]
-			   }
-			 ]
-		  }
+					"@type": "ImageObject",
+					"@id": urlPage + "#primaryimage",
+					"inLanguage": "es-CO",
+					"url": urlPage + "/app-icon-512x512",
+					"width": 512,
+					"height": 512
+				},
+				{
+					"@type": "WebPage",
+					"@id": urlPage + "/#webpage",
+					"url": urlPage + "/",
+					"name": "Inicio : " + nombrePage,
+					"isPartOf": {
+						"@id": urlPage + "#website"
+					},
+					"primaryImageOfPage": {
+						"@id": urlPage + "#primaryimage"
+					},
+					"datePublished": "2021-03-29T02:30:36+00:00",
+					"dateModified": "2021-03-28T18:57:03+00:00",
+					"inLanguage": "es-CO",
+					"potentialAction": [
+						{
+							"@type": "ReadAction",
+							"target": [
+								urlPage
+							]
+						}
+					]
+				}
+			]
+		}
 
 		return (
 			<div className="site">

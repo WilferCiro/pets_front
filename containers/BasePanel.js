@@ -21,6 +21,7 @@ export default class BasePanel extends Component {
 	static service         = Services;
 	static store           = Store;
 	static user            = User;
+	static constants      = Constant;
 
 	// Global references
 	static refBreadcrumb = new React.createRef();
@@ -32,7 +33,7 @@ export default class BasePanel extends Component {
 		super(props);
 
 		// Variables
-		this.constants  = Constant;
+		this.constants  = BasePanel.constants;
 		this.URLSave    = null;
 		this.store      = BasePanel.store;
 		this.user       = BasePanel.user;

@@ -3,7 +3,7 @@
 **/
 
 // React Components
-import React          from 'react';
+import React, {useRef} from 'react';
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
@@ -20,64 +20,54 @@ import {
 import {
 	Button,
 	Affix,
-	Badge,
 	Space,
 	PageHeader
 } from 'antd';
 
-class Header extends BasePanel{
-	constructor(props) {
-		super(props);
+function Header({ query, isLogged, nroCart, pageName}) {
+	let refNotifications = useRef(null);
 
-		// References
-		this.refNotifications = React.createRef();
-		this.headerRef        = React.createRef();
-
-		// Methods
-		this.openNotifications = this.openNotifications.bind(this);
-		this.openMenuMobile    = this.openMenuMobile.bind(this);
+	const openNotifications = () => {
+		refNotifications.current.open();
 	}
 
-	openNotifications() {
-		this.refNotifications.current.open();
-	}
-
-	openMenuMobile() {
+	const openMenuMobile = () => {
 		BasePanel.refMobileMenu.current.open();
 	}
 
-	render() {
-		let isLogged = this.props.isLogged;
-		return (
-			<div>
-				<Affix offsetTop={0}>
-
-					<PageHeader
-						className={(isLogged) ? "site-page-header-responsive affixed" :  "site-page-header-responsive affixed header-noLogin"}
-						title={this.props.pageName}
-						onBack={this.openMenuMobile}
-						backIcon={<MenuOutlined className="show-tablet icon-menu-header" />}
-						extra={[
-							<Space align="center" key={Math.random()}>
-								{/*<Badge status="primary" dot>*/}
-									<Button shape="circle" icon={<BellOutlined />} onClick={(e) => this.openNotifications()} />
-								{/*</Badge>*/}
-								<CartButton nroCart={this.props.nroCart} ref={BasePanel.refButtonCart} />
-								{(!isLogged)?
-								<a key={Math.random()} onClick={e => this.openLogin()} className="center-vertical iniciar-sesion-header">Login</a>
-								:
-								null}
-							</Space>
-
-						]}
-						>
-					</PageHeader>
-
-				</Affix>
-				<Notifications ref={this.refNotifications} />
-			</div>
-		);
+	const openLogin = () => {
+		if(BasePanel.refLogin.current) {
+			BasePanel.refLogin.current.open({});
+		}
 	}
+
+	return (
+		<div>
+			<Affix offsetTop={0}>
+
+				<PageHeader
+					className={(isLogged) ? "site-page-header-responsive affixed" :  "site-page-header-responsive affixed header-noLogin"}
+					title={pageName}
+					onBack={openMenuMobile}
+					backIcon={<MenuOutlined className="show-tablet icon-menu-header" />}
+					extra={[
+						<Space align="center" key={Math.random()}>
+							<Button shape="circle" icon={<BellOutlined />} onClick={openNotifications} />
+							<CartButton nroCart={nroCart} ref={BasePanel.refButtonCart} />
+							{(!isLogged)?
+							<a key={Math.random()} onClick={openLogin} className="center-vertical iniciar-sesion-header">Login</a>
+							:
+							null}
+						</Space>
+
+					]}
+					>
+				</PageHeader>
+
+			</Affix>
+			<Notifications ref={refNotifications} />
+		</div>
+	)
 }
 
 Header.getInitialProps = async ({query, req, pathname}) => {
@@ -90,7 +80,3 @@ Header.getInitialProps = async ({query, req, pathname}) => {
 }
 
 export default Header;
-
-/*
-
-*/

@@ -55,14 +55,13 @@ class ProfileView extends BasePanel{
 		this.editUserData            = this.editUserData.bind(this);
 		this.editUserPassword        = this.editUserPassword.bind(this);
 		this.openPedido              = this.openPedido.bind(this);
-		this.openModalPuntos         = this.openModalPuntos.bind(this);
 		this.sendConfirmation        = this.sendConfirmation.bind(this);
 
 		// References
 		this.refFormEditPassword = React.createRef();
 		this.refFormEdit         = React.createRef();
 		this.refModalPedido      = React.createRef();
-		this.refModalPuntos      = React.createRef();
+		this.openModalPuntos     = null;
 	}
 
 	componentDidMount() {
@@ -193,10 +192,6 @@ class ProfileView extends BasePanel{
 		}
 	}
 
-	openModalPuntos() {
-		this.refModalPuntos.current.open();
-	}
-
 	async sendConfirmation() {
 
 		let data = await BasePanel.service.apiSend({
@@ -267,7 +262,7 @@ class ProfileView extends BasePanel{
 		}
 		return (
 			<div className="page-center">
-				<ModalPuntos ref={this.refModalPuntos} />
+				<ModalPuntos forwardRef={c => { this.openModalPuntos = c }} />
 				<ModalPedido ref={this.refModalPedido} />
 				<EditUserForm
 					ref={this.refFormEdit}
@@ -416,7 +411,7 @@ class ProfileView extends BasePanel{
 									<Divider />
 									<Space>
 										<Button type="primary" shape="round" onClick={(e) => this.redirectPage(this.constants.route_tienda)}>Visitar tienda </Button>
-										<Button onClick={this.openModalPuntos}>¿Cómo conseguir puntos? </Button>
+										<Button onClick={e => this.openModalPuntos(true)}>¿Cómo conseguir puntos? </Button>
 									</Space>
 								</Card>
 							</TabPane>

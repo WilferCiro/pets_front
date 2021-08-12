@@ -38,13 +38,13 @@ class Home extends BasePanel{
 		super(props);
 
 		// References
-		this.refVideo = React.createRef();
 		this.refCarousel = React.createRef();
 
 		// Methods
-		this.iniciaYa = this.iniciaYa.bind(this);
-		this.prevPage = this.prevPage.bind(this);
-		this.nextPage = this.nextPage.bind(this);
+		this.iniciaYa  = this.iniciaYa.bind(this);
+		this.prevPage  = this.prevPage.bind(this);
+		this.nextPage  = this.nextPage.bind(this);
+		this.openVideo = this.openVideo.bind(this);
 
 	}
 
@@ -69,12 +69,18 @@ class Home extends BasePanel{
 		this.refCarousel.current.next();
 	}
 
+	openVideo() {
+		if(this.refVideo) {
+			this.refVideo();
+		}
+	}
+
 	render() {
 
 		return (
 			<div className="index-page">
 
-				<VideoHome ref={this.refVideo}/>
+				<VideoHome forwardRef={ e => {this.refVideo = e}}/>
 				<div className="swipe-index">
 					<Image
 						src={this.constants.img_swipe}
@@ -105,7 +111,7 @@ class Home extends BasePanel{
 											<Divider />
 											<Space>
 												<Button type="primary" shape="round" onClick={this.iniciaYa}>Inicia ya </Button>
-												<Button shape="round" onClick={(e) => this.refVideo.current.open()}>Conoce más sobre nosotros </Button>
+												<Button shape="round" onClick={this.openVideo}>Conoce más sobre nosotros </Button>
 											</Space>
 										</div>
 									</Col>

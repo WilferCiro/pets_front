@@ -3,7 +3,7 @@
 **/
 
 // React Components
-import React          from 'react';
+import React, {useState, useRef} from 'react';
 
 // Custom classes
 import BasePanel      from '@/containers/BasePanel';
@@ -16,55 +16,38 @@ import {
 	Modal
 } from 'antd';
 
-class VideoHome extends BasePanel{
-	constructor(props) {
-		super(props);
+function VideoHome({forwardRef}) {
+	const [visible, setVisible] = useState(false);
+	const refVideo = useRef(null);
 
-		// States
-		this.state = {
-			open : false
-		}
 
-		// Methods
-		this.open = this.open.bind(this);
-		this.close = this.close.bind(this);
-
-		// References
-		this.refVideo = React.createRef();
-	}
-	componentDidMount() {
+	const close = () => {
+		refVideo.current.resetPlayer();
+		setVisible(false);
 	}
 
-	close() {
-		console.log(this.refVideo.current.resetPlayer());
-		this.setState({
-			open: false
-		})
+	const open = () => {
+		setVisible(true);
 	}
 
-	open() {
-		this.setState({
-			open: true
-		})
-	}
+	forwardRef(open);
 
-	render() {
-		const opts = {
-			height: '390',
-			width: '100%',
-			playerVars: {
-				// https://developers.google.com/youtube/player_parameters
-				autoplay: 0,
-			},
-		};
-		return (
-			<Modal width={700} centered title="Somos Kiwi Peluditos" visible={this.state.open} onOk={this.close} onCancel={this.close}>
+	const opts = {
+		height: '390',
+		width: '100%',
+		playerVars: {
+			// https://developers.google.com/youtube/player_parameters
+			autoplay: 0,
+		},
+	};
 
-				<YouTube ref={this.refVideo} videoId="fAMp8Np0okg" opts={opts} onReady={this._onReady} />
+	return (
+		<Modal width={700} centered title="Somos Kiwi Peluditos" visible={visible} onOk={close} onCancel={close}>
 
-			</Modal>
-		);
-	}
+			<YouTube ref={refVideo} videoId="fAMp8Np0okg" opts={opts} />
+
+		</Modal>
+	);
 }
 
 export default VideoHome;
